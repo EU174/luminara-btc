@@ -1,0 +1,37 @@
+{
+  "name": "luminara-btc",
+  "version": "0.1.0-alpha.1",
+  "description": "Privacy-first Bitcoin and Freedom Tech education platform",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node src/migrate.js",
+    "test": "node scripts/check.mjs",
+    "test:public-export": "node scripts/public-export-check.mjs",
+    "test:btc-content-manifest": "node scripts/btc-content-manifest-check.mjs",
+    "test:btc-content-evidence": "node scripts/btc-content-evidence-check.mjs",
+    "test:btc-content-boundary": "node scripts/btc-content-boundary-check.mjs",
+    "test:btc-frontend-boundary": "node scripts/btc-frontend-boundary-check.mjs",
+    "test:btc-locale-fallback": "node scripts/btc-locale-fallback-check.mjs",
+    "test:btc-database-schema": "node scripts/btc-database-schema-check.mjs",
+    "test:btc-database-lifecycle": "node scripts/btc-database-lifecycle-check.mjs",
+    "test:database-boundary": "node scripts/database-boundary-check.mjs"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.0.0",
+    "@fastify/rate-limit": "^10.0.0",
+    "@fastify/static": "^9.0.0",
+    "fastify": "^5.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.4"
+  }
+}

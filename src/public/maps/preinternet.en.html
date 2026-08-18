@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before the Internet · Luminara</title><style>
+:root{
+  --paper:#f6f3ec; --paper2:#efe9dd; --ink:#1c2230; --ink2:#4a5468; --muted:#8a8172;
+  --rule:#d9cfbc; --rule2:#e7dfce; --gold:#b7791f; --center:#1c2230;
+  --power:#c0392b; --technology:#1f7a5a; --media:#b7791f; --privacy:#6b4fa0; --economy:#a04a7a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 10px 30px rgba(60,50,30,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:radial-gradient(1100px 620px at 50% -8%, #fbf8f1 0%, var(--paper) 60%),var(--paper);
+  color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.app-shell{display:grid;grid-template-columns:288px minmax(0,1fr) 340px;gap:20px;padding:22px;min-height:100vh}
+.control-rail,.detail-panel{background:linear-gradient(180deg,#fffdf8,var(--paper2));
+  border:1px solid var(--rule);border-radius:14px;padding:20px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:16px;min-height:0}
+.detail-panel{overflow:auto}
+.eyebrow{margin:0;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+#app-title{margin:0;font-family:var(--serif);font-size:30px;line-height:1.05;letter-spacing:-.01em}
+.chapter-lede{margin:0;color:var(--ink2);font-size:14px;font-family:var(--serif);font-style:italic;line-height:1.5}
+.rail-rule{height:1px;background:linear-gradient(90deg,var(--rule),transparent);margin:2px 0}
+.section-h{margin:0;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lens-group{display:flex;flex-wrap:wrap;gap:7px}
+.lens-btn{cursor:pointer;border:1px solid var(--rule);background:#fffdf7;color:var(--ink2);
+  padding:6px 11px;border-radius:8px;font-size:12.5px;transition:.15s;display:inline-flex;gap:7px;align-items:center;font-weight:500}
+.lens-btn:hover{border-color:var(--muted);color:var(--ink)}
+.lens-btn[aria-pressed="true"]{border-color:var(--dot);color:var(--ink);background:#fff;box-shadow:0 0 0 1px var(--dot) inset}
+.lens-dot{width:9px;height:9px;border-radius:50%;background:var(--dot);display:inline-block}
+.lens-desc{margin:0;color:var(--ink2);font-size:12.5px;min-height:3.2em;line-height:1.5;font-family:var(--serif)}
+.progress-box{font-size:11.5px;color:var(--muted)}
+.progress-bar{height:5px;border-radius:5px;background:var(--rule2);overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#d6a94e);width:0;transition:width .35s}
+.node-list{display:flex;flex-direction:column;gap:2px;overflow:auto}
+.node-list button{text-align:left;cursor:pointer;border:1px solid transparent;background:transparent;color:var(--ink2);
+  padding:8px 9px;border-radius:9px;font-size:13px;display:flex;gap:10px;align-items:baseline;transition:.12s;font-family:var(--serif)}
+.node-list button:hover{background:#fffdf6;border-color:var(--rule)}
+.node-list button[aria-current="true"]{background:#fff;border-color:var(--dot);color:var(--ink)}
+.node-idx{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px;min-width:16px;font-family:var(--sans)}
+
+.map-stage{position:relative;background:radial-gradient(680px 680px at 50% 46%, #fffdf8 0%, #f4efe4 72%, #efe7d7 100%);
+  border:1px solid var(--rule);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;min-height:600px;display:flex}
+.system-map{width:100%;height:100%;display:block}
+
+.ring{fill:none;stroke:var(--rule2);stroke-width:1}
+.ring-tick{stroke:var(--rule);stroke-width:1}
+.era-label{fill:var(--muted);font-size:10.5px;font-family:var(--sans);font-weight:600;letter-spacing:.03em}
+
+.edge path{fill:none;stroke:var(--rule);stroke-width:1.4;transition:stroke .25s, opacity .25s;opacity:.5;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw .9s ease forwards}
+.edge.active path{stroke:var(--dot,#b7791f);stroke-width:2;opacity:.92;marker-end:url(#arrow-active)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.edge-label{fill:var(--muted);font-size:10px;opacity:0;transition:.2s;font-family:var(--sans)}
+.edge.active .edge-label{opacity:.9}
+
+.center-halo{fill:#fff;opacity:.6;transform-origin:center;transform-box:fill-box;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.4;r:74}50%{opacity:.75;r:86}}
+.center-ring{fill:none;stroke:var(--dot,#b7791f);stroke-width:2;opacity:.5;transition:stroke .3s}
+.center-disc{fill:var(--center);stroke:#000;stroke-opacity:.06}
+.center-t1{fill:#fff;font-family:var(--serif);font-size:15px;font-weight:600;text-anchor:middle}
+.center-t2{fill:#e9c986;font-family:var(--sans);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-anchor:middle}
+.spoke{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 4;opacity:.45}
+
+.node{cursor:pointer;opacity:0;animation:pop .5s ease forwards;animation-delay:var(--delay,0s)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.node{transform-origin:var(--ox) var(--oy);transform-box:view-box}
+.node .halo{fill:var(--dot);opacity:.10;transition:.2s}
+.node .disc{fill:#fffdf8;stroke:var(--dot);stroke-width:2;transition:.2s;filter:drop-shadow(0 3px 6px rgba(60,50,30,.12))}
+.node:hover .disc{stroke-width:2.6}
+.node .num{fill:var(--dot);font-family:var(--serif);font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+.node .cap{fill:var(--ink);font-family:var(--serif);font-size:13px;font-weight:600}
+.node .kicker{fill:var(--muted);font-family:var(--sans);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.node .era{fill:var(--dot);font-family:var(--sans);font-size:9.5px;font-weight:700}
+.node.selected .disc{stroke-width:3;fill:#fff}
+.node.selected .halo{opacity:.22}
+.node.dim{opacity:.32}
+
+.detail-empty{color:var(--ink2);font-size:13.5px;font-family:var(--serif);line-height:1.6}
+.detail-kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dot);margin:0;font-weight:600}
+.detail-title{margin:5px 0 0;font-family:var(--serif);font-size:21px;line-height:1.15}
+.detail-thesis{margin:0;color:var(--ink);font-size:14.5px;font-family:var(--serif);line-height:1.55}
+.detail-insight{margin:0;padding:11px 13px;border-left:3px solid var(--dot);background:#fffdf6;border-radius:0 8px 8px 0;font-size:13.5px;font-family:var(--serif);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;color:var(--ink2);background:#fffdf6;border:1px solid var(--rule);border-radius:999px;padding:3px 10px}
+.related h4,.sources-block h4{margin:8px 0 5px;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
+.related-list{display:flex;flex-direction:column;gap:3px}
+.related-list button{cursor:pointer;text-align:left;background:#fffdf6;border:1px solid var(--rule);color:var(--ink2);border-radius:8px;padding:7px 9px;font-size:12.5px;font-family:var(--serif)}
+.related-list button:hover{border-color:var(--dot);color:var(--ink)}
+.sources-block ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.sources-block li{font-size:11.5px;color:var(--ink2);line-height:1.4}
+.sources-block a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--rule)}
+.panel-actions{display:flex;gap:8px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
+.btn{cursor:pointer;border-radius:9px;padding:9px 13px;font-size:13px;border:1px solid var(--rule);background:#fffdf7;color:var(--ink);font-weight:500}
+.btn.primary{background:var(--center);color:#fff;border-color:var(--center)}
+.btn:hover{filter:brightness(.98)}.btn.primary:hover{filter:brightness(1.15)}
+.empty-state{margin:auto;text-align:center;padding:30px;color:var(--ink2);max-width:420px;font-family:var(--serif)}
+.empty-state a{color:var(--gold)}
+
+.scene-dialog{border:1px solid var(--rule);background:linear-gradient(180deg,#fffdf8,var(--paper2));
+  border-radius:16px;max-width:680px;width:calc(100vw - 40px);padding:0;box-shadow:0 30px 80px rgba(40,30,10,.3)}
+.scene-dialog::backdrop{background:rgba(40,32,18,.34);backdrop-filter:blur(2px)}
+.dialog-inner{padding:26px 30px}
+.dialog-inner h3{margin:2px 0 0;font-family:var(--serif);font-size:26px;line-height:1.12}
+.dialog-close{position:absolute;top:14px;right:18px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:24px;line-height:1}
+.dialog-body{margin:14px 0;color:var(--ink);font-size:15.5px;line-height:1.72;font-family:var(--serif)}
+.dialog-body h2{font-size:17px;font-family:var(--serif);margin:18px 0 6px}
+.dialog-body p{margin:0 0 12px}
+.arpa-wrap{margin-top:14px;border:1px solid var(--rule);border-radius:12px;padding:16px;background:#fffdf6}
+.arpa-wrap h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.arpa-svg{width:100%;height:160px;display:block;background:#faf6ec;border-radius:8px;border:1px solid var(--rule2)}
+.arpa-note{margin:9px 0 0;color:var(--ink2);font-size:12px;min-height:1.4em;font-family:var(--serif)}
+.arpa-net line{stroke:var(--rule);stroke-width:2}
+.arpa-net .path-active{stroke:var(--technology);stroke-width:3}
+.arpa-net circle.host{fill:#fffdf8;stroke:var(--muted);stroke-width:2}
+.arpa-net circle.down{fill:#f6e3e0;stroke:var(--power);stroke-width:2}
+.arpa-net .packet{fill:var(--gold)}
+.arpa-net text{fill:var(--ink2);font-size:11px;text-anchor:middle;font-family:var(--serif)}
+
+@media (prefers-reduced-motion: reduce){
+  .node,.edge path,.center-halo{animation:none!important;opacity:1!important;stroke-dashoffset:0!important}
+}
+@media (max-width:1060px){
+  .app-shell{grid-template-columns:1fr}
+  .map-stage{min-height:64vh;order:-1}
+  .control-rail{order:0}.detail-panel{order:2}
+}
+@media (max-width:560px){
+  .app-shell{padding:12px;gap:12px}
+  #app-title{font-size:24px}
+  .map-stage{min-height:72vh}
+}
+</style>
+<script>
+const CHAPTER_DATA = {"chapter": {"key": "preinternet", "title": "Before the Internet", "sourceUrl": "https://luminara.tech/#/scene?s=3&c=preinternet", "centralIdea": "Information becomes power", "centerX": 500, "centerY": 445, "ring": 300, "lede": "How information becomes power — from scarcity and signals to the network society.", "lang": "en"}, "lenses": [{"id": "chronology", "label": "Chronology", "accent": "#7dd3fc", "description": "The order of events and the shift from information scarcity to data flows."}, {"id": "power", "label": "Power", "accent": "#f87171", "description": "Who controls information: institutions, protocols, networks, or platforms."}, {"id": "technology", "label": "Technologies", "accent": "#34d399", "description": "Inventions and protocols: signal, hypertext, packets, TCP/IP, Web."}, {"id": "media", "label": "Media", "accent": "#fbbf24", "description": "How the medium of transmission changes perception, behavior, and the organization of society."}, {"id": "privacy", "label": "Privacy", "accent": "#c084fc", "description": "Cryptography as protection from surveillance and control."}], "nodes": [{"id": "scarcity", "sceneIndex": 0, "x": 500.0, "y": 145.0, "type": "power", "title": "Information as Scarcity", "shortTitle": "Scarcity", "insight": "Before the internet, information was physically expensive and centralized — this made it a tool of power for those who had the equipment.", "body": "## A World Where Words Cost Money\n\nYou are reading this on a screen. Somewhere in a data center, a server sent you this text in milliseconds — and it cost you nothing. It feels self-evident, like electricity or running water. But it was not always this way. And understanding what it was like \"before\" is not historical curiosity, but the key to understanding why the modern internet is built exactly as it is. And why that is a problem.\n\nJust seventy years ago, sending a message from Kyiv to New York cost money, took days and was controlled by those who had the equipment: states, telegraph companies, newspaper editorial offices. Information was a scarcity — exactly like oil or grain. And like any scarcity, it was power. Whoever controlled the transmission of information controlled reality.\n\nImagine a printing house in the mid-twentieth century. Huge metal machines, lead type, the smell of ink and oil. To deliver one idea to a million people, you had to physically print a million copies of a newspaper, load them onto trucks, and distribute them to kiosks across the country. Every copy cost money. Every kilometer of delivery cost money. A typo in the print run meant money thrown away, reputation damaged. It was a huge, heavy, slow mechanism.\n\nRadio and television seemed like a revolution — the signal travels at the speed of light, no trucks needed. But they had a fundamental limitation: one transmitter, millions of receivers. Only the person with the tower could speak. The rest of humanity listened. You could not pick up the receiver and answer. You could not object. You could not add your own voice.\n\nThis is what the information world looked like before the internet: centralized, expensive, one-way. A few sources broadcast to many. Information flowed strictly from top to bottom — from those who had the equipment to those who did not. This was not an accident or malicious intent — it was the physical reality of the technologies of that time.\n\n> Information was not just a resource — it was the architecture of power. Whoever owned the channel of transmission owned reality.\n\nThat is why the first people who understood that this architecture could be changed understood something revolutionary. Not simply that \"data could be transmitted faster.\" But that \"the very structure of power over information can be broken.\" And they began working on it — long before the first browser appeared.", "tags": ["power", "scarcity", "media"], "lensWeight": {"chronology": 5, "power": 5, "technology": 1, "media": 4, "privacy": 1}, "angDeg": -90.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "before 1948"}, {"id": "shannon", "sceneIndex": 1, "x": 692.8, "y": 215.2, "type": "technology", "title": "Shannon: Information Became Physics", "shortTitle": "Shannon", "insight": "Shannon proved that information can be measured and transmitted as a physical quantity — this laid the mathematical foundation for the entire digital world.", "body": "## The Man Who Measured Thought\n\nIn 1948, the American mathematician Claude Shannon published a paper with the dry technical title \"A Mathematical Theory of Communication.\" Few people read it then. Few people read it now. But it changed the world more than most books everyone reads.\n\nShannon proved something that had seemed impossible: any message — a word, a sound, an image, a number, a smell described in words — can be precisely measured, compressed and transmitted through any communication channel. He called the unit of measurement a \"bit\" — from binary digit. Zero or one. Signal or no signal. The entire universe of information is combinations of zeros and ones.\n\nBefore Shannon, information was something vague and subjective. Some words were \"more important\" than others. Some images were \"more meaningful.\" Some messages were \"richer.\" After Shannon, information became a physical quantity, just as real and measurable as mass or temperature. The world stopped being divided only into matter and energy. A third thing appeared — information. And this third thing turned out to be no less fundamental than the first two.\n\n## A Candle Flame Across the Ocean\n\nTo understand what Shannon did, imagine this task: transmit the flame of a candle from Kyiv to Tokyo. You can carry the candle itself — but that is slow, expensive, and the flame will go out on the way. This is the transmission of matter, and it is limited by physical laws.\n\nBut you can describe the flame: its color, height, temperature, shape, the chemical composition of the wax. Send this description at the speed of light through a wire. And another person in Tokyo will light exactly the same flame. This is the transmission of information — and it does not know physical limitations.\n\nShannon showed that this second method can be made absolutely precise, reliable and scalable. That any signal can be encoded into bits, transmitted without distortion and reconstructed on the other side. The entire digital world stands on this: from email to 4K streaming, from messengers to blockchain.\n\nEvery time you send a message in Telegram — Shannon is at work. Every time a transaction in a blockchain is transmitted between network nodes — Shannon is at work. He created the mathematical foundation on which everything digital is built.\n\n> Shannon did not invent the internet. He proved that the internet was possible — that information can be transmitted precisely, like a physical quantity.\n\nThe paradox is that Shannon himself worked at Bell Laboratories — the largest telephone monopoly in the world. His discovery eventually destroyed his employer's monopoly. When information can be transmitted through any channel, it means no channel can remain a monopoly forever.", "tags": ["signal", "coding", "measurement"], "lensWeight": {"chronology": 4, "power": 2, "technology": 5, "media": 2, "privacy": 2}, "angDeg": -50.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1948"}, {"id": "memex", "sceneIndex": 2, "x": 795.4, "y": 392.9, "type": "media", "title": "Bush's Memex: A Dream Ahead of Its Time", "shortTitle": "Memex", "insight": "In 1945, Vannevar Bush described hypertext and connected knowledge — 46 years before the Web. The right ideas do not die; they wait for their technologies.", "body": "## Hypertext Forty Years Before the Internet\n\nBack in 1945 — two years before the first fully fledged computer appeared and forty-six years before the World Wide Web — the American scientist Vannevar Bush wrote an essay titled \"As We May Think.\" It was published in The Atlantic — not in a scientific journal, but in a mass publication for a broad audience. Bush wanted everyone to read him, not only fellow scientists.\n\nHe described a device he called \"memex\" — from memory extender. It was a personal library of all human knowledge, where any document is connected to any other by meaning. You read an article about Napoleon — and with one movement move to a map of his campaigns. From the map — to letters from his generals. From the letters — to an analysis of his tactics by twentieth-century military historians. You do not search an alphabetical catalog, you do not browse shelves — you follow the chain of thought, the way thought itself follows.\n\nThis was hypertext. Forty years before the word would be officially coined. Forty-six years before Tim Berners-Lee would implement this idea as the World Wide Web.\n\n## Why the Dream Sat in a Desk Drawer\n\nBush saw the future with complete clarity: knowledge should be connected, accessible to everyone and belong to all. There was only one problem — the technologies did not yet exist. In 1945, computers occupied entire rooms, cost as much as airplanes and could only calculate. No displays, no mice, no networks. Bush described the device in terms of microfilm and mechanical levers — because that was all he had available for analogy.\n\nHis dream sat in a desk drawer for almost half a century. But it was not forgotten. People read it, quoted it, passed it from hand to hand. Ted Nelson coined the word \"hypertext\" in 1965 — directly inspired by Bush. Douglas Engelbart created the computer mouse and a system of hypertext documents — also under Bush's influence.\n\nWhen Tim Berners-Lee wrote his proposal to create the Web at CERN in 1989, he directly referred to Bush's essay as the original idea. Forty-four years after publication, the dream finally received the tools for implementation.\n\nThis story matters not as a historical curiosity. It shows something fundamental: the right idea does not die. It waits for its moment. Sometimes for decades. Today we are living through a similar moment: ideas of a decentralized internet, where users own their data, existed long before blockchain. The technologies have simply finally caught up with the vision.\n\n> Bush described the World Wide Web forty-six years before its invention. Not because he was a prophet — but because he understood what the human mind wants from tools of knowledge.\n\nParadoxically, in 1945 Bush was thinking about links between ideas — while in the end we got an internet where links between people turned out to be more important than links between ideas. This is an important difference, and we will return to it in the following chapters.", "tags": ["hypertext", "knowledge", "associations"], "lensWeight": {"chronology": 4, "power": 2, "technology": 4, "media": 5, "privacy": 1}, "angDeg": -10.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1945"}, {"id": "arpanet", "sceneIndex": 3, "x": 759.8, "y": 595.0, "type": "technology", "title": "ARPANET: the internet was born from fear", "shortTitle": "ARPANET", "insight": "ARPANET was created as a military communications system with no single point of failure, and this decentralized architecture became the foundation of the entire internet.", "body": "## The satellite that changed the architecture of the world\n\nThe history of the internet does not begin in Silicon Valley or in university lecture halls. It begins in the Pentagon, at the height of the Cold War, in a moment of acute geopolitical fear.\n\nOn October 4, 1957, the Soviet Union launched the first artificial Earth satellite. A small metal sphere 58 centimeters in diameter, weighing 83 kilograms, flew above the Earth and beeped, and the whole world heard it. For the American military, this was not just a competitor's technological triumph. It was an alarm signal: the enemy controls orbit. If they can launch a satellite, they can launch a missile with a nuclear warhead and reach any point on the planet.\n\nA year later, the United States created DARPA, the Defense Advanced Research Projects Agency. Its task was to create a military communications system that could not be destroyed by a single strike. Traditional telephone networks were catastrophically vulnerable: where there is a central telephone exchange, there is a point of failure. One bomb on the Pentagon, and communication with the entire army is lost.\n\n## A network without a center, the idea that changed everything\n\nDARPA engineers came up with a fundamentally different solution. What if the center were removed entirely? Make every node in the network equal. If one fails, the message automatically finds another route. Like water in pipes: if one pipe is blocked, the water finds a detour.\n\nThis idea was called ARPANET. In 1969, it worked for the first time: four universities, UCLA, Stanford, UC Santa Barbara and Utah, exchanged data over a telephone line. The first message they tried to send was the word \"login\". The system crashed after the letter \"o\". The first word transmitted over the proto-internet was \"lo\", which in English means \"look\". Accidental poetry.\n\nNo one then thought this would become the foundation of the global civilian internet. The military wanted reliable communication in case of nuclear war. They created something larger: an architecture in which power structurally cannot concentrate in one point. A distributed network is, by its nature, resistant to centralization.\n\nAt least, that was the idea. Reality turned out to be more complicated, and we will talk about that in the next chapters.\n\n> The internet was created as a military communications system resistant to a nuclear strike. In the end, it proved resistant to any centralization of power, and this became its main political property.\n\nIn 1974, Vinton Cerf and Robert Kahn solved the next problem: different computers spoke different languages. Stanford's network did not understand MIT's network. They created TCP/IP, a universal protocol, a common language for transmitting data between any networks. Data is split into small packets, each finds its own path, and at the other end it is assembled back together. As if you cut a letter into pieces, sent each piece by a separate courier, and they still came together in the correct order at the recipient's end. This very protocol remains the foundation of the internet today, fifty years after it was created.", "tags": ["packets", "DARPA", "TCP/IP", "decentralization"], "lensWeight": {"chronology": 5, "power": 5, "technology": 5, "media": 2, "privacy": 3}, "angDeg": 30.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1969"}, {"id": "open-web", "sceneIndex": 4, "x": 602.6, "y": 726.9, "type": "technology", "title": "Berners-Lee: the decision to give everything away for free", "shortTitle": "Open Web", "insight": "Berners-Lee gave the Web away for free, not out of altruism, but because he understood that only an open protocol can become global.", "body": "## A proposal marked \"vague, but exciting\"\n\nIn 1989, a young British programmer named Tim Berners-Lee was working at CERN, the European Organization for Nuclear Research in Geneva. It is the world's largest scientific institute: thousands of scientists from dozens of countries work on the same experiments, but constantly lose documents, forget context, and spend months figuring out what had already been done before them.\n\nBerners-Lee wrote an internal proposal for management. The idea: create a system where all documents are connected by links and accessible from any computer on the network. His boss, Mike Sendall, wrote three words in the margin: \"Vague, but exciting\". It was the most modest review of an invention that would change the world.\n\nOver three years, Berners-Lee created three things on which the entire modern internet stands: HTML, the language for marking up documents; HTTP, the protocol for transmitting them; and URL, the addressing system. Together they formed the World Wide Web. Documents are stored on servers, have addresses, are connected by links, and open through a browser program. Simple, elegant, universal.\n\n## The decision that defined an era\n\nBut the key decision was not technical. It was ethical.\n\nBerners-Lee could have patented his invention. CERN's lawyers suggested it. If every site had paid royalties for using HTTP, Berners-Lee would have become the richest person on the planet. Instead, he insisted on giving the technology to humanity for free, without restrictions, without licenses, without conditions.\n\n\"If the Web had been patented or controlled by one company, it would not have existed,\" he later explained. This was not altruism for altruism's sake. It was a strategy: only without barriers could the network grow to global scale. Only if anyone can create a site without permission will the network become truly open.\n\nIn 1993, students at the US National Center for Supercomputing Applications released the Mosaic browser, the first to show text and images together on one screen. Before that, the internet was a world of text. Mosaic made it visual. And understandable for an ordinary person who had never learned programming.\n\nThat same year, the number of websites passed five hundred. It sounds funny now, but at the time it was an explosion. Two years later, there were already two hundred thousand. The race had begun.\n\n> Berners-Lee gave the Web away for free, and by doing so made it global. If he had patented it, we would still be paying royalties for every link.\n\nThis story about Berners-Lee is not just a biographical fact. It is a lesson about the nature of networks: open protocols grow faster than closed ones because anyone can build on them. That is why the Ethereum blockchain is open. That is why TON is an open protocol. In 1991, Berners-Lee laid down a principle that still determines which technologies win.", "tags": ["Web", "protocol", "openness"], "lensWeight": {"chronology": 5, "power": 4, "technology": 5, "media": 4, "privacy": 2}, "angDeg": 70.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1991"}, {"id": "atoms-to-bits", "sceneIndex": 5, "x": 397.4, "y": 726.9, "type": "economy", "title": "From atoms to bits: a shift in economic logic", "shortTitle": "Atoms → bits", "insight": "The shift \"from atoms to bits\" is not just technology; it is a change in economic logic, from the scale of sameness to the uniqueness of each interaction.", "body": "## Toffler saw it in 1980\n\nWhen Alvin Toffler published The Third Wave in 1980, personal computers barely existed. There was no internet. There were no mobile phones. And yet he described an economic transformation that would fully unfold only forty years later.\n\nToffler described three eras of human civilization. The first wave was agrarian: land and harvest as the main value. The second wave was industrial: the assembly line, standardization, mass production. A factory produces a thousand identical refrigerators, and it is efficient precisely because they are identical. The more units of product, the lower the cost of each one. Scale is the victory of the industrial economy.\n\nThe third wave is informational. And here the logic turns upside down. In the information economy, copying is free. One program can behave differently with a billion users at the same time, and this is not a bug, but its main advantage. Value is created not by replicating the identical, but by the uniqueness of each interaction.\n\n## Nicholas Negroponte and the simplest formula\n\nIn 1995, MIT Media Lab director Nicholas Negroponte expressed this in one phrase that became famous: \"from atoms to bits\".\n\nAtoms are the physical world. To produce a refrigerator, you need metal, plastic, electronics, labor, a factory. To deliver it to the buyer, you need a truck, a warehouse, a store. Every copy costs money. Distribution is limited by resources. If you want to sell a million refrigerators, you need to produce a million refrigerators.\n\nBits are the digital world. To create a program, you need one developer and one computer. To deliver it to a billion users, you need a server and an internet connection. Copying is practically free. Delivery is instant. Distribution is infinite. If you want to sell a billion copies of a program, you do not need to manufacture a billion programs. One copy replicates a billion times.\n\nThis is not just a technological difference. It is a shift in fundamental economic logic. The entire economy of the 20th century was built on the logic of atoms: scarcity, scale, standardization. The economy of the 21st century is built on the logic of bits: abundance, personalization, network effects.\n\n> The industrial economy earned money from the scale of sameness. The information economy earns money from the uniqueness of each interaction. These are opposite logics.\n\nOnce you understand this difference, much of the modern world starts to make sense. Why is Google free? Because copying search results costs nothing, and monetization comes through advertising. Why does Spotify pay musicians pennies? Because the marginal cost of one stream approaches zero. Why are cryptocurrencies possible at all? Because digital assets can be transferred without a physical medium. All of these are consequences of one principle that Negroponte formulated in three words.", "tags": ["economy", "bits", "scale"], "lensWeight": {"chronology": 4, "power": 4, "technology": 3, "media": 3, "privacy": 1}, "angDeg": 110.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1995"}, {"id": "media-effects", "sceneIndex": 6, "x": 240.2, "y": 595.0, "type": "media", "title": "McLuhan and Rushkoff's Viruses: Media Change Us", "shortTitle": "Media", "insight": "McLuhan and Rushkoff understood that what matters is not information, but the environment through which it is transmitted. Media change us regardless of content - through a structure we do not notice.", "body": "## The medium matters more than the message\n\nMarshall McLuhan was an inconvenient thinker. In 1964, he wrote a phrase that was first dismissed as nonsense, then treated as a metaphor, and only later understood as a precise technical description of reality: \"The medium is the message.\"\n\nWhat did he mean? When mass television appeared in the 1950s, everyone argued about content: good programs or bad ones, educational or entertaining, propaganda or art. McLuhan said: that is a secondary question. Television itself - as an environment, as a technology, as a mode of perception - had already changed society, regardless of what exactly was being shown.\n\nFor the first time in history, television synchronized millions of people: the same news at the same time in the same words - in every home across the country at once. It created what McLuhan called the \"global village\" - a world where everyone experiences the same event at the same time. Before television, people in different cities lived in different informational realities. After it, they lived in one.\n\n## Rushkoff's biological metaphor\n\nIn 1994, the American media theorist Douglas Rushkoff added a biological metaphor to McLuhan's idea, and it turned out to be even more precise. In the book *Media Virus!*, he described the mechanism now called viral content - ten years before YouTube and twenty years before TikTok.\n\nIdeas spread like viruses. Not because they are true. Not because they are useful. But because they hit a psychological vulnerability in the audience - the thing that makes people pass them on: fear, outrage, delight, recognition, anger, tenderness. Emotion is the replication mechanism of an idea.\n\nRushkoff showed that content that triggers a strong emotion spreads regardless of its truth or usefulness. A scandalous story travels faster than a true one. A frightening story travels faster than a boring one. This is not an accident and not manipulation - it is an architectural feature of the media environment. A virus does not choose its host by the criterion of \"good person or bad person.\" It chooses by the criterion of \"vulnerable or not.\"\n\nLong before TikTok algorithms, which are optimized precisely for this, Rushkoff described the principle on which they are built. The algorithm did not create virality. It simply learned how to amplify it.\n\n> McLuhan warned: what matters is not the program, but the television set. Rushkoff clarified: what matters is not the idea, but the emotion it provokes. Together, they described the architecture of modern social networks thirty years before they appeared.\n\nWhen the internet appeared, the first question was again about content: what would people read and watch there? McLuhan would have said: wrong question. The right one is: what does the environment itself do to a person when they spend more and more time inside it? This question became critically important when social networks appeared. Unfortunately, it was asked too late.", "tags": ["media", "behavior", "perception"], "lensWeight": {"chronology": 3, "power": 3, "technology": 1, "media": 5, "privacy": 2}, "angDeg": 150.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1964–1990s"}, {"id": "cypherpunks", "sceneIndex": 7, "x": 204.6, "y": 392.9, "type": "privacy", "title": "Hughes and the Cypherpunks: Privacy Is Mathematics", "shortTitle": "Cypherpunks", "insight": "In 1993, Hughes predicted the privacy crisis and demanded mathematical protection - his manifesto became the ideological foundation of Bitcoin and all of Web3.", "body": "## The voice that warned in advance\n\nIn 1993, when most people were hearing the word \"internet\" for the first time, the mathematician and cryptographer Eric Hughes wrote a three-page document. It was called \"A Cypherpunk's Manifesto\" and was published on the mailing list of a small community of people who worked on cryptography and thought about the consequences of a public network appearing.\n\nAt the time, the internet was only just becoming available to ordinary people. The first browsers had only just appeared. No one was thinking yet about privacy online - people were simply excited by the new possibilities: you could correspond with people on the other side of the planet! You could read news in real time! You could find any information!\n\nHughes thought differently. His argument was simple and ironclad: an open internet means that every action you take online is potentially visible to everyone - providers, governments, corporations. This is not an accidental vulnerability. It is an architectural feature of a system that, intentionally or not, was built exactly this way. And the only way to protect privacy under these conditions is not to ask providers and governments for permission, but to use mathematics. Cryptography. Mathematics that no law can break.\n\n## A prophecy that came true literally\n\nHughes wrote in 1993: \"Privacy in an open society requires anonymous transaction systems.\" It sounded like science fiction. Most readers shrugged: \"I have nothing to hide.\" Why would an ordinary person need anonymous transactions?\n\nThirty years later, we live in a world where corporations know more about users than their loved ones do. Where data leaks have become daily news. Where every card purchase, every search query, every movement with a phone turned on is recorded and stored. Hughes was not paranoid. He was simply thinking several moves ahead.\n\nThe cypherpunks - a small community that gathered around this idea in the early 1990s - ultimately laid the ideological foundation for Bitcoin. In 2008, Satoshi Nakamoto published the description of Bitcoin specifically on the cypherpunk mailing list. It was a direct answer to Hughes's question: here is your anonymous transaction system, built on mathematics rather than trust in an intermediary.\n\nBack in 1984, Stewart Brand uttered the phrase that became a manifesto of the open internet: \"Information wants to be free.\" He meant the nature of information - it does not diminish when copied, so artificial barriers contradict its nature. Hughes completed this from the other side: freedom of information without privacy is not freedom; it is transparency for those who are watching.\n\n> Brand said: information wants to be free. Hughes answered: and privacy wants to be protected by mathematics. Together, they described the two poles of digital freedom.\n\nThese two principles - openness and privacy - in some sense contradict each other. And the tension between them still defines the main arguments about what the internet should be. How can knowledge be made accessible to everyone while each person's personal data is protected? This question has not yet been solved. And it is exactly what Web3 is trying to solve.", "tags": ["cryptography", "privacy", "surveillance"], "lensWeight": {"chronology": 3, "power": 4, "technology": 4, "media": 2, "privacy": 5}, "angDeg": 190.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1993"}, {"id": "castells", "sceneIndex": 8, "x": 307.2, "y": 215.2, "type": "power", "title": "Castells: Power Shifted to Flows", "shortTitle": "Flows", "insight": "Castells showed that power shifted from control over places to control over flows of data and attention - and this made it invisible and hard to challenge.", "body": "## The revolution no one noticed\n\nBy the mid-1990s, the Spanish sociologist Manuel Castells was observing a transformation happening in plain sight - and wrote a three-volume work about what most people were not noticing. The information revolution had already happened. People were simply looking for it in the wrong place.\n\nThey were waiting for flying cars and robots in the kitchen. They were waiting for the fantastic future promised by popular science magazines of the 1960s. But the revolution was happening in bank server rooms, in the logistics centers of global corporations, in financial flows between continents. By the 1990s, money had already stopped being physical - it had become flows of data between servers. Production had stopped being local - it had become a global network of suppliers, where design is done in California, parts are made in China, assembly happens in Vietnam, and sales happen everywhere. Power was no longer measured by territory.\n\n## The space of places versus the space of flows\n\nCastells introduced a distinction that helps explain the modern world. Old power controlled the \"space of places\": factories, ports, borders, territories. Physical points that can be occupied, defended, held. New power controls the \"space of flows\": data, capital, attention, information.\n\nThese are fundamentally different kinds of power. Territorial power can be seen on a map - here is the border, here is the army, here is the castle. Power over flows is invisible. Where is Google's power located? Nowhere and everywhere at once. Where is Facebook's power located? In the algorithm that determines what billions of people see. Where is Bitcoin's power located? In a distributed network that has no physical location.\n\nCastells showed: whoever controls the flows controls the world. And this observation proved frighteningly accurate. Five or six technology companies control most of the planet's information flows. They do not own territories. They own algorithms that determine what people see, read, buy, and believe in.\n\nDaniel Bell had predicted back in 1973 the transition to a post-industrial society where the main resource is information and the main institutions are not factories, but universities and research laboratories. In the 1990s, Castells saw that this had happened - but power over information was concentrated somewhere very different from universities.\n\n> Old power controlled places. New power controls flows. And flows are much harder to challenge than territory.\n\nThis is the fundamental question that runs through the entire course: how is power organized in a world where information is the main resource? Who controls it? How does it concentrate? And what happens when a few corporations seize control over most of the planet's information flows? The next chapters are about this.", "tags": ["flows", "society", "power"], "lensWeight": {"chronology": 4, "power": 5, "technology": 2, "media": 4, "privacy": 3}, "angDeg": 230.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1996"}], "edges": [{"from": "scarcity", "to": "shannon", "label": "from scarcity to measurement", "lenses": ["chronology", "technology"]}, {"from": "shannon", "to": "arpanet", "label": "signal becomes a network", "lenses": ["chronology", "technology"]}, {"from": "memex", "to": "open-web", "label": "hypertext becomes the Web", "lenses": ["chronology", "media", "technology"]}, {"from": "arpanet", "to": "open-web", "label": "resilience plus openness", "lenses": ["chronology", "power", "technology"]}, {"from": "open-web", "to": "atoms-to-bits", "label": "openness speeds up copying", "lenses": ["power", "technology"]}, {"from": "atoms-to-bits", "to": "castells", "label": "economy turns into flows", "lenses": ["power", "media"]}, {"from": "media-effects", "to": "castells", "label": "media shape the network society", "lenses": ["media", "power"]}, {"from": "arpanet", "to": "cypherpunks", "label": "the network needs protection", "lenses": ["privacy", "technology", "power"]}, {"from": "cypherpunks", "to": "castells", "label": "privacy within the flows", "lenses": ["privacy", "power"]}, {"from": "scarcity", "to": "castells", "label": "from access control to flow control", "lenses": ["power"]}], "ui": {"eyebrow": "Luminara · Foundations", "sectionLenses": "Interpretation lenses", "sectionScenes": "Chapter scenes", "detailLabel": "Detail", "detailEmpty": "Choose a node on the map — its thesis, insight, sources, and related ideas will appear here. The lenses above change what is highlighted and recolor the center.", "related": "Related ideas", "sources": "Sources", "readScene": "Read scene", "centerLabel": "Central idea", "progress": "Explored", "progressOf": "of", "openInLuminara": "Open in Luminara", "close": "Close", "arpaTitle": "Mini-demo · packet routing", "arpaNote": "Press “Send packet”. Then “Disable node” — the packet will find another route. That is what a network with no single point of failure means.", "arpaSend": "Send packet", "arpaFail": "Disable node", "arpaReset": "Reset", "arpaDemo": "ARPANET demo", "typePower": "Power", "typeTechnology": "Technologies", "typeMedia": "Media", "typePrivacy": "Privacy", "typeEconomy": "Economy", "chapterTitle": "Before the Internet", "scene": "Scene", "arpaRouting": "Packet routing", "arpaNoRoute": "No route: too many nodes are down.", "arpaDelivered": "delivered", "arpaAria": "ARPANET packet rerouting", "initError": "Initialization error"}};
+function renderEmptyState(reason){const empty=document.querySelector(".empty-state"),svg=document.querySelector(".system-map");if(!empty||!svg)return;empty.hidden=false;svg.setAttribute("hidden","");empty.innerHTML=`<p>${reason}</p><a href="${CHAPTER_DATA.chapter.sourceUrl}" target="_blank" rel="noreferrer">Luminara</a>`;}
+</script></head>
+<body>
+<main class="app-shell">
+  <section class="control-rail">
+    <div><p class="eyebrow">Luminara · Foundations</p><h1 id="app-title">Before the Internet</h1></div>
+    <p class="chapter-lede">How information becomes power — from scarcity and signals to the network society.</p>
+    <div class="rail-rule"></div>
+    <div><p class="section-h">Interpretation lenses</p><div class="lens-group" style="margin-top:9px"></div><p class="lens-desc" style="margin-top:9px"></p></div>
+    <div class="rail-rule"></div>
+    <div class="progress-box"></div>
+    <div><p class="section-h">Chapter scenes</p><nav class="node-list" style="margin-top:6px"></nav></div>
+  </section>
+  <section class="map-stage">
+    <svg class="system-map" viewBox="0 0 1000 890" role="img" preserveAspectRatio="xMidYMid meet"><title id="map-title">Before the Internet</title><desc id="map-desc">Information becomes power</desc></svg>
+    <div class="empty-state" hidden></div>
+  </section>
+  <aside class="detail-panel"></aside>
+</main>
+<dialog class="scene-dialog"></dialog>
+<script>
+const state={lens:"chronology",selected:null,visited:new Set(),entered:false};
+const byId=id=>CHAPTER_DATA.nodes.find(n=>n.id===id);
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in(a||{}))e.setAttribute(k,a[k]);return e;};
+function typeColor(t){return{power:"#c0392b",technology:"#1f7a5a",media:"#b7791f",privacy:"#6b4fa0",economy:"#a04a7a"}[t]||"#b7791f";}
+function typeLabel(t){const u=CHAPTER_DATA.ui;return{power:u.typePower,technology:u.typeTechnology,media:u.typeMedia,privacy:u.typePrivacy,economy:u.typeEconomy}[t]||"";}
+function lensById(id){return CHAPTER_DATA.lenses.find(l=>l.id===id);}
+function edgeActive(e){return e.lenses.includes(state.lens);}
+function nodeWeight(n){return(n.lensWeight&&n.lensWeight[state.lens])||0;}
+const CX=CHAPTER_DATA.chapter.centerX||500, CY=CHAPTER_DATA.chapter.centerY||445, RING=CHAPTER_DATA.chapter.ring||300;
+
+function buildLenses(){
+  const w=document.querySelector(".lens-group");w.innerHTML="";
+  CHAPTER_DATA.lenses.forEach(l=>{const b=document.createElement("button");b.className="lens-btn";b.type="button";
+    b.setAttribute("aria-pressed",String(l.id===state.lens));b.style.setProperty("--dot",l.accent);
+    b.innerHTML=`<span class="lens-dot"></span>${l.label}`;b.addEventListener("click",()=>setLens(l.id));w.appendChild(b);});
+}
+function setLens(id){state.lens=id;const l=lensById(id);
+  const d=document.querySelector(".lens-desc");if(d)d.textContent=l?l.description:"";
+  document.querySelectorAll(".lens-btn").forEach((b,i)=>b.setAttribute("aria-pressed",String(CHAPTER_DATA.lenses[i].id===id)));
+  renderAll();}
+
+function curve(a,b){const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;const dx=mx-CX,dy=my-CY,len=Math.hypot(dx,dy)||1;const bow=26;
+  return `M ${a.x} ${a.y} Q ${mx+(dx/len)*bow} ${my+(dy/len)*bow} ${b.x} ${b.y}`;}
+
+function defs(){
+  const d=el("defs");
+  const mk=(id,color)=>{const m=el("marker",{id,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"});
+    const p=el("path",{d:"M0 0 L10 5 L0 10 z",fill:color});m.appendChild(p);return m;};
+  d.appendChild(mk("arrow-active", lensById(state.lens)?lensById(state.lens).accent:"#b7791f"));
+  return d;
+}
+
+function renderMap(){
+  const svg=document.querySelector(".system-map");if(!svg)return;
+  [...svg.querySelectorAll("defs,g,.ring,.ring-tick,.era-label,.spoke")].forEach(n=>n.remove());
+  svg.appendChild(defs());
+  // rings
+  const gDeco=el("g",{});
+  [RING*0.55,RING].forEach(r=>gDeco.appendChild(el("circle",{class:"ring",cx:CX,cy:CY,r})));
+  svg.appendChild(gDeco);
+  // spokes + chronology era labels around outer ring
+  const gSpoke=el("g",{});
+  CHAPTER_DATA.nodes.forEach(n=>{
+    gSpoke.appendChild(el("line",{class:"spoke",x1:CX,y1:CY,x2:n.x,y2:n.y}));
+  });
+  svg.appendChild(gSpoke);
+
+  // edges (with directional arrows on active)
+  const gE=el("g",{});
+  CHAPTER_DATA.edges.forEach(e=>{const a=byId(e.from),b=byId(e.to);if(!a||!b)return;
+    const active=edgeActive(e);const g=el("g",{class:"edge"+(active?" active":"")});
+    if(active)g.style.setProperty("--dot",lensById(state.lens).accent);
+    const d=curve(a,b);const p=el("path",{d});
+    // approximate length for draw animation
+    const len=Math.round(Math.hypot(b.x-a.x,b.y-a.y)*1.15);
+    p.style.setProperty("--len",len);
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+    const lb=el("text",{class:"edge-label",x:mx,y:my-5,"text-anchor":"middle"});lb.textContent=e.label;
+    g.appendChild(p);g.appendChild(lb);gE.appendChild(g);});
+  svg.appendChild(gE);
+
+  // center (breathing, lens-tinted ring)
+  const gC=el("g",{});
+  gC.style.setProperty("--dot", lensById(state.lens)?lensById(state.lens).accent:"#b7791f");
+  gC.appendChild(el("circle",{class:"center-halo",cx:CX,cy:CY,r:78}));
+  gC.appendChild(el("circle",{class:"center-ring",cx:CX,cy:CY,r:72}));
+  gC.appendChild(el("circle",{class:"center-disc",cx:CX,cy:CY,r:66}));
+  const t2=el("text",{class:"center-t2",x:CX,y:CY-20});t2.textContent=CHAPTER_DATA.ui.centerLabel;gC.appendChild(t2);
+  wrapText(gC,CHAPTER_DATA.chapter.centralIdea,CX,CY+2,120,"center-t1",17);
+  svg.appendChild(gC);
+
+  // nodes with smart outward labels + era
+  const gN=el("g",{});
+  CHAPTER_DATA.nodes.forEach((n,i)=>{
+    const g=el("g",{class:"node"+(state.selected===n.id?" selected":""),tabindex:"0",role:"button","aria-label":`${n.sceneIndex+1}. ${n.title} (${n.era||""})`});
+    g.style.setProperty("--dot",typeColor(n.type));
+    g.style.setProperty("--ox",n.x+"px");g.style.setProperty("--oy",n.y+"px");
+    if(!state.entered) g.style.setProperty("--delay",(0.15+i*0.06)+"s"); else g.style.animation="none",g.style.opacity="1";
+    if(state.selected){const linked=CHAPTER_DATA.edges.some(e=>(e.from===state.selected&&e.to===n.id)||(e.to===state.selected&&e.from===n.id));
+      if(n.id!==state.selected&&!linked)g.classList.add("dim");}
+    else if(nodeWeight(n)<=1){g.classList.add("dim");}
+    g.appendChild(el("circle",{class:"halo",cx:n.x,cy:n.y,r:34}));
+    g.appendChild(el("circle",{class:"disc",cx:n.x,cy:n.y,r:26}));
+    const num=el("text",{class:"num",x:n.x,y:n.y});num.textContent=String(n.sceneIndex+1);g.appendChild(num);
+
+    // smart label placement: outward along the radius from center
+    const dx=n.x-CX,dy=n.y-CY,len=Math.hypot(dx,dy)||1;
+    const ux=dx/len,uy=dy/len;
+    const lx=n.x+ux*40, ly=n.y+uy*40;
+    // anchor by horizontal side
+    const anchor = ux>0.25?"start":(ux<-0.25?"end":"middle");
+    const era=el("text",{class:"era",x:lx,y:ly-13,"text-anchor":anchor});era.textContent=n.era||"";g.appendChild(era);
+    const kick=el("text",{class:"kicker",x:lx,y:ly-1,"text-anchor":anchor});kick.textContent=typeLabel(n.type);g.appendChild(kick);
+    wrapTextAnchored(g,n.shortTitle,lx,ly+13,150,"cap",13,anchor);
+
+    g.addEventListener("click",()=>selectNode(n.id));
+    g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectNode(n.id);}});
+    gN.appendChild(g);
+  });
+  svg.appendChild(gN);
+  state.entered=true;
+}
+function wrapText(parent,text,x,y,maxw,cls,fs){wrapTextAnchored(parent,text,x,y,maxw,cls,fs,"middle");}
+function wrapTextAnchored(parent,text,x,y,maxw,cls,fs,anchor){
+  const words=String(text).split(/\s+/);const lines=[];let line="";
+  const approx=s=>s.length*(fs*0.56);
+  words.forEach(w=>{const t=line?line+" "+w:w;if(approx(t)>maxw&&line){lines.push(line);line=w;}else line=t;});
+  if(line)lines.push(line);const total=(lines.length-1)*(fs+2);
+  lines.forEach((ln,i)=>{const t=el("text",{class:cls,x,y:y-total/2+i*(fs+2),"text-anchor":anchor});t.textContent=ln;parent.appendChild(t);});
+}
+
+function renderNodeList(){const nav=document.querySelector(".node-list");if(!nav)return;nav.innerHTML="";
+  CHAPTER_DATA.nodes.slice().sort((a,b)=>a.sceneIndex-b.sceneIndex).forEach(n=>{
+    const b=document.createElement("button");b.type="button";b.setAttribute("aria-current",String(state.selected===n.id));b.style.setProperty("--dot",typeColor(n.type));
+    b.innerHTML=`<span class="node-idx">${String(n.sceneIndex+1).padStart(2,"0")}</span><span>${n.shortTitle}</span>`;
+    b.addEventListener("click",()=>selectNode(n.id));nav.appendChild(b);});}
+function renderProgress(){const box=document.querySelector(".progress-box");if(!box)return;
+  const total=CHAPTER_DATA.nodes.length,seen=state.visited.size;
+  box.innerHTML=`${CHAPTER_DATA.ui.progress} ${seen} ${CHAPTER_DATA.ui.progressOf} ${total}<div class="progress-bar"><div class="progress-fill" style="width:${Math.round(seen/total*100)}%"></div></div>`;}
+function firstSentence(txt){return String(txt).replace(/^##[^\n]*\n+/,"").split(/(?<=[.!?])\s/)[0]||"";}
+function renderDetail(){const p=document.querySelector(".detail-panel");if(!p)return;
+  if(!state.selected){p.innerHTML=`<p class="eyebrow">${CHAPTER_DATA.ui.detailLabel}</p><p class="detail-empty">${CHAPTER_DATA.ui.detailEmpty}</p>`;return;}
+  const n=byId(state.selected);const c=typeColor(n.type);
+  const related=CHAPTER_DATA.edges.filter(e=>e.from===n.id||e.to===n.id).map(e=>({node:byId(e.from===n.id?e.to:e.from),label:e.label})).filter(x=>x.node);
+  const srcs=(n.sources||[]).slice(0,10);
+  p.innerHTML=`<p class="detail-kicker" style="--dot:${c}">${CHAPTER_DATA.ui.scene} ${n.sceneIndex+1} · ${typeLabel(n.type)}${n.era?" · "+n.era:""}</p>
+    <h3 class="detail-title">${n.title}</h3>
+    <p class="detail-thesis">${firstSentence(n.body)}</p>
+    <p class="detail-insight" style="--dot:${c}">${n.insight}</p>
+    <div class="chips">${(n.tags||[]).map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+    <div class="related"><h4>${CHAPTER_DATA.ui.related}</h4><div class="related-list">
+      ${related.map(r=>`<button type="button" data-go="${r.node.id}">${r.node.shortTitle} · <span style="color:var(--muted)">${r.label}</span></button>`).join("")}</div></div>
+    ${srcs.length?`<div class="sources-block"><h4>${CHAPTER_DATA.ui.sources} (${srcs.length})</h4><ol>${srcs.map(s=>`<li>${s.url?`<a href="${s.url}" target="_blank" rel="noreferrer">${s.title}</a>`:s.title}</li>`).join("")}</ol></div>`:""}
+    <div class="panel-actions"><button class="btn primary" type="button" data-full="${n.id}">${CHAPTER_DATA.ui.readScene}</button>
+      ${n.id==="arpanet"?'<button class="btn" type="button" data-arpa="1">${CHAPTER_DATA.ui.arpaDemo}</button>':""}</div>`;
+  p.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>selectNode(b.getAttribute("data-go"))));
+  p.querySelector("[data-full]").addEventListener("click",()=>renderFullScene(n.id));
+  const ad=p.querySelector("[data-arpa]");if(ad)ad.addEventListener("click",()=>renderFullScene("arpanet",true));}
+function selectNode(id){state.selected=id;state.visited.add(id);renderAll();}
+
+function mdToHtml(md){return String(md).split(/\n{2,}/).map(b=>{b=b.trim();if(!b)return"";
+  if(b.startsWith("## "))return`<h2>${b.slice(3)}</h2>`;return`<p>${b.replace(/\*([^*]+)\*/g,"<em>$1</em>")}</p>`;}).join("");}
+function renderFullScene(id,openArpa){const n=byId(id);if(!n)return;const dlg=document.querySelector(".scene-dialog");const isArpa=n.id==="arpanet";const c=typeColor(n.type);const srcs=(n.sources||[]);
+  dlg.innerHTML=`<div class="dialog-inner"><button class="dialog-close" aria-label="${CHAPTER_DATA.ui.close}" type="button">×</button>
+    <p class="detail-kicker" style="--dot:${c}">${CHAPTER_DATA.ui.scene} ${n.sceneIndex+1} · ${typeLabel(n.type)}${n.era?" · "+n.era:""}</p>
+    <h3>${n.title}</h3><div class="dialog-body">${mdToHtml(n.body)}</div>
+    <p class="detail-insight" style="--dot:${c}">${n.insight}</p>${isArpa?arpaMarkup():""}
+    ${srcs.length?`<div class="sources-block"><h4>${CHAPTER_DATA.ui.sources}</h4><ol>${srcs.map(s=>`<li>${s.url?`<a href="${s.url}" target="_blank" rel="noreferrer">${s.title}</a>`:s.title}</li>`).join("")}</ol></div>`:""}
+    <div class="panel-actions"><a class="btn" href="${CHAPTER_DATA.chapter.sourceUrl}" target="_blank" rel="noreferrer">${CHAPTER_DATA.ui.openInLuminara}</a>
+      <button class="btn primary" type="button" data-close>${CHAPTER_DATA.ui.close}</button></div></div>`;
+  const close=()=>dlg.close();dlg.querySelector(".dialog-close").addEventListener("click",close);dlg.querySelector("[data-close]").addEventListener("click",close);
+  if(typeof dlg.showModal==="function")dlg.showModal();else dlg.setAttribute("open","");
+  if(isArpa){wireArpanet(dlg);if(openArpa)setTimeout(()=>runArpanetPacketDemo(dlg),300);}}
+function arpaMarkup(){return `<div class="arpa-wrap"><h4>${CHAPTER_DATA.ui.arpaTitle}</h4>
+  <svg class="arpa-svg arpa-net" viewBox="0 0 460 160" role="img" aria-label="${CHAPTER_DATA.ui.arpaAria}"></svg>
+  <p class="arpa-note">${CHAPTER_DATA.ui.arpaNote}</p>
+  <div class="panel-actions"><button class="btn primary" type="button" data-send>${CHAPTER_DATA.ui.arpaSend}</button>
+    <button class="btn" type="button" data-fail>${CHAPTER_DATA.ui.arpaFail}</button><button class="btn" type="button" data-reset>${CHAPTER_DATA.ui.arpaReset}</button></div></div>`;}
+const ARPA={hosts:{A:{x:40,y:80,label:"A"},B:{x:170,y:38,label:"B"},C:{x:170,y:122,label:"C"},D:{x:300,y:80,label:"D"},E:{x:420,y:80,label:"E"}},
+  links:[["A","B"],["A","C"],["B","D"],["C","D"],["D","E"]],down:new Set(),
+  route(){const P=[["A","B","D","E"],["A","C","D","E"]];for(const p of P)if(p.every(h=>!this.down.has(h)))return p;return null;}};
+function drawArpa(svg){svg.innerHTML="";const mk=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  ARPA.links.forEach(([f,t])=>{const A=ARPA.hosts[f],B=ARPA.hosts[t];svg.appendChild(mk("line",{x1:A.x,y1:A.y,x2:B.x,y2:B.y}));});
+  Object.entries(ARPA.hosts).forEach(([id,h])=>{svg.appendChild(mk("circle",{cx:h.x,cy:h.y,r:16,class:ARPA.down.has(id)?"down":"host"}));const t=mk("text",{x:h.x,y:h.y+4});t.textContent=h.label;svg.appendChild(t);});}
+function wireArpanet(dlg){const svg=dlg.querySelector(".arpa-net");ARPA.down=new Set();drawArpa(svg);
+  dlg.querySelector("[data-send]").addEventListener("click",()=>runArpanetPacketDemo(dlg));
+  dlg.querySelector("[data-fail]").addEventListener("click",()=>{ARPA.down.add("B");drawArpa(svg);dlg.querySelector(".arpa-note").textContent=(CHAPTER_DATA.ui.arpaFailNote||"Node B down; routes via C.");});
+  dlg.querySelector("[data-reset]").addEventListener("click",()=>{ARPA.down=new Set();drawArpa(svg);dlg.querySelector(".arpa-note").textContent=(CHAPTER_DATA.ui.arpaResetNote||"Network restored.");});}
+function runArpanetPacketDemo(dlg){dlg=dlg||document.querySelector(".scene-dialog");const svg=dlg.querySelector(".arpa-net");if(!svg)return;drawArpa(svg);
+  const path=ARPA.route();const note=dlg.querySelector(".arpa-note");if(!path){if(note)note.textContent=CHAPTER_DATA.ui.arpaNoRoute;return;}
+  for(let i=0;i<path.length-1;i++){const A=ARPA.hosts[path[i]],B=ARPA.hosts[path[i+1]];
+    [...svg.querySelectorAll("line")].forEach(ln=>{const s=(+ln.getAttribute("x1")===A.x&&+ln.getAttribute("y1")===A.y&&+ln.getAttribute("x2")===B.x&&+ln.getAttribute("y2")===B.y)||(+ln.getAttribute("x1")===B.x&&+ln.getAttribute("y1")===B.y&&+ln.getAttribute("x2")===A.x&&+ln.getAttribute("y2")===A.y);if(s)ln.classList.add("path-active");});}
+  if(note)note.textContent=CHAPTER_DATA.ui.arpaRouting+": "+path.join(" → ");
+  const pkt=document.createElementNS(SVGNS,"circle");pkt.setAttribute("r","5");pkt.setAttribute("class","packet");svg.appendChild(pkt);
+  let seg=0,t=0;function step(){if(seg>=path.length-1){pkt.remove();if(note)note.textContent+="  ✓ "+CHAPTER_DATA.ui.arpaDelivered;return;}
+    const A=ARPA.hosts[path[seg]],B=ARPA.hosts[path[seg+1]];t+=0.04;pkt.setAttribute("cx",A.x+(B.x-A.x)*t);pkt.setAttribute("cy",A.y+(B.y-A.y)*t);if(t>=1){t=0;seg++;}requestAnimationFrame(step);}
+  requestAnimationFrame(step);}
+function renderAll(){renderMap();renderNodeList();renderDetail();renderProgress();}
+async function boot(){buildLenses();setLens(state.lens);}
+document.addEventListener("DOMContentLoaded",()=>{try{boot();}catch(e){renderEmptyState(CHAPTER_DATA.ui.initError+": "+e.message);}});
+</script>
+</body></html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live демо · Машина переменного подкрепления · Luminara</title>
+<style>
+:root{
+  /* DARK (default) — mirrors app :root */
+  --bg: oklch(11% 0.026 285); --bg-surface: oklch(14.5% 0.032 285); --bg-elev: oklch(18% 0.041 285);
+  --bg-card: oklch(16% 0.036 285); --bg-tint: oklch(22% 0.051 285);
+  --line: oklch(28% 0.036 285); --line-soft: oklch(22% 0.032 285); --line-strong: oklch(40% 0.058 285);
+  --text: oklch(96% 0.007 285); --text-mid: oklch(80% 0.014 285); --text-muted: oklch(62% 0.029 285); --text-dim: oklch(46% 0.043 285);
+  --accent: oklch(72% 0.261 295); --accent-2: oklch(82% 0.174 205); --accent-3: oklch(80% 0.189 85); --accent-4: oklch(78% 0.203 155);
+  /* type/lens colors mapped to app ecosystem chroma */
+  --power: oklch(80% 0.203 10); --technology: oklch(78% 0.189 155); --media: oklch(80% 0.189 85);
+  --privacy: oklch(74% 0.232 290); --economy: oklch(76% 0.185 320);
+  --glass: oklch(11% 0.026 285 / 0.7); --scrim: oklch(0% 0 0 / 0.6);
+  --star: rgba(255,255,255,.6); --neb1: rgba(60,80,160,.16); --neb2: rgba(120,60,160,.10);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+[data-theme="light"]{
+  --bg: oklch(98% 0.006 285); --bg-surface: oklch(96% 0.009 285); --bg-elev: oklch(93.5% 0.012 285);
+  --bg-card: oklch(97% 0.007 285); --bg-tint: oklch(91% 0.014 285);
+  --line: oklch(82% 0.017 285); --line-soft: oklch(88% 0.014 285); --line-strong: oklch(70% 0.026 285);
+  --text: oklch(22% 0.043 285); --text-mid: oklch(40% 0.036 285); --text-muted: oklch(55% 0.041 285); --text-dim: oklch(68% 0.032 285);
+  --accent: oklch(55% 0.319 295); --accent-2: oklch(55% 0.232 205); --accent-3: oklch(62% 0.232 60); --accent-4: oklch(55% 0.232 155);
+  --power: oklch(58% 0.261 10); --technology: oklch(52% 0.232 155); --media: oklch(58% 0.200 90);
+  --privacy: oklch(48% 0.290 290); --economy: oklch(54% 0.220 320);
+  --glass: oklch(98% 0.006 285 / 0.85); --scrim: oklch(100% 0 0 / 0.6);
+  --star: rgba(120,110,160,.35); --neb1: rgba(150,140,220,.10); --neb2: rgba(190,160,220,.08);
+}
+[data-theme="light"] .stars,[data-theme="light"] .stars2{opacity:.25}
+[data-theme="light"] .btn.primary{color:#fff}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans,system-ui);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.demo-wrap{width:min(620px,100%)}
+.demo-card{position:relative;border-radius:18px;padding:22px 24px 20px;
+  background:linear-gradient(150deg,color-mix(in oklch,var(--accent) 12%,var(--bg-elev)),var(--bg-elev));
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));
+  box-shadow:0 10px 40px -16px color-mix(in oklch,var(--accent) 55%,transparent),0 0 0 1px var(--line) inset;
+  animation:demoGlow 3.8s ease-in-out infinite}
+@keyframes demoGlow{0%,100%{box-shadow:0 8px 30px -16px color-mix(in oklch,var(--accent) 45%,transparent),0 0 0 1px var(--line) inset}
+  50%{box-shadow:0 12px 44px -12px color-mix(in oklch,var(--accent) 70%,transparent),0 0 0 1px color-mix(in oklch,var(--accent) 30%,var(--line)) inset}}
+.demo-head{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.demo-badge{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:color-mix(in oklch,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-radius:999px;padding:4px 10px;white-space:nowrap}
+.demo-title{font-size:17px;font-weight:600;color:var(--text);font-family:var(--serif,Georgia,serif);line-height:1.3}
+.demo-note{margin:14px 0 0;color:var(--text-mid);font-size:14px;line-height:1.55;min-height:1.5em;font-family:var(--serif,Georgia,serif)}
+.demo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{font-family:var(--sans,system-ui);font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:10px;
+  cursor:pointer;border:1px solid var(--line-strong);background:var(--bg-surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* revision-3 #19 WCAG AA fix: white text on the DARK-theme accent (L≈72%) was only ~2.75:1.
+   var(--bg) (near-black in dark theme) gives ~7.4:1. Light theme keeps its own white override
+   below, since the light accent (L≈55%) already passes at ~5.9:1. */
+.btn.primary:hover{filter:brightness(1.08)}
+.demo-stage{margin-top:6px}
+.demo-stat{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.demo-stat .s{font-size:12px;color:var(--text-muted)}
+.demo-stat .s b{display:block;font-size:22px;color:var(--text);font-family:var(--serif,Georgia,serif);font-weight:600;margin-top:2px}
+.demo-slider{margin-top:12px}
+.demo-slider label{font-size:12px;color:var(--text-muted);display:block;margin-bottom:5px}
+.demo-slider input[type=range]{width:100%;accent-color:var(--accent)}
+svg text{font-family:var(--sans,system-ui)}
+
+.slot{width:100%;height:150px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--bg-surface);border:1px solid var(--line);font-size:64px;transition:.15s}.slot.win{background:color-mix(in oklch,var(--accent) 20%,var(--bg-surface));transform:scale(1.03)}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-card" role="region" aria-label="Интерактивное живое демо">
+    <div class="demo-head">
+      <span class="demo-badge" data-s="badge">Живое демо</span>
+      <span class="demo-title" data-s="title">Машина переменного подкрепления</span>
+    </div>
+    <div class="demo-stage">
+<div class="slot" data-slot>·</div>
+<div class="demo-stat"><div class="s"><span data-s="stat_pulls">Обновлений</span><b data-pulls>0</b></div><div class="s"><span data-s="stat_rewards">Наград</span><b data-rew>0</b></div></div>
+<div class="demo-actions"><button class="btn primary" type="button" data-pull data-s="pull">Обновить ленту</button><button class="btn" type="button" data-reset data-s="reset">Сброс</button></div>
+    </div>
+    <p class="demo-note" data-s="hint">…</p>
+  </div>
+</div>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var p=new URLSearchParams(location.search);
+    var theme=p.get("theme"),accent=p.get("accent"),rawLang=p.get("lang");
+    // Each field is parsed/applied independently (revision-3 #19 fix): a bad accent must
+    // never discard an already-valid theme or language. URLSearchParams.get() already
+    // URL-decodes its value once; re-decoding here threw on a literal "%" inside
+    // oklch(72% ...) accents and the old shared try/catch reset the language to "ru".
+    try{
+      if(theme==="light")document.documentElement.setAttribute("data-theme","light");
+      else if(theme==="dark")document.documentElement.setAttribute("data-theme","dark");
+    }catch(e){}
+    try{
+      if(accent)document.documentElement.style.setProperty("--accent",accent);
+    }catch(e){}
+    if(rawLang)__lang=rawLang;
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+const S={"title": {"ru": "Машина переменного подкрепления", "en": "Variable reinforcement machine", "uk": "Машина змінного підкріплення", "kk": "Ауыспалы нығайту машинасы", "uz": "O‘zgaruvchan mustahkamlash mashinasi", "es": "Máquina de refuerzo variable", "fr": "Machine de renforcement variable", "hy": "Փոփոխական ամրապնդման մեքենա"}, "badge": {"ru": "Живое демо", "en": "Live demo", "uk": "Живе демо", "kk": "Тірі демо", "uz": "Jonli demo", "es": "Demo en vivo", "fr": "Démo en direct", "hy": "Կենդանի դեմո"}, "hint": {"ru": "Обновляй ленту. Награда непредсказуема — иногда пусто, иногда лайк. Именно это затягивает.", "en": "Refresh the feed. The reward is unpredictable: sometimes nothing, sometimes a like. That is what hooks you.", "uk": "Оновлюй стрічку. Нагорода непередбачувана — іноді порожньо, іноді лайк. Саме це затягує.", "kk": "Лентаны жаңарт. Сый күтпеген жерден келеді — кейде бос, кейде лайк. Дәл осы тартып алады.", "uz": "Lentani yangila. Mukofot oldindan bilinmaydi — baʼzan bo‘sh, baʼzan layk. Aynan shu tortadi.", "es": "Actualiza el feed. La recompensa es impredecible: a veces nada, a veces un like. Justo eso engancha.", "fr": "Rafraîchis le fil. La récompense est imprévisible : parfois rien, parfois un like. C’est ça qui accroche.", "hy": "Թարմացրու ժապավենը։ Պարգևը անկանխատեսելի է՝ երբեմն ոչինչ, երբեմն լայք։ Հենց դա է ձգում։"}, "pull": {"ru": "Обновить ленту", "en": "Refresh feed", "uk": "Оновити стрічку", "kk": "Лентаны жаңарту", "uz": "Lentani yangilash", "es": "Actualizar feed", "fr": "Rafraîchir le fil", "hy": "Թարմացնել ժապավենը"}, "reset": {"ru": "Сброс", "en": "Reset", "uk": "Скинути", "kk": "Қалпына келтіру", "uz": "Tiklash", "es": "Restablecer", "fr": "Réinitialiser", "hy": "Վերակայել"}, "stat_pulls": {"ru": "Обновлений", "en": "Refreshes", "uk": "Оновлень", "kk": "Жаңартулар", "uz": "Yangilanishlar", "es": "Actualizaciones", "fr": "Rafraîchissements", "hy": "Թարմացումներ"}, "stat_rewards": {"ru": "Наград", "en": "Rewards", "uk": "Нагород", "kk": "Сыйлар", "uz": "Mukofotlar", "es": "Recompensas", "fr": "Récompenses", "hy": "Պարգևներ"}, "res": {"ru": "Непредсказуемая награда удерживает сильнее стабильной. (Скиннер, 1938 → каждое приложение сегодня)", "en": "An unpredictable reward holds you more strongly than a stable one. (Skinner, 1938 → every app today)", "uk": "Непередбачувана нагорода утримує сильніше за стабільну. (Скіннер, 1938 → кожен застосунок сьогодні)", "kk": "Күтпеген сый тұрақты сыйдан күштірек ұстайды. (Скиннер, 1938 → бүгінгі әрбір қолданба)", "uz": "Oldindan bilinmaydigan mukofot barqaror mukofotdan kuchliroq ushlab turadi. (Skinner, 1938 → bugungi har bir ilova)", "es": "Una recompensa impredecible retiene más que una estable. (Skinner, 1938 → cada app hoy)", "fr": "Une récompense imprévisible retient plus qu’une récompense stable. (Skinner, 1938 → chaque app aujourd’hui)", "hy": "Անկանխատեսելի պարգևը ավելի ուժեղ է պահում, քան կայունը։ (Սքիններ, 1938 → այսօրվա յուրաքանչյուր հավելված)"}};
+const DLANGS=["ru", "en", "uk", "kk", "uz", "es", "fr", "hy"];
+function t(k,l){l=l||window.__LANG;var o=S[k]||{};return o[l]||o.ru||"";}
+function applyLang(l){
+  if(DLANGS.indexOf(l)<0)l="ru"; window.__LANG=l; document.documentElement.lang=l;
+  document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");var v=t(k,l);if(v)el.textContent=v;});
+  if(typeof onLang==="function")try{onLang(l);}catch(e){}
+}
+window.addEventListener("message",function(ev){
+  try{
+    // Revision-3 #19 hardening: only same-origin messages from the actual embedding
+    // window, carrying our own typed shape, are honoured. Nothing in this app currently
+    // posts live style updates into this iframe (theme/accent/lang are set once via the
+    // URL when the modal opens) — this just stops an arbitrary embedder or foreign frame
+    // from pushing unvalidated messages into the page.
+    if(ev.source!==window.parent)return;
+    if(ev.origin!==window.location.origin)return;
+    var d=ev.data;
+    if(!d||typeof d!=="object"||d.type!=="luminara:demo-style")return;
+    if(d.theme==="light"||d.theme==="dark")document.documentElement.setAttribute("data-theme",d.theme);
+    if(typeof d.accent==="string"&&d.accent)document.documentElement.style.setProperty("--accent",d.accent);
+    if(typeof d.lang==="string"&&d.lang)applyLang(d.lang);
+  }catch(e){}
+});
+var pulls=0,rew=0;var slot=document.querySelector('[data-slot]');
+function onLang(l){}
+document.querySelector('[data-pull]').addEventListener('click',function(){pulls++;var win=Math.random()<0.32;slot.classList.remove('win');void slot.offsetWidth;if(win){rew++;slot.textContent='\u2764\uFE0F';slot.classList.add('win');}else{slot.textContent=['\u00B7','\u2205','\u2014'][Math.floor(Math.random()*3)];}document.querySelector('[data-pulls]').textContent=pulls;document.querySelector('[data-rew]').textContent=rew;if(pulls>=8){document.querySelector('.demo-note').textContent=t('res');}});
+document.querySelector('[data-reset]').addEventListener('click',function(){pulls=0;rew=0;slot.textContent='\u00B7';slot.classList.remove('win');document.querySelector('[data-pulls]').textContent='0';document.querySelector('[data-rew]').textContent='0';document.querySelector('.demo-note').textContent=t('hint');});
+applyLang(window.__LANG||"ru");
+</script>
+</body>
+</html>

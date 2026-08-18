@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live демо · Ссылка, отданная даром · Luminara</title>
+<style>
+:root{
+  /* DARK (default) — mirrors app :root */
+  --bg: oklch(11% 0.026 285); --bg-surface: oklch(14.5% 0.032 285); --bg-elev: oklch(18% 0.041 285);
+  --bg-card: oklch(16% 0.036 285); --bg-tint: oklch(22% 0.051 285);
+  --line: oklch(28% 0.036 285); --line-soft: oklch(22% 0.032 285); --line-strong: oklch(40% 0.058 285);
+  --text: oklch(96% 0.007 285); --text-mid: oklch(80% 0.014 285); --text-muted: oklch(62% 0.029 285); --text-dim: oklch(46% 0.043 285);
+  --accent: oklch(72% 0.261 295); --accent-2: oklch(82% 0.174 205); --accent-3: oklch(80% 0.189 85); --accent-4: oklch(78% 0.203 155);
+  /* type/lens colors mapped to app ecosystem chroma */
+  --power: oklch(80% 0.203 10); --technology: oklch(78% 0.189 155); --media: oklch(80% 0.189 85);
+  --privacy: oklch(74% 0.232 290); --economy: oklch(76% 0.185 320);
+  --glass: oklch(11% 0.026 285 / 0.7); --scrim: oklch(0% 0 0 / 0.6);
+  --star: rgba(255,255,255,.6); --neb1: rgba(60,80,160,.16); --neb2: rgba(120,60,160,.10);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+[data-theme="light"]{
+  --bg: oklch(98% 0.006 285); --bg-surface: oklch(96% 0.009 285); --bg-elev: oklch(93.5% 0.012 285);
+  --bg-card: oklch(97% 0.007 285); --bg-tint: oklch(91% 0.014 285);
+  --line: oklch(82% 0.017 285); --line-soft: oklch(88% 0.014 285); --line-strong: oklch(70% 0.026 285);
+  --text: oklch(22% 0.043 285); --text-mid: oklch(40% 0.036 285); --text-muted: oklch(55% 0.041 285); --text-dim: oklch(68% 0.032 285);
+  --accent: oklch(55% 0.319 295); --accent-2: oklch(55% 0.232 205); --accent-3: oklch(62% 0.232 60); --accent-4: oklch(55% 0.232 155);
+  --power: oklch(58% 0.261 10); --technology: oklch(52% 0.232 155); --media: oklch(58% 0.200 90);
+  --privacy: oklch(48% 0.290 290); --economy: oklch(54% 0.220 320);
+  --glass: oklch(98% 0.006 285 / 0.85); --scrim: oklch(100% 0 0 / 0.6);
+  --star: rgba(120,110,160,.35); --neb1: rgba(150,140,220,.10); --neb2: rgba(190,160,220,.08);
+}
+[data-theme="light"] .stars,[data-theme="light"] .stars2{opacity:.25}
+[data-theme="light"] .btn.primary{color:#fff}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans,system-ui);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.demo-wrap{width:min(620px,100%)}
+.demo-card{position:relative;border-radius:18px;padding:22px 24px 20px;
+  background:linear-gradient(150deg,color-mix(in oklch,var(--accent) 12%,var(--bg-elev)),var(--bg-elev));
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));
+  box-shadow:0 10px 40px -16px color-mix(in oklch,var(--accent) 55%,transparent),0 0 0 1px var(--line) inset;
+  animation:demoGlow 3.8s ease-in-out infinite}
+@keyframes demoGlow{0%,100%{box-shadow:0 8px 30px -16px color-mix(in oklch,var(--accent) 45%,transparent),0 0 0 1px var(--line) inset}
+  50%{box-shadow:0 12px 44px -12px color-mix(in oklch,var(--accent) 70%,transparent),0 0 0 1px color-mix(in oklch,var(--accent) 30%,var(--line)) inset}}
+.demo-head{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.demo-badge{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:color-mix(in oklch,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-radius:999px;padding:4px 10px;white-space:nowrap}
+.demo-title{font-size:17px;font-weight:600;color:var(--text);font-family:var(--serif,Georgia,serif);line-height:1.3}
+.demo-note{margin:14px 0 0;color:var(--text-mid);font-size:14px;line-height:1.55;min-height:1.5em;font-family:var(--serif,Georgia,serif)}
+.demo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{font-family:var(--sans,system-ui);font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:10px;
+  cursor:pointer;border:1px solid var(--line-strong);background:var(--bg-surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* revision-3 #19 WCAG AA fix: white text on the DARK-theme accent (L≈72%) was only ~2.75:1.
+   var(--bg) (near-black in dark theme) gives ~7.4:1. Light theme keeps its own white override
+   below, since the light accent (L≈55%) already passes at ~5.9:1. */
+.btn.primary:hover{filter:brightness(1.08)}
+.demo-stage{margin-top:6px}
+.demo-stat{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.demo-stat .s{font-size:12px;color:var(--text-muted)}
+.demo-stat .s b{display:block;font-size:22px;color:var(--text);font-family:var(--serif,Georgia,serif);font-weight:600;margin-top:2px}
+.demo-slider{margin-top:12px}
+.demo-slider label{font-size:12px;color:var(--text-muted);display:block;margin-bottom:5px}
+.demo-slider input[type=range]{width:100%;accent-color:var(--accent)}
+svg text{font-family:var(--sans,system-ui)}
+
+.w1-net{width:100%;height:220px;display:block}.w1-node{transition:.5s}.w1-link{transition:.6s;stroke-width:2}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-card" role="region" aria-label="Интерактивное живое демо">
+    <div class="demo-head">
+      <span class="demo-badge" data-s="badge">Живое демо</span>
+      <span class="demo-title" data-s="title">Ссылка, отданная даром</span>
+    </div>
+    <div class="demo-stage">
+<svg class="w1-net" viewBox="0 0 460 220" role="img" aria-label="web"></svg>
+<div class="demo-actions"><button class="btn" type="button" data-patent data-s="patent">Запатентовать</button><button class="btn primary" type="button" data-give data-s="give">Отдать всем</button></div>
+    </div>
+    <p class="demo-note" data-s="hint">…</p>
+  </div>
+</div>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var p=new URLSearchParams(location.search);
+    var theme=p.get("theme"),accent=p.get("accent"),rawLang=p.get("lang");
+    // Each field is parsed/applied independently (revision-3 #19 fix): a bad accent must
+    // never discard an already-valid theme or language. URLSearchParams.get() already
+    // URL-decodes its value once; re-decoding here threw on a literal "%" inside
+    // oklch(72% ...) accents and the old shared try/catch reset the language to "ru".
+    try{
+      if(theme==="light")document.documentElement.setAttribute("data-theme","light");
+      else if(theme==="dark")document.documentElement.setAttribute("data-theme","dark");
+    }catch(e){}
+    try{
+      if(accent)document.documentElement.style.setProperty("--accent",accent);
+    }catch(e){}
+    if(rawLang)__lang=rawLang;
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+const S={"title": {"ru": "Ссылка, отданная даром", "en": "The link given away", "uk": "Посилання, віддане даром", "kk": "Тегін берілген сілтеме", "uz": "Bepul berilgan havola", "es": "El enlace entregado gratis", "fr": "Le lien offert gratuitement", "hy": "Անվճար տրված հղումը"}, "badge": {"ru": "Живое демо", "en": "Live demo", "uk": "Живе демо", "kk": "Тірі демо", "uz": "Jonli demo", "es": "Demo en vivo", "fr": "Démo en direct", "hy": "Կենդանի դեմո"}, "hint": {"ru": "Гипертекст можно было запатентовать — или отдать всем. Нажми и посмотри, каким стал бы интернет.", "en": "Hypertext could have been patented, or given to everyone. Click and see what the internet might have become.", "uk": "Гіпертекст можна було запатентувати — або віддати всім. Натисни й подивися, яким став би інтернет.", "kk": "Гипермәтінді патенттеуге де, бәріне тегін беруге де болатын. Басып көр де, интернет қандай болар еді, қара.", "uz": "Gipermatnni patentlash yoki hammaga berish mumkin edi. Bos va internet qanday bo‘lishi mumkinligini ko‘r.", "es": "El hipertexto pudo patentarse, o entregarse a todos. Pulsa y mira en qué se habría convertido internet.", "fr": "L’hypertexte aurait pu être breveté, ou offert à tous. Clique et vois ce qu’internet aurait pu devenir.", "hy": "Հիպերտեքստը կարելի էր արտոնագրել կամ տալ բոլորին։ Սեղմիր և տես, թե ինչպիսին կդառնար ինտերնետը։"}, "patent": {"ru": "Запатентовать", "en": "Patent it", "uk": "Запатентувати", "kk": "Патенттеу", "uz": "Patentlash", "es": "Patentarlo", "fr": "Le breveter", "hy": "Արտոնագրել"}, "give": {"ru": "Отдать всем", "en": "Give it to everyone", "uk": "Віддати всім", "kk": "Бәріне беру", "uz": "Hammaga berish", "es": "Darlo a todos", "fr": "L’offrir à tous", "hy": "Տալ բոլորին"}, "res_patent": {"ru": "Запатентовано: закрытые сады, несовместимые острова. Единого веба нет.", "en": "Patented: walled gardens, incompatible islands. There is no single web.", "uk": "Запатентовано: закриті сади, несумісні острови. Єдиного вебу немає.", "kk": "Патенттелді: жабық бақтар, үйлеспейтін аралдар. Біртұтас веб жоқ.", "uz": "Patentlandi: yopiq bog‘lar, mos kelmaydigan orollar. Yagona web yo‘q.", "es": "Patentado: jardines cerrados, islas incompatibles. No hay una web única.", "fr": "Breveté : jardins fermés, îles incompatibles. Il n’y a pas de web unique.", "hy": "Արտոնագրված է․ փակ այգիներ, անհամատեղելի կղզիներ։ Միասնական վեբ չկա։"}, "res_give": {"ru": "Отдано всем: острова соединяются в единую паутину. Это и есть Web.", "en": "Given to everyone: the islands connect into one web. That is the Web.", "uk": "Віддано всім: острови зʼєднуються в єдину павутину. Це і є Web.", "kk": "Бәріне берілді: аралдар біртұтас торға қосылады. Бұл — Web.", "uz": "Hammaga berildi: orollar yagona to‘rga ulanadi. Mana shu Web.", "es": "Entregado a todos: las islas se conectan en una sola telaraña. Eso es la Web.", "fr": "Offert à tous : les îles se relient en une seule toile. C’est cela, le Web.", "hy": "Տրված է բոլորին․ կղզիները միանում են մեկ սարդոստայնի։ Սա է Web-ը։"}};
+const DLANGS=["ru", "en", "uk", "kk", "uz", "es", "fr", "hy"];
+function t(k,l){l=l||window.__LANG;var o=S[k]||{};return o[l]||o.ru||"";}
+function applyLang(l){
+  if(DLANGS.indexOf(l)<0)l="ru"; window.__LANG=l; document.documentElement.lang=l;
+  document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");var v=t(k,l);if(v)el.textContent=v;});
+  if(typeof onLang==="function")try{onLang(l);}catch(e){}
+}
+window.addEventListener("message",function(ev){
+  try{
+    // Revision-3 #19 hardening: only same-origin messages from the actual embedding
+    // window, carrying our own typed shape, are honoured. Nothing in this app currently
+    // posts live style updates into this iframe (theme/accent/lang are set once via the
+    // URL when the modal opens) — this just stops an arbitrary embedder or foreign frame
+    // from pushing unvalidated messages into the page.
+    if(ev.source!==window.parent)return;
+    if(ev.origin!==window.location.origin)return;
+    var d=ev.data;
+    if(!d||typeof d!=="object"||d.type!=="luminara:demo-style")return;
+    if(d.theme==="light"||d.theme==="dark")document.documentElement.setAttribute("data-theme",d.theme);
+    if(typeof d.accent==="string"&&d.accent)document.documentElement.style.setProperty("--accent",d.accent);
+    if(typeof d.lang==="string"&&d.lang)applyLang(d.lang);
+  }catch(e){}
+});
+var SVGNS='http://www.w3.org/2000/svg';var svg=document.querySelector('.w1-net');
+var nodes=[[80,60],[150,150],[230,50],[300,150],[380,70],[380,160],[110,110]];
+var webLinks=[[0,1],[1,2],[2,3],[3,4],[4,5],[1,6],[0,6],[2,4],[3,5],[1,3]];
+var islandLinks=[[0,6],[2,3],[4,5]];
+function draw(mode){svg.innerHTML='';var links=mode==='give'?webLinks:islandLinks;var col=mode==='give'?'var(--accent)':'var(--line-strong)';links.forEach(function(l){var a=nodes[l[0]],b=nodes[l[1]];var ln=document.createElementNS(SVGNS,'line');ln.setAttribute('x1',a[0]);ln.setAttribute('y1',a[1]);ln.setAttribute('x2',b[0]);ln.setAttribute('y2',b[1]);ln.setAttribute('stroke',col);ln.setAttribute('class','w1-link');ln.setAttribute('opacity',mode==='give'?0.7:0.4);svg.appendChild(ln);});nodes.forEach(function(n,i){var c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',n[0]);c.setAttribute('cy',n[1]);c.setAttribute('r',mode==='give'?13:15);c.setAttribute('class','w1-node');c.setAttribute('fill',mode==='give'?'var(--accent)':'#8a3d5c');c.setAttribute('opacity',0.9);svg.appendChild(c);if(mode!=='give'){var lock=document.createElementNS(SVGNS,'text');lock.setAttribute('x',n[0]);lock.setAttribute('y',n[1]+5);lock.setAttribute('text-anchor','middle');lock.setAttribute('font-size','14');lock.setAttribute('fill','#fff');lock.textContent='\uD83D\uDD12';svg.appendChild(lock);}});}
+function onLang(l){}
+var note=document.querySelector('.demo-note');
+document.querySelector('[data-patent]').addEventListener('click',function(){draw('patent');note.textContent=t('res_patent');});
+document.querySelector('[data-give]').addEventListener('click',function(){draw('give');note.textContent=t('res_give');});
+draw('give');
+applyLang(window.__LANG||"ru");
+</script>
+</body>
+</html>

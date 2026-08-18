@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live демо · Два взгляда на одну ленту · Luminara</title>
+<style>
+:root{
+  /* DARK (default) — mirrors app :root */
+  --bg: oklch(11% 0.026 285); --bg-surface: oklch(14.5% 0.032 285); --bg-elev: oklch(18% 0.041 285);
+  --bg-card: oklch(16% 0.036 285); --bg-tint: oklch(22% 0.051 285);
+  --line: oklch(28% 0.036 285); --line-soft: oklch(22% 0.032 285); --line-strong: oklch(40% 0.058 285);
+  --text: oklch(96% 0.007 285); --text-mid: oklch(80% 0.014 285); --text-muted: oklch(62% 0.029 285); --text-dim: oklch(46% 0.043 285);
+  --accent: oklch(72% 0.261 295); --accent-2: oklch(82% 0.174 205); --accent-3: oklch(80% 0.189 85); --accent-4: oklch(78% 0.203 155);
+  /* type/lens colors mapped to app ecosystem chroma */
+  --power: oklch(80% 0.203 10); --technology: oklch(78% 0.189 155); --media: oklch(80% 0.189 85);
+  --privacy: oklch(74% 0.232 290); --economy: oklch(76% 0.185 320);
+  --glass: oklch(11% 0.026 285 / 0.7); --scrim: oklch(0% 0 0 / 0.6);
+  --star: rgba(255,255,255,.6); --neb1: rgba(60,80,160,.16); --neb2: rgba(120,60,160,.10);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+[data-theme="light"]{
+  --bg: oklch(98% 0.006 285); --bg-surface: oklch(96% 0.009 285); --bg-elev: oklch(93.5% 0.012 285);
+  --bg-card: oklch(97% 0.007 285); --bg-tint: oklch(91% 0.014 285);
+  --line: oklch(82% 0.017 285); --line-soft: oklch(88% 0.014 285); --line-strong: oklch(70% 0.026 285);
+  --text: oklch(22% 0.043 285); --text-mid: oklch(40% 0.036 285); --text-muted: oklch(55% 0.041 285); --text-dim: oklch(68% 0.032 285);
+  --accent: oklch(55% 0.319 295); --accent-2: oklch(55% 0.232 205); --accent-3: oklch(62% 0.232 60); --accent-4: oklch(55% 0.232 155);
+  --power: oklch(58% 0.261 10); --technology: oklch(52% 0.232 155); --media: oklch(58% 0.200 90);
+  --privacy: oklch(48% 0.290 290); --economy: oklch(54% 0.220 320);
+  --glass: oklch(98% 0.006 285 / 0.85); --scrim: oklch(100% 0 0 / 0.6);
+  --star: rgba(120,110,160,.35); --neb1: rgba(150,140,220,.10); --neb2: rgba(190,160,220,.08);
+}
+[data-theme="light"] .stars,[data-theme="light"] .stars2{opacity:.25}
+[data-theme="light"] .btn.primary{color:#fff}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans,system-ui);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.demo-wrap{width:min(620px,100%)}
+.demo-card{position:relative;border-radius:18px;padding:22px 24px 20px;
+  background:linear-gradient(150deg,color-mix(in oklch,var(--accent) 12%,var(--bg-elev)),var(--bg-elev));
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));
+  box-shadow:0 10px 40px -16px color-mix(in oklch,var(--accent) 55%,transparent),0 0 0 1px var(--line) inset;
+  animation:demoGlow 3.8s ease-in-out infinite}
+@keyframes demoGlow{0%,100%{box-shadow:0 8px 30px -16px color-mix(in oklch,var(--accent) 45%,transparent),0 0 0 1px var(--line) inset}
+  50%{box-shadow:0 12px 44px -12px color-mix(in oklch,var(--accent) 70%,transparent),0 0 0 1px color-mix(in oklch,var(--accent) 30%,var(--line)) inset}}
+.demo-head{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.demo-badge{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:color-mix(in oklch,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-radius:999px;padding:4px 10px;white-space:nowrap}
+.demo-title{font-size:17px;font-weight:600;color:var(--text);font-family:var(--serif,Georgia,serif);line-height:1.3}
+.demo-note{margin:14px 0 0;color:var(--text-mid);font-size:14px;line-height:1.55;min-height:1.5em;font-family:var(--serif,Georgia,serif)}
+.demo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{font-family:var(--sans,system-ui);font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:10px;
+  cursor:pointer;border:1px solid var(--line-strong);background:var(--bg-surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* revision-3 #19 WCAG AA fix: white text on the DARK-theme accent (L≈72%) was only ~2.75:1.
+   var(--bg) (near-black in dark theme) gives ~7.4:1. Light theme keeps its own white override
+   below, since the light accent (L≈55%) already passes at ~5.9:1. */
+.btn.primary:hover{filter:brightness(1.08)}
+.demo-stage{margin-top:6px}
+.demo-stat{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.demo-stat .s{font-size:12px;color:var(--text-muted)}
+.demo-stat .s b{display:block;font-size:22px;color:var(--text);font-family:var(--serif,Georgia,serif);font-weight:600;margin-top:2px}
+.demo-slider{margin-top:12px}
+.demo-slider label{font-size:12px;color:var(--text-muted);display:block;margin-bottom:5px}
+.demo-slider input[type=range]{width:100%;accent-color:var(--accent)}
+svg text{font-family:var(--sans,system-ui)}
+
+.feed{display:flex;flex-direction:column;gap:8px;margin:6px 0}.post{position:relative;padding:14px;border-radius:12px;background:var(--bg-surface);border:1px solid var(--line);font-family:var(--serif,Georgia,serif);color:var(--text)}.layer{position:absolute;inset:0;border-radius:12px;background:color-mix(in oklch,var(--accent) 88%,#000);color:#fff;display:flex;align-items:center;padding:0 14px;font-size:13px;opacity:0;transition:.35s;pointer-events:none}.neto .layer{opacity:1}.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;margin-bottom:4px}.seg button{border:none;background:var(--bg-surface);color:var(--text-muted);padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600}.seg button.on{background:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-card" role="region" aria-label="Интерактивное живое демо">
+    <div class="demo-head">
+      <span class="demo-badge" data-s="badge">Живое демо</span>
+      <span class="demo-title" data-s="title">Два взгляда на одну ленту</span>
+    </div>
+    <div class="demo-stage">
+<div class="seg"><button type="button" data-mode="consum" class="on" data-s="toggle_consum">Консьюмтариат</button><button type="button" data-mode="neto" data-s="toggle_neto">Нетократ</button></div>
+<div class="feed" data-feed><div class="post"><span data-s="post1">Пост от друга</span><div class="layer" data-s="layer1">Кто владеет площадкой</div></div><div class="post"><span data-s="post2">Реклама</span><div class="layer" data-s="layer2">Куда идут твои данные</div></div><div class="post"><span data-s="post3">Рекомендация</span><div class="layer" data-s="layer3">Кто извлекает ценность</div></div></div>
+    </div>
+    <p class="demo-note" data-s="hint">…</p>
+  </div>
+</div>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var p=new URLSearchParams(location.search);
+    var theme=p.get("theme"),accent=p.get("accent"),rawLang=p.get("lang");
+    // Each field is parsed/applied independently (revision-3 #19 fix): a bad accent must
+    // never discard an already-valid theme or language. URLSearchParams.get() already
+    // URL-decodes its value once; re-decoding here threw on a literal "%" inside
+    // oklch(72% ...) accents and the old shared try/catch reset the language to "ru".
+    try{
+      if(theme==="light")document.documentElement.setAttribute("data-theme","light");
+      else if(theme==="dark")document.documentElement.setAttribute("data-theme","dark");
+    }catch(e){}
+    try{
+      if(accent)document.documentElement.style.setProperty("--accent",accent);
+    }catch(e){}
+    if(rawLang)__lang=rawLang;
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+const S={"title": {"ru": "Два взгляда на одну ленту", "en": "Two views of one feed", "uk": "Два погляди на одну стрічку", "kk": "Бір лентаға екі көзқарас", "uz": "Bitta lentaga ikki qarash", "es": "Dos miradas sobre un mismo feed", "fr": "Deux regards sur un même fil", "hy": "Երկու հայացք նույն ժապավենին"}, "badge": {"ru": "Живое демо", "en": "Live demo", "uk": "Живе демо", "kk": "Тірі демо", "uz": "Jonli demo", "es": "Demo en vivo", "fr": "Démo en direct", "hy": "Կենդանի դեմո"}, "hint": {"ru": "Переключи взгляд. Консьюмтариат видит контент. Нетократ видит архитектуру под ним.", "en": "Switch the view. The consumtariat sees content. The netocrat sees the architecture beneath it.", "uk": "Перемкни погляд. Консьюмтаріат бачить контент. Нетократ бачить архітектуру під ним.", "kk": "Көзқарасты ауыстыр. Консьюмтариат контентті көреді. Нетократ оның астындағы архитектураны көреді.", "uz": "Qarashni almashtir. Konsyumatariat kontentni ko‘radi. Netokrat uning ostidagi arxitekturani ko‘radi.", "es": "Cambia la mirada. El consumtariado ve contenido. El netócrata ve la arquitectura debajo.", "fr": "Change de regard. Le consumtariat voit le contenu. Le netocrate voit l’architecture dessous.", "hy": "Փոխիր հայացքը։ Կոնսյումտարիատը տեսնում է կոնտենտը։ Նետոկրատը տեսնում է դրա տակ գտնվող ճարտարապետությունը։"}, "toggle_consum": {"ru": "Консьюмтариат", "en": "Consumtariat", "uk": "Консьюмтаріат", "kk": "Консьюмтариат", "uz": "Konsyumatariat", "es": "Consumtariado", "fr": "Consumtariat", "hy": "Կոնսյումտարիատ"}, "toggle_neto": {"ru": "Нетократ", "en": "Netocrat", "uk": "Нетократ", "kk": "Нетократ", "uz": "Netokrat", "es": "Netócrata", "fr": "Netocrate", "hy": "Նետոկրատ"}, "post1": {"ru": "Пост от друга", "en": "Post from a friend", "uk": "Пост від друга", "kk": "Достан пост", "uz": "Do‘stdan post", "es": "Post de un amigo", "fr": "Post d’un ami", "hy": "Ընկերոջ գրառում"}, "post2": {"ru": "Реклама", "en": "Ad", "uk": "Реклама", "kk": "Жарнама", "uz": "Reklama", "es": "Anuncio", "fr": "Publicité", "hy": "Գովազդ"}, "post3": {"ru": "Рекомендация", "en": "Recommendation", "uk": "Рекомендація", "kk": "Ұсыным", "uz": "Tavsiya", "es": "Recomendación", "fr": "Recommandation", "hy": "Խորհուրդ"}, "layer1": {"ru": "Кто владеет площадкой", "en": "Who owns the platform", "uk": "Хто володіє майданчиком", "kk": "Алаңға кім иелік етеді", "uz": "Maydonga kim egalik qiladi", "es": "Quién posee la plataforma", "fr": "Qui possède la plateforme", "hy": "Ով է տիրապետում հարթակին"}, "layer2": {"ru": "Куда идут твои данные", "en": "Where your data goes", "uk": "Куди йдуть твої дані", "kk": "Деректерің қайда кетеді", "uz": "Maʼlumotlaring qayerga ketadi", "es": "A dónde van tus datos", "fr": "Où vont tes données", "hy": "Ուր են գնում քո տվյալները"}, "layer3": {"ru": "Кто извлекает ценность", "en": "Who extracts value", "uk": "Хто витягує цінність", "kk": "Құндылықты кім алады", "uz": "Qiymatni kim chiqarib oladi", "es": "Quién extrae el valor", "fr": "Qui extrait la valeur", "hy": "Ով է քաղում արժեքը"}, "res": {"ru": "Барьер входа — понимание, а не деньги. Нетократ видит архитектуру под контентом.", "en": "The entry barrier is understanding, not money. The netocrat sees the architecture beneath the content.", "uk": "Барʼєр входу — розуміння, а не гроші. Нетократ бачить архітектуру під контентом.", "kk": "Кіру кедергісі — ақша емес, түсіну. Нетократ контент астындағы архитектураны көреді.", "uz": "Kirish to‘sig‘i pul emas, tushunish. Netokrat kontent ostidagi arxitekturani ko‘radi.", "es": "La barrera de entrada es entender, no el dinero. El netócrata ve la arquitectura debajo del contenido.", "fr": "La barrière d’entrée est la compréhension, pas l’argent. Le netocrate voit l’architecture sous le contenu.", "hy": "Մուտքի պատնեշը փողը չէ, այլ հասկանալը։ Նետոկրատը տեսնում է կոնտենտի տակ գտնվող ճարտարապետությունը։"}};
+const DLANGS=["ru", "en", "uk", "kk", "uz", "es", "fr", "hy"];
+function t(k,l){l=l||window.__LANG;var o=S[k]||{};return o[l]||o.ru||"";}
+function applyLang(l){
+  if(DLANGS.indexOf(l)<0)l="ru"; window.__LANG=l; document.documentElement.lang=l;
+  document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");var v=t(k,l);if(v)el.textContent=v;});
+  if(typeof onLang==="function")try{onLang(l);}catch(e){}
+}
+window.addEventListener("message",function(ev){
+  try{
+    // Revision-3 #19 hardening: only same-origin messages from the actual embedding
+    // window, carrying our own typed shape, are honoured. Nothing in this app currently
+    // posts live style updates into this iframe (theme/accent/lang are set once via the
+    // URL when the modal opens) — this just stops an arbitrary embedder or foreign frame
+    // from pushing unvalidated messages into the page.
+    if(ev.source!==window.parent)return;
+    if(ev.origin!==window.location.origin)return;
+    var d=ev.data;
+    if(!d||typeof d!=="object"||d.type!=="luminara:demo-style")return;
+    if(d.theme==="light"||d.theme==="dark")document.documentElement.setAttribute("data-theme",d.theme);
+    if(typeof d.accent==="string"&&d.accent)document.documentElement.style.setProperty("--accent",d.accent);
+    if(typeof d.lang==="string"&&d.lang)applyLang(d.lang);
+  }catch(e){}
+});
+var feed=document.querySelector('[data-feed]');
+function setMode(m){feed.classList.toggle('neto',m==='neto');document.querySelectorAll('[data-mode]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-mode')===m);});if(m==='neto')document.querySelector('.demo-note').textContent=t('res');else document.querySelector('.demo-note').textContent=t('hint');}
+function onLang(l){}
+document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.getAttribute('data-mode'));});});
+applyLang(window.__LANG||"ru");
+</script>
+</body>
+</html>

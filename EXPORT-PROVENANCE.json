@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17",
+  "source": {
+    "repository": "EU174/luminara",
+    "commit": "2fc99aad223413ba2cfeb51abbb546967e68b1cd",
+    "historyImported": false
+  },
+  "publicShell": {
+    "repository": "EU174/luminara-btc",
+    "commit": "323c615c17ac19e4bd41650fd35987d262c29d25"
+  },
+  "candidate": {
+    "keepCopied": 102,
+    "rewriteCopied": 79,
+    "shellFiles": 7,
+    "sourceGitDirectoryCopied": false,
+    "dependenciesCopied": false
+  },
+  "checkpoint": {
+    "backendComposition": "BTC-only; 53 exact routes verified",
+    "database": "BTC_DATABASE_URL-only; two non-commercial migrations",
+    "dependencies": "TON, Ethereum and TweetNaCl packages removed",
+    "qualityGate": "npm test passes five BTC-only checks",
+    "frontend": "rewrite pending; candidate is not publishable"
+  },
+  "state": "99B in progress; local-only and not authorized for public push"
+}

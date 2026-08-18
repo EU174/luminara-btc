@@ -6,11 +6,11 @@ teams.
 
 ## Status
 
-**Pre-alpha · public project shell · 15 August 2026**
+**Pre-alpha · public audit candidate · 17 August 2026**
 
-This repository was opened early so that the project can develop transparently. Executable source
-code has not been published yet. Code will be imported only after security-boundary, licensing,
-content-rights, and secret-history reviews are complete.
+This repository was opened early so that the project can develop transparently. The first
+sanitized source snapshot is prepared for publication only after security-boundary, content-rights,
+secret-history and reproducibility reviews are complete.
 
 The initial repository contains no production configuration, user data, wallet identifiers,
 credentials, database exports, or source history from the main Luminara product.
@@ -48,8 +48,10 @@ private history of another product.
 See [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.md), and
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## License status
+## Rights notice
 
-No executable code or course content is licensed from this repository yet. Code and educational
-content licenses will be added separately after provenance and rights review. Public visibility by
-itself does not grant reuse rights.
+Copyright © 2026 Luminara. All rights reserved.
+
+This repository is made public for transparency and security review. It does not grant permission
+to copy, modify, distribute, deploy, sublicense, or use its code or educational content. No
+open-source or Creative Commons license is provided.

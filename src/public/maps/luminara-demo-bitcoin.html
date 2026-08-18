@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тренажёр безопасности Bitcoin-кошелька · Luminara</title>
+<style>
+:root{
+  --bg:oklch(11% .026 285);--surface:oklch(15% .032 285);--surface-2:oklch(18% .041 285);
+  --line:oklch(29% .04 285);--line-strong:oklch(43% .06 285);--text:oklch(96% .007 285);
+  --mid:oklch(80% .014 285);--muted:oklch(62% .029 285);--accent:oklch(72% .261 295);
+  --good:oklch(78% .17 155);--warn:oklch(80% .17 82);--bad:oklch(68% .2 20);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+[data-theme="light"]{
+  --bg:oklch(98% .006 285);--surface:oklch(96% .009 285);--surface-2:oklch(92% .014 285);
+  --line:oklch(82% .017 285);--line-strong:oklch(68% .03 285);--text:oklch(22% .043 285);
+  --mid:oklch(40% .036 285);--muted:oklch(55% .041 285);--accent:oklch(55% .319 295);
+  --good:oklch(48% .16 155);--warn:oklch(54% .16 82);--bad:oklch(49% .2 20);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:24px;background:var(--bg);color:var(--text);font-family:var(--sans);}
+button{font:inherit}
+.trainer{width:min(820px,100%);margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.head{padding:20px 22px 16px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.head-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.head-controls{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.eyebrow{font-size:11px;line-height:1.2;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.theme-toggle{display:grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid var(--line-strong);border-radius:50%;background:transparent;color:var(--text);font-size:16px;line-height:1;cursor:pointer}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:color-mix(in oklch,var(--accent) 8%,transparent)}
+.palette-switch{display:flex;align-items:center;gap:4px}
+.palette-swatch{width:17px;height:17px;padding:0;border:2px solid transparent;border-radius:50%;cursor:pointer;transition:transform .14s,border-color .14s;box-shadow:0 0 0 1px color-mix(in oklch,var(--bg) 65%,transparent)}
+.palette-swatch:hover{transform:scale(1.14)}
+.palette-swatch.active{border-color:var(--text)}
+.palette-swatch[data-palette="violet"]{background:oklch(72% .26 295)}
+.palette-swatch[data-palette="cobalt"]{background:oklch(72% .26 250)}
+.palette-swatch[data-palette="ember"]{background:oklch(78% .23 60)}
+.palette-swatch[data-palette="forest"]{background:oklch(76% .23 165)}
+.palette-swatch[data-palette="crimson"]{background:oklch(68% .27 15)}
+.title-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{font:500 24px/1.2 var(--serif);margin:0;letter-spacing:0}
+.counter{font-size:12px;color:var(--muted);white-space:nowrap}
+.notice{margin:0;color:var(--mid);font:400 14px/1.45 var(--serif)}
+.progress{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.progress-item{min-width:0;display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}
+.progress-index{display:grid;place-items:center;width:20px;height:20px;flex:0 0 20px;border:1px solid var(--line-strong);border-radius:50%;font-size:11px}
+.progress-item.active{color:var(--text)}
+.progress-item.active .progress-index{border-color:var(--accent);color:var(--accent)}
+.progress-item.done{color:var(--good)}
+.progress-item.done .progress-index{border-color:var(--good);background:color-mix(in oklch,var(--good) 12%,transparent)}
+.stage{padding:22px;min-height:426px;display:flex;flex-direction:column}
+.stage-kicker{font-size:12px;color:var(--accent);margin-bottom:8px}
+h2{margin:0;font:500 22px/1.2 var(--serif);letter-spacing:0}
+.prompt{margin:10px 0 18px;max-width:68ch;color:var(--mid);font:400 16px/1.48 var(--serif)}
+.choice-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice,.order-choice{min-height:58px;text-align:left;padding:12px 14px;border:1px solid var(--line-strong);border-radius:7px;background:transparent;color:var(--text);cursor:pointer;transition:border-color .14s,background .14s,transform .14s}
+.choice:hover,.order-choice:hover{border-color:var(--accent);background:color-mix(in oklch,var(--accent) 7%,transparent)}
+.choice:focus-visible,.order-choice:focus-visible,.next:focus-visible,.restart:focus-visible,.theme-toggle:focus-visible,.palette-swatch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.choice[data-state="bad"],.order-choice[data-state="bad"]{border-color:var(--bad);background:color-mix(in oklch,var(--bad) 10%,transparent)}
+.choice[data-state="good"],.order-choice[data-state="good"]{border-color:var(--good);background:color-mix(in oklch,var(--good) 10%,transparent)}
+.choice:disabled,.order-choice:disabled{cursor:default;opacity:.8}
+.feedback{min-height:48px;margin:16px 0 0;padding:11px 13px;border-left:3px solid var(--line-strong);background:var(--surface-2);color:var(--mid);font-size:14px;line-height:1.42}
+.feedback.good{border-left-color:var(--good);color:var(--text)}
+.feedback.bad{border-left-color:var(--bad);color:var(--text)}
+.next,.restart{align-self:flex-start;margin-top:14px;padding:9px 14px;border:1px solid var(--accent);border-radius:7px;background:var(--accent);color:var(--bg);font-weight:600;cursor:pointer}
+[data-theme="light"] .next,[data-theme="light"] .restart{color:white}
+.address-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:-2px 0 16px}
+.address-box{padding:11px 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface-2)}
+.address-label{display:block;margin-bottom:7px;color:var(--muted);font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+code{display:block;color:var(--text);font:500 12px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;overflow-wrap:anywhere}
+.address-diff{color:var(--warn);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.address-note{margin:-7px 0 16px;color:var(--muted);font-size:12px}
+.order-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px}
+.order-path{margin:0;padding:0;list-style:none;display:grid;gap:7px}
+.order-path li{min-height:45px;display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:7px;color:var(--muted);font-size:13px}
+.order-path li.filled{border-color:color-mix(in oklch,var(--good) 70%,var(--line));color:var(--text);background:color-mix(in oklch,var(--good) 8%,transparent)}
+.order-no{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid currentColor;font-size:10px;flex:0 0 20px}
+.order-bank{display:grid;gap:7px}
+.order-choice{min-height:45px;font-size:13px}
+.result{display:grid;gap:14px;align-content:start;max-width:600px}
+.result-mark{display:grid;place-items:center;width:42px;height:42px;border:1px solid var(--good);border-radius:50%;color:var(--good);font-size:22px}
+.result p{margin:0;color:var(--mid);font:400 16px/1.48 var(--serif)}
+.result-list{margin:0;padding-left:19px;color:var(--mid);font-size:14px;line-height:1.6}
+@media (max-width:620px){
+  body{padding:12px}.head,.stage{padding:17px}.progress{padding:12px 17px;grid-template-columns:1fr 1fr}.progress-item{font-size:11px}.choice-list,.address-compare,.order-layout{grid-template-columns:1fr}.stage{min-height:500px}h1{font-size:22px}.head-top{align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<main class="trainer" aria-labelledby="demo-title">
+  <header class="head">
+    <div class="head-top">
+      <div class="eyebrow" data-s="eyebrow">Live демо · Bitcoin</div>
+      <div class="head-controls">
+        <div class="palette-switch" role="group" data-palette-switch>
+          <button class="palette-swatch" type="button" data-palette="violet"></button>
+          <button class="palette-swatch" type="button" data-palette="cobalt"></button>
+          <button class="palette-swatch" type="button" data-palette="ember"></button>
+          <button class="palette-swatch" type="button" data-palette="forest"></button>
+          <button class="palette-swatch" type="button" data-palette="crimson"></button>
+        </div>
+        <button class="theme-toggle" type="button" data-theme-toggle></button>
+      </div>
+    </div>
+    <div class="title-row">
+      <h1 id="demo-title" data-s="title">Тренажёр безопасности Bitcoin-кошелька</h1>
+      <span class="counter" data-counter></span>
+    </div>
+    <p class="notice" data-s="notice">Учебный сценарий: не вводите сюда настоящую seed phrase и не подключайте кошелёк.</p>
+  </header>
+  <nav class="progress" aria-label="Прогресс тренажёра" data-progress></nav>
+  <section class="stage" aria-live="polite" data-stage></section>
+</main>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var params=new URLSearchParams(location.search),theme=params.get("theme"),accent=params.get("accent"),rawLang=params.get("lang");
+    if(theme==="light"||theme==="dark")document.documentElement.setAttribute("data-theme",theme);
+    if(accent)document.documentElement.style.setProperty("--accent",accent);
+    if(rawLang)__lang=rawLang;
+    window.__THEME_FROM_URL=theme==="light"||theme==="dark"?theme:"";
+    window.__ACCENT_FROM_URL=accent||"";
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+
+var I18N={
+  ru:{
+    eyebrow:"Live демо · Bitcoin",title:"Тренажёр безопасности Bitcoin-кошелька",notice:"Учебный сценарий: не вводите сюда настоящую seed phrase и не подключайте кошелёк.",
+    step:"Шаг {n} из 4",protected:"Защищённых решений: {n}/4",continue:"Продолжить",restart:"Пройти ещё раз",next:"Следующий шаг",
+    backup:{title:"Резервная копия",prompt:"Вы создали новый Bitcoin-кошелёк. Где безопаснее оставить слова восстановления?",choices:[["phone","Сфотографировать слова и оставить в галерее телефона."],["cloud","Вставить их в облачную заметку, ведь она защищена паролем."],["offline","Переписать офлайн, проверить читаемость и хранить в защищённом физическом месте отдельно от устройства."],["chat","Отправить их себе в чат, чтобы не потерять."]],good:"Верно. Слова восстановления дают полный контроль над средствами. Их не фотографируют, не хранят в облаке и никому не пересылают.",bad:"Этот вариант создаёт цифровую копию или передаёт секрет третьей стороне. Фото, облако, буфер обмена и чаты могут быть скомпрометированы."},
+    address:{title:"Похожий адрес",prompt:"Перед отправкой адрес из буфера обмена почти совпадает с проверенным адресом получателя. Что делать?",expected:"Проверенный адрес",clipboard:"Адрес в кошельке",note:"Учебные, непригодные для перевода примеры.",choices:[["short","Сверить только первые и последние несколько символов."],["send","Подтвердить: большая часть символов всё равно совпала."],["full","Проверить полный адрес независимым способом, затем сеть, сумму и комиссию в самом кошельке."],["support","Переслать оба адреса случайному «саппорту» в чате."]],good:"Верно. Подмена из буфера обмена часто сохраняет начало и конец. Сверяйте весь адрес на доверенном устройстве, а перед подтверждением — сеть и сумму.",bad:"Первые и последние символы не доказывают, что адрес тот же. Не подтверждайте перевод, пока полный адрес и параметры не проверены."},
+    message:{title:"Сообщение «от поддержки»",prompt:"В личные сообщения пришло: «Для срочного обновления введите 12 или 24 слова на нашем портале». Как ответить?",choices:[["portal","Перейти по ссылке и ввести слова, чтобы не потерять доступ."],["part","Отправить только первые три слова — этого должно быть достаточно."],["official","Закрыть сообщение; не делиться словами и открыть кошелёк только через известное официальное приложение или сайт."],["screen","Дать «поддержке» доступ к экрану, чтобы она всё проверила."]],good:"Верно. Настоящая поддержка не просит recovery phrase. Проверяйте обновления и помощь только в самостоятельно открытом официальном канале.",bad:"Ни часть phrase, ни удалённый доступ, ни ссылка из сообщения не безопасны. Тот, кто получил слова, получает контроль над средствами."},
+    order:{title:"Соберите безопасный порядок",prompt:"Нажимайте только подходящие действия в правильной последовательности. Лишние действия остаются ловушками.",path:"Ваш порядок",bank:"Доступные действия",choose:"Выберите следующий безопасный шаг.",good:"Верно. Это следующий шаг безопасного пути.",bad:"Не сейчас. Это либо небезопасное действие, либо шаг не в том порядке.",complete:"Порядок собран.",items:[["official","Открыть проверенное официальное приложение или сайт кошелька."],["write","Записать слова восстановления только офлайн."],["verify","Проверить резервную копию только штатной функцией в настоящем кошельке."],["store","Убрать резервную копию в защищённое физическое место отдельно от устройства."],["confirm","Перед переводом проверить полный адрес, сеть, сумму и комиссию; затем подтвердить в кошельке."],["cloud","Вставить слова восстановления в облачную заметку."],["support","Ввести слова на странице из сообщения «поддержки»."],["photo","Сделать скриншот слов на случай, если бумага потеряется."]]},
+    result:{title:"Безопасный маршрут собран",body:"Вы прошли четыре типичные точки риска: резервную копию, подмену адреса, фишинговое сообщение и порядок действий.",items:["Слова восстановления равны контролю над Bitcoin; не создавайте цифровых копий и не показывайте их никому.","Проверяйте весь адрес, сеть, сумму и комиссию именно в кошельке перед подтверждением.","Любое срочное сообщение с просьбой назвать или ввести phrase — сигнал остановиться и открыть официальный канал самостоятельно."]}
+  },
+  en:{
+    eyebrow:"Live demo · Bitcoin",title:"Bitcoin wallet safety trainer",notice:"Training scenario: never enter a real recovery phrase here or connect a wallet.",
+    step:"Step {n} of 4",protected:"Protected choices: {n}/4",continue:"Continue",restart:"Try again",next:"Next step",
+    backup:{title:"Backup",prompt:"You have created a new Bitcoin wallet. Where is it safest to keep the recovery words?",choices:[["phone","Photograph the words and keep them in the phone gallery."],["cloud","Paste them into a cloud note because it has a password."],["offline","Write them down offline, check that they are readable, and keep them in a protected physical place separate from the device."],["chat","Send them to yourself in a chat so they are not lost."]],good:"Correct. Recovery words give complete control over funds. Do not photograph them, store them in the cloud, or send them to anyone.",bad:"This creates a digital copy or gives a secret to a third party. Photos, cloud services, clipboards, and chats can be compromised."},
+    address:{title:"A look-alike address",prompt:"Before sending, the address from the clipboard almost matches the recipient address you verified. What should you do?",expected:"Verified address",clipboard:"Address in wallet",note:"Training examples only; they cannot receive funds.",choices:[["short","Compare only the first and last few characters."],["send","Confirm it: most characters still match."],["full","Verify the full address independently, then check network, amount, and fee in the wallet itself."],["support","Forward both addresses to a random chat “support” account."]],good:"Correct. Clipboard replacement often preserves the beginning and end. Verify the entire address on a trusted device, then check network and amount before confirming.",bad:"The first and last characters do not prove that this is the same address. Do not confirm until the full address and transaction details are checked."},
+    message:{title:"A “support” message",prompt:"A direct message says: “For an urgent update, enter your 12 or 24 words on our portal.” What is the safe response?",choices:[["portal","Open the link and enter the words so you do not lose access."],["part","Send only the first three words; that should be enough."],["official","Close the message, share no words, and open the wallet only through a known official app or site."],["screen","Give “support” access to the screen so it can check everything."]],good:"Correct. Real support never asks for a recovery phrase. Check updates and support through an official channel you open yourself.",bad:"No part of the phrase, remote access, or a link from a message is safe. Whoever gets the words gets control over the funds."},
+    order:{title:"Build the safe sequence",prompt:"Select only suitable actions in the right order. The extra actions are traps.",path:"Your sequence",bank:"Available actions",choose:"Choose the next safe step.",good:"Correct. This is the next step on the safe path.",bad:"Not now. This action is unsafe or belongs at a different point in the sequence.",complete:"Sequence complete.",items:[["official","Open a verified official wallet app or site."],["write","Write the recovery words down offline only."],["verify","Verify the backup only through the wallet’s built-in recovery check."],["store","Keep the backup in a protected physical location separate from the device."],["confirm","Before sending, verify the full address, network, amount, and fee; then confirm in the wallet."],["cloud","Paste the recovery words into a cloud note."],["support","Enter the words on a “support” page sent in a message."],["photo","Take a screenshot of the words in case the paper is lost."]]},
+    result:{title:"Safe route complete",body:"You covered four common risk points: a backup, address replacement, a phishing message, and the order of actions.",items:["Recovery words equal control of Bitcoin: make no digital copies and show them to no one.","Verify the full address, network, amount, and fee in the wallet before confirmation.","Any urgent request to reveal or enter a phrase is a reason to stop and open an official channel yourself."]}
+  },
+  uk:{
+    eyebrow:"Live демо · Bitcoin",title:"Тренажер безпеки Bitcoin-гаманця",notice:"Навчальний сценарій: не вводьте тут справжню recovery phrase і не підключайте гаманець.",
+    step:"Крок {n} з 4",protected:"Захищених рішень: {n}/4",continue:"Продовжити",restart:"Пройти ще раз",next:"Наступний крок",
+    backup:{title:"Резервна копія",prompt:"Ви створили новий Bitcoin-гаманець. Де безпечніше зберігати слова відновлення?",choices:[["phone","Сфотографувати слова й залишити у галереї телефона."],["cloud","Вставити їх у хмарну нотатку, адже вона має пароль."],["offline","Переписати офлайн, перевірити читабельність і зберігати у захищеному фізичному місці окремо від пристрою."],["chat","Надіслати їх собі в чат, щоб не загубити."]],good:"Вірно. Слова відновлення дають повний контроль над коштами. Їх не фотографують, не зберігають у хмарі й нікому не надсилають.",bad:"Цей варіант створює цифрову копію або передає секрет третій стороні. Фото, хмари, буфер обміну й чати можуть бути скомпрометовані."},
+    address:{title:"Схожа адреса",prompt:"Перед надсиланням адреса з буфера обміну майже збігається з перевіреною адресою отримувача. Що робити?",expected:"Перевірена адреса",clipboard:"Адреса у гаманці",note:"Лише навчальні приклади; вони не можуть отримувати кошти.",choices:[["short","Звірити лише перші й останні кілька символів."],["send","Підтвердити: більшість символів усе одно збігається."],["full","Незалежно перевірити повну адресу, потім мережу, суму й комісію в самому гаманці."],["support","Переслати обидві адреси випадковій «підтримці» в чаті."]],good:"Вірно. Підміна в буфері обміну часто зберігає початок і кінець. Звіряйте всю адресу на довіреному пристрої, а потім мережу й суму.",bad:"Перші та останні символи не доводять, що адреса та сама. Не підтверджуйте, доки не перевірені повна адреса й параметри."},
+    message:{title:"Повідомлення «від підтримки»",prompt:"У приватні повідомлення прийшло: «Для термінового оновлення введіть 12 або 24 слова на нашому порталі». Яка відповідь безпечна?",choices:[["portal","Перейти за посиланням і ввести слова, щоб не втратити доступ."],["part","Надіслати лише перші три слова — цього має вистачити."],["official","Закрити повідомлення, не ділитися словами й відкрити гаманець лише через відомий офіційний застосунок або сайт."],["screen","Дати «підтримці» доступ до екрана, щоб вона все перевірила."]],good:"Вірно. Справжня підтримка не просить recovery phrase. Перевіряйте оновлення та допомогу лише через офіційний канал, який відкрили самостійно.",bad:"Ані частина phrase, ані віддалений доступ, ані посилання з повідомлення не безпечні. Хто отримав слова, той отримав контроль над коштами."},
+    order:{title:"Складіть безпечний порядок",prompt:"Обирайте лише доречні дії у правильній послідовності. Зайві дії — це пастки.",path:"Ваш порядок",bank:"Доступні дії",choose:"Оберіть наступний безпечний крок.",good:"Вірно. Це наступний крок безпечного шляху.",bad:"Не зараз. Ця дія небезпечна або стоїть не на своєму місці.",complete:"Порядок складено.",items:[["official","Відкрити перевірений офіційний застосунок або сайт гаманця."],["write","Записати слова відновлення лише офлайн."],["verify","Перевірити резервну копію тільки штатною функцією відновлення у справжньому гаманці."],["store","Зберігати копію у захищеному фізичному місці окремо від пристрою."],["confirm","Перед надсиланням перевірити повну адресу, мережу, суму й комісію; потім підтвердити в гаманці."],["cloud","Вставити слова відновлення у хмарну нотатку."],["support","Ввести слова на сторінці «підтримки» з повідомлення."],["photo","Зробити скриншот слів на випадок втрати паперу."]]},
+    result:{title:"Безпечний маршрут складено",body:"Ви пройшли чотири типові точки ризику: резервну копію, підміну адреси, фішингове повідомлення та порядок дій.",items:["Слова відновлення дорівнюють контролю над Bitcoin: не створюйте цифрових копій і не показуйте їх нікому.","Перевіряйте повну адресу, мережу, суму й комісію у гаманці перед підтвердженням.","Будь-яке термінове прохання назвати або ввести phrase — привід зупинитися й самостійно відкрити офіційний канал."]}
+  },
+  kk:{
+    eyebrow:"Live демо · Bitcoin",title:"Bitcoin әмияны қауіпсіздігі тренажері",notice:"Оқу сценарийі: мұнда нақты recovery phrase енгізбеңіз және әмиян қоспаңыз.",
+    step:"4-тен {n}-қадам",protected:"Қорғалған шешімдер: {n}/4",continue:"Жалғастыру",restart:"Қайта өту",next:"Келесі қадам",
+    backup:{title:"Резервтік көшірме",prompt:"Сіз жаңа Bitcoin әмиянын жасадыңыз. Қалпына келтіру сөздерін қайда қауіпсіз сақтауға болады?",choices:[["phone","Сөздерді суретке түсіріп, телефон галереясында қалдыру."],["cloud","Құпиясөзі бар бұлттық жазбаға енгізу."],["offline","Офлайн жазып, оқылуын тексеріп, құрылғыдан бөлек қорғалған физикалық жерде сақтау."],["chat","Жоғалтпау үшін өзіме чатқа жіберу."]],good:"Дұрыс. Қалпына келтіру сөздері қаражатты толық басқаруға мүмкіндік береді. Оларды суретке түсірмейді, бұлтта сақтамайды және ешкімге жібермейді.",bad:"Бұл тәсіл цифрлық көшірме жасайды не құпияны үшінші тарапқа береді. Фото, бұлт, алмасу буфері және чаттар бұзылуы мүмкін."},
+    address:{title:"Ұқсас мекенжай",prompt:"Жіберер алдында алмасу буферіндегі мекенжай тексерілген алушы мекенжайына ұқсайды. Не істеу керек?",expected:"Тексерілген мекенжай",clipboard:"Әмияндағы мекенжай",note:"Тек оқу мысалдары; оларға қаражат жіберілмейді.",choices:[["short","Тек алғашқы және соңғы бірнеше таңбаны салыстыру."],["send","Растау: таңбалардың көбі бәрібір сәйкес келеді."],["full","Толық мекенжайды тәуелсіз тексеріп, кейін желіні, соманы және комиссияны әмиянда тексеру."],["support","Екі мекенжайды чаттағы кездейсоқ «қолдауға» жіберу."]],good:"Дұрыс. Алмасу буферін ауыстыру көбіне басы мен соңын сақтайды. Сенімді құрылғыда бүкіл мекенжайды, кейін желі мен соманы тексеріңіз.",bad:"Алғашқы және соңғы таңбалар мекенжайдың бірдей екенін дәлелдемейді. Толық мекенжай мен параметрлер тексерілмейінше растауға болмайды."},
+    message:{title:"«Қолдаудан» хабарлама",prompt:"Жеке хабарламада: «Шұғыл жаңарту үшін порталда 12 немесе 24 сөзді енгізіңіз» делінген. Қауіпсіз жауап қайсы?",choices:[["portal","Қолжетімділікті жоғалтпау үшін сілтемеге өтіп, сөздерді енгізу."],["part","Тек алғашқы үш сөзді жіберу — бұл жеткілікті болуы тиіс."],["official","Хабарламаны жабу, сөздермен бөліспеу және әмиянды тек белгілі ресми қолданба не сайт арқылы ашу."],["screen","Барлығын тексеру үшін «қолдауға» экранға қолжетімділік беру."]],good:"Дұрыс. Нағыз қолдау recovery phrase сұрамайды. Жаңартулар мен көмекті өзіңіз ашқан ресми арнадан ғана тексеріңіз.",bad:"Phrase-тің еш бөлігі де, қашықтан қолжетімділік те, хабарламадағы сілтеме де қауіпсіз емес. Сөздерді алған адам қаражатты басқара алады."},
+    order:{title:"Қауіпсіз реттілік құраңыз",prompt:"Тек дұрыс әрекеттерді дұрыс ретпен таңдаңыз. Артық әрекеттер — тұзақтар.",path:"Сіздің ретіңіз",bank:"Қолжетімді әрекеттер",choose:"Келесі қауіпсіз қадамды таңдаңыз.",good:"Дұрыс. Бұл қауіпсіз жолдың келесі қадамы.",bad:"Қазір емес. Бұл әрекет қауіпті немесе реттегі орны басқа.",complete:"Рет құрастырылды.",items:[["official","Тексерілген ресми әмиян қолданбасын немесе сайтын ашу."],["write","Қалпына келтіру сөздерін тек офлайн жазу."],["verify","Резервтік көшірмені тек шынайы әмиянның штаттық қалпына келтіру тексеруімен тексеру."],["store","Көшірмені құрылғыдан бөлек қорғалған физикалық жерде сақтау."],["confirm","Жіберер алдында толық мекенжайды, желіні, соманы және комиссияны тексеріп, содан кейін әмиянда растау."],["cloud","Қалпына келтіру сөздерін бұлттық жазбаға енгізу."],["support","Хабарламадағы «қолдау» бетіне сөздерді енгізу."],["photo","Қағаз жоғалса деп сөздердің скриншотын жасау."]]},
+    result:{title:"Қауіпсіз маршрут дайын",body:"Сіз төрт жиі кездесетін тәуекел нүктесінен өттіңіз: резервтік көшірме, мекенжайды ауыстыру, фишингтік хабарлама және әрекет реті.",items:["Қалпына келтіру сөздері Bitcoin-ді басқаруға тең: цифрлық көшірме жасамаңыз және ешкімге көрсетпеңіз.","Растау алдында толық мекенжайды, желіні, соманы және комиссияны әмиянда тексеріңіз.","Phrase айту не енгізу туралы кез келген шұғыл өтініш — тоқтап, ресми арнаны өзіңіз ашуға белгі."]}
+  },
+  uz:{
+    eyebrow:"Live demo · Bitcoin",title:"Bitcoin hamyoni xavfsizligi trenajyori",notice:"O‘quv ssenariysi: bu yerga haqiqiy recovery phrase kiritmang va hamyonni ulamang.",
+    step:"4 dan {n}-qadam",protected:"Himoyalangan qarorlar: {n}/4",continue:"Davom etish",restart:"Qayta o‘tish",next:"Keyingi qadam",
+    backup:{title:"Zaxira nusxa",prompt:"Siz yangi Bitcoin hamyonini yaratdingiz. Tiklash so‘zlarini qayerda xavfsiz saqlash mumkin?",choices:[["phone","So‘zlarni suratga olib, telefon galereyasida qoldirish."],["cloud","Paroli borligi uchun ularni bulutli eslatmaga joylash."],["offline","Ularni oflayn yozib, o‘qilishini tekshirib, qurilmadan alohida himoyalangan jismoniy joyda saqlash."],["chat","Yo‘qolmasligi uchun o‘zingizga chatga yuborish."]],good:"To‘g‘ri. Tiklash so‘zlari mablag‘lar ustidan to‘liq nazorat beradi. Ularni suratga olmang, bulutda saqlamang va hech kimga yubormang.",bad:"Bu usul raqamli nusxa yaratadi yoki sirni uchinchi tomonga beradi. Suratlar, bulut, bufer va chatlar buzilishi mumkin."},
+    address:{title:"O‘xshash manzil",prompt:"Jo‘natishdan oldin buferdagi manzil tekshirilgan qabul qiluvchi manziliga deyarli mos. Nima qilish kerak?",expected:"Tekshirilgan manzil",clipboard:"Hamyondagi manzil",note:"Faqat o‘quv misollari; ularga mablag‘ yuborib bo‘lmaydi.",choices:[["short","Faqat boshidagi va oxiridagi bir nechta belgini solishtirish."],["send","Tasdiqlash: belgilarining ko‘pi baribir mos keladi."],["full","To‘liq manzilni mustaqil tekshirib, keyin tarmoq, summa va komissiyani hamyonning o‘zida tekshirish."],["support","Ikkala manzilni chatdagi tasodifiy «qo‘llab-quvvatlash»ga yuborish."]],good:"To‘g‘ri. Buferni almashtirish ko‘pincha bosh va oxirini saqlaydi. Ishonchli qurilmada butun manzilni, keyin tarmoq va summani tekshiring.",bad:"Bosh va oxirgi belgilar manzil bir xil ekanini isbotlamaydi. To‘liq manzil va tranzaksiya ma’lumotlari tekshirilmaguncha tasdiqlamang."},
+    message:{title:"«Qo‘llab-quvvatlash» xabari",prompt:"Shaxsiy xabarda: «Shoshilinch yangilanish uchun portalimizda 12 yoki 24 so‘zni kiriting» deb yozilgan. Xavfsiz javob qaysi?",choices:[["portal","Kirishni yo‘qotmaslik uchun havolani ochib, so‘zlarni kiritish."],["part","Faqat dastlabki uchta so‘zni yuborish — shu kifoya bo‘lishi kerak."],["official","Xabarni yopish, so‘zlarni bermaslik va hamyonni faqat ma’lum rasmiy ilova yoki sayt orqali ochish."],["screen","Hammasini tekshirishi uchun «qo‘llab-quvvatlash»ga ekranga kirish berish."]],good:"To‘g‘ri. Haqiqiy qo‘llab-quvvatlash recovery phrase so‘ramaydi. Yangilanish va yordamni faqat o‘zingiz ochgan rasmiy kanalda tekshiring.",bad:"Phrase-ning hech bir qismi, masofaviy kirish yoki xabardagi havola xavfsiz emas. So‘zlarni olgan kishi mablag‘larni boshqara oladi."},
+    order:{title:"Xavfsiz tartibni tuzing",prompt:"Faqat mos harakatlarni to‘g‘ri ketma-ketlikda tanlang. Ortiqcha harakatlar tuzoqdir.",path:"Sizning tartibingiz",bank:"Mavjud harakatlar",choose:"Keyingi xavfsiz qadamni tanlang.",good:"To‘g‘ri. Bu xavfsiz yo‘lning keyingi qadami.",bad:"Hozir emas. Bu harakat xavfli yoki ketma-ketlikdagi o‘rni boshqa.",complete:"Tartib tuzildi.",items:[["official","Tasdiqlangan rasmiy hamyon ilovasi yoki saytini ochish."],["write","Tiklash so‘zlarini faqat oflayn yozish."],["verify","Zaxira nusxani faqat haqiqiy hamyonning o‘rnatilgan tiklash tekshiruvi orqali tekshirish."],["store","Nusxani qurilmadan alohida himoyalangan jismoniy joyda saqlash."],["confirm","Jo‘natishdan oldin to‘liq manzil, tarmoq, summa va komissiyani tekshirib, keyin hamyonda tasdiqlash."],["cloud","Tiklash so‘zlarini bulutli eslatmaga joylash."],["support","Xabardagi «qo‘llab-quvvatlash» sahifasiga so‘zlarni kiritish."],["photo","Qog‘oz yo‘qolishi mumkin deb so‘zlarning skrinshotini olish."]]},
+    result:{title:"Xavfsiz yo‘l tayyor",body:"Siz to‘rtta odatiy xavf nuqtasidan o‘tdingiz: zaxira nusxa, manzilni almashtirish, fishing xabari va harakatlar tartibi.",items:["Tiklash so‘zlari Bitcoin ustidan nazoratga teng: raqamli nusxa yaratmang va ularni hech kimga ko‘rsatmang.","Tasdiqlashdan oldin to‘liq manzil, tarmoq, summa va komissiyani hamyonda tekshiring.","Phrase aytish yoki kiritish haqidagi har qanday shoshilinch so‘rov to‘xtab, rasmiy kanalni o‘zingiz ochish signalidir."]}
+  },
+  es:{
+    eyebrow:"Demo en vivo · Bitcoin",title:"Entrenador de seguridad para billeteras Bitcoin",notice:"Escenario de aprendizaje: no introduzcas aquí una frase de recuperación real ni conectes una billetera.",
+    step:"Paso {n} de 4",protected:"Decisiones protegidas: {n}/4",continue:"Continuar",restart:"Intentarlo de nuevo",next:"Siguiente paso",
+    backup:{title:"Copia de seguridad",prompt:"Has creado una nueva billetera Bitcoin. ¿Dónde es más seguro guardar las palabras de recuperación?",choices:[["phone","Fotografiar las palabras y dejarlas en la galería del teléfono."],["cloud","Pegarlas en una nota en la nube porque tiene contraseña."],["offline","Anotarlas sin conexión, comprobar que se leen bien y guardarlas en un lugar físico protegido, separado del dispositivo."],["chat","Enviártelas por chat para no perderlas."]],good:"Correcto. Las palabras de recuperación dan control total sobre los fondos. No las fotografíes, no las guardes en la nube y no se las envíes a nadie.",bad:"Esta opción crea una copia digital o entrega un secreto a un tercero. Las fotos, la nube, el portapapeles y los chats pueden verse comprometidos."},
+    address:{title:"Una dirección parecida",prompt:"Antes de enviar, la dirección del portapapeles casi coincide con la dirección verificada del destinatario. ¿Qué debes hacer?",expected:"Dirección verificada",clipboard:"Dirección en la billetera",note:"Ejemplos de aprendizaje; no pueden recibir fondos.",choices:[["short","Comparar solo los primeros y últimos caracteres."],["send","Confirmar: la mayoría de los caracteres coincide."],["full","Verificar la dirección completa de forma independiente y luego revisar red, importe y comisión en la propia billetera."],["support","Reenviar ambas direcciones a un «soporte» aleatorio en el chat."]],good:"Correcto. La sustitución del portapapeles suele conservar el inicio y el final. Verifica toda la dirección en un dispositivo fiable, y después la red y el importe.",bad:"Los primeros y últimos caracteres no prueban que sea la misma dirección. No confirmes hasta revisar la dirección completa y los datos de la transacción."},
+    message:{title:"Un mensaje «de soporte»",prompt:"Recibes un mensaje: «Para una actualización urgente, introduce 12 o 24 palabras en nuestro portal». ¿Cuál es la respuesta segura?",choices:[["portal","Abrir el enlace e introducir las palabras para no perder el acceso."],["part","Enviar solo las tres primeras palabras; debería bastar."],["official","Cerrar el mensaje, no compartir palabras y abrir la billetera solo desde una aplicación o web oficial conocida."],["screen","Dar a «soporte» acceso a la pantalla para que lo revise todo."]],good:"Correcto. El soporte real nunca pide una frase de recuperación. Comprueba las actualizaciones y la ayuda mediante un canal oficial que abras tú mismo.",bad:"Ni una parte de la frase, ni el acceso remoto, ni un enlace de un mensaje son seguros. Quien obtiene las palabras controla los fondos."},
+    order:{title:"Construye la secuencia segura",prompt:"Selecciona solo las acciones adecuadas en el orden correcto. Las acciones sobrantes son trampas.",path:"Tu secuencia",bank:"Acciones disponibles",choose:"Elige el siguiente paso seguro.",good:"Correcto. Este es el siguiente paso de la ruta segura.",bad:"Ahora no. Esta acción es insegura o va en otro lugar de la secuencia.",complete:"Secuencia completada.",items:[["official","Abrir una aplicación o web oficial de la billetera que hayas verificado."],["write","Anotar las palabras de recuperación solo sin conexión."],["verify","Verificar la copia solo con la comprobación de recuperación integrada de la billetera real."],["store","Guardar la copia en un lugar físico protegido, separado del dispositivo."],["confirm","Antes de enviar, verificar la dirección completa, la red, el importe y la comisión; después confirmar en la billetera."],["cloud","Pegar las palabras de recuperación en una nota en la nube."],["support","Introducir las palabras en una página de «soporte» enviada por mensaje."],["photo","Hacer una captura de las palabras por si se pierde el papel."]]},
+    result:{title:"Ruta segura completada",body:"Has recorrido cuatro puntos de riesgo habituales: una copia de seguridad, la sustitución de dirección, un mensaje de phishing y el orden de las acciones.",items:["Las palabras de recuperación equivalen al control de Bitcoin: no hagas copias digitales ni se las muestres a nadie.","Verifica la dirección completa, la red, el importe y la comisión en la billetera antes de confirmar.","Cualquier petición urgente de revelar o introducir una frase es motivo para detenerse y abrir por tu cuenta un canal oficial."]}
+  },
+  fr:{
+    eyebrow:"Démo en direct · Bitcoin",title:"Entraîneur de sécurité pour portefeuille Bitcoin",notice:"Scénario d’apprentissage : n’entre jamais ici une vraie phrase de récupération et ne connecte pas de portefeuille.",
+    step:"Étape {n} sur 4",protected:"Décisions protégées : {n}/4",continue:"Continuer",restart:"Recommencer",next:"Étape suivante",
+    backup:{title:"Sauvegarde",prompt:"Tu as créé un nouveau portefeuille Bitcoin. Où est-il le plus sûr de conserver les mots de récupération ?",choices:[["phone","Photographier les mots et les laisser dans la galerie du téléphone."],["cloud","Les coller dans une note cloud parce qu’elle a un mot de passe."],["offline","Les écrire hors ligne, vérifier qu’ils sont lisibles et les garder dans un lieu physique protégé, séparé de l’appareil."],["chat","Te les envoyer dans une conversation pour ne pas les perdre."]],good:"Correct. Les mots de récupération donnent le contrôle total des fonds. Ne les photographie pas, ne les stocke pas dans le cloud et ne les envoie à personne.",bad:"Cette option crée une copie numérique ou confie un secret à un tiers. Photos, cloud, presse-papiers et conversations peuvent être compromis."},
+    address:{title:"Une adresse ressemblante",prompt:"Avant l’envoi, l’adresse du presse-papiers ressemble presque à l’adresse vérifiée du destinataire. Que faire ?",expected:"Adresse vérifiée",clipboard:"Adresse dans le portefeuille",note:"Exemples d’apprentissage uniquement ; ils ne peuvent recevoir aucun fonds.",choices:[["short","Comparer uniquement les premiers et derniers caractères."],["send","Confirmer : la plupart des caractères correspondent quand même."],["full","Vérifier l’adresse entière indépendamment, puis le réseau, le montant et les frais dans le portefeuille."],["support","Transférer les deux adresses à un « support » inconnu dans le chat."]],good:"Correct. Une substitution du presse-papiers conserve souvent le début et la fin. Vérifie toute l’adresse sur un appareil fiable, puis le réseau et le montant.",bad:"Les premiers et derniers caractères ne prouvent pas qu’il s’agit de la même adresse. Ne confirme pas avant d’avoir vérifié l’adresse complète et les détails."},
+    message:{title:"Un message « du support »",prompt:"Tu reçois un message : « Pour une mise à jour urgente, entre tes 12 ou 24 mots sur notre portail ». Quelle réponse est sûre ?",choices:[["portal","Ouvrir le lien et entrer les mots pour ne pas perdre l’accès."],["part","Envoyer seulement les trois premiers mots ; cela devrait suffire."],["official","Fermer le message, ne partager aucun mot et ouvrir le portefeuille uniquement via une application ou un site officiel connu."],["screen","Donner au « support » l’accès à l’écran pour tout vérifier."]],good:"Correct. Le vrai support ne demande jamais une phrase de récupération. Vérifie les mises à jour et l’aide par un canal officiel que tu ouvres toi-même.",bad:"Aucune partie de la phrase, aucun accès à distance et aucun lien reçu par message ne sont sûrs. Celui qui obtient les mots contrôle les fonds."},
+    order:{title:"Construis la séquence sûre",prompt:"Choisis uniquement les bonnes actions dans le bon ordre. Les actions en trop sont des pièges.",path:"Ta séquence",bank:"Actions disponibles",choose:"Choisis la prochaine étape sûre.",good:"Correct. C’est la prochaine étape du parcours sûr.",bad:"Pas maintenant. Cette action est dangereuse ou n’est pas au bon endroit dans la séquence.",complete:"Séquence terminée.",items:[["official","Ouvrir une application ou un site officiel de portefeuille que tu as vérifié."],["write","Noter les mots de récupération uniquement hors ligne."],["verify","Vérifier la sauvegarde uniquement avec le contrôle de récupération intégré au vrai portefeuille."],["store","Conserver la sauvegarde dans un lieu physique protégé, séparé de l’appareil."],["confirm","Avant l’envoi, vérifier l’adresse entière, le réseau, le montant et les frais, puis confirmer dans le portefeuille."],["cloud","Coller les mots de récupération dans une note cloud."],["support","Entrer les mots sur une page de « support » reçue par message."],["photo","Faire une capture des mots au cas où le papier serait perdu."]]},
+    result:{title:"Parcours sûr terminé",body:"Tu as parcouru quatre points de risque courants : une sauvegarde, une substitution d’adresse, un message de phishing et l’ordre des actions.",items:["Les mots de récupération équivalent au contrôle de Bitcoin : ne crée pas de copies numériques et ne les montre à personne.","Vérifie l’adresse entière, le réseau, le montant et les frais dans le portefeuille avant de confirmer.","Toute demande urgente de révéler ou de saisir une phrase doit te faire arrêter et ouvrir toi-même un canal officiel."]}
+  },
+  hy:{
+    eyebrow:"Կենդանի դեմո · Bitcoin",title:"Bitcoin դրամապանակի անվտանգության մարզիչ",notice:"Ուսումնական սցենար. այստեղ մի՛ մուտքագրեք իրական recovery phrase և մի՛ միացրեք դրամապանակ։",
+    step:"Քայլ {n}-ը 4-ից",protected:"Պաշտպանված որոշումներ՝ {n}/4",continue:"Շարունակել",restart:"Անցնել կրկին",next:"Հաջորդ քայլը",
+    backup:{title:"Պահուստային պատճեն",prompt:"Դուք ստեղծել եք նոր Bitcoin դրամապանակ։ Որտե՞ղ է առավել անվտանգ պահել վերականգնման բառերը։",choices:[["phone","Լուսանկարել բառերը և թողնել հեռախոսի պատկերասրահում։"],["cloud","Տեղադրել դրանք ամպային նշման մեջ, քանի որ այն գաղտնաբառ ունի։"],["offline","Գրել օֆլայն, ստուգել ընթեռնելիությունը և պահել պաշտպանված ֆիզիկական վայրում՝ սարքից առանձին։"],["chat","Ուղարկել ինքներդ ձեզ չատով, որպեսզի չկորչեն։"]],good:"Ճիշտ է։ Վերականգնման բառերը լիակատար վերահսկողություն են տալիս միջոցների վրա։ Մի՛ լուսանկարեք, մի՛ պահեք ամպում և մի՛ ուղարկեք ոչ ոքի։",bad:"Այս տարբերակը ստեղծում է թվային պատճեն կամ գաղտնիքը տալիս երրորդ կողմի։ Լուսանկարները, ամպը, փոխանակման բուֆերը և չատերը կարող են վտանգվել։"},
+    address:{title:"Նման հասցե",prompt:"Ուղարկելուց առաջ փոխանակման բուֆերից հասցեն գրեթե համընկնում է ստուգված ստացողի հասցեին։ Ի՞նչ անել։",expected:"Ստուգված հասցե",clipboard:"Դրամապանակի հասցե",note:"Միայն ուսումնական օրինակներ են. դրանք միջոցներ չեն կարող ստանալ։",choices:[["short","Համեմատել միայն առաջին և վերջին մի քանի նիշերը։"],["send","Հաստատել. նիշերի մեծ մասն ամեն դեպքում համընկնում է։"],["full","Անկախ ստուգել ամբողջ հասցեն, ապա դրամապանակում ստուգել ցանցը, գումարը և վճարը։"],["support","Երկու հասցեն էլ ուղարկել չատում պատահական «աջակցությանը»։"]],good:"Ճիշտ է։ Փոխանակման բուֆերի փոխարինումը հաճախ պահպանում է սկիզբն ու վերջը։ Վստահելի սարքում ստուգեք ամբողջ հասցեն, ապա ցանցն ու գումարը։",bad:"Առաջին և վերջին նիշերը չեն ապացուցում, որ հասցեն նույնն է։ Մի՛ հաստատեք, մինչև ամբողջ հասցեն և գործարքի տվյալները ստուգված չլինեն։"},
+    message:{title:"«Աջակցությունից» հաղորդագրություն",prompt:"Անձնական հաղորդագրությունում գրված է. «Շտապ թարմացման համար մեր պորտալում մուտքագրեք 12 կամ 24 բառը»։ Ո՞ր արձագանքն է անվտանգ։",choices:[["portal","Բացել հղումը և մուտքագրել բառերը, որպեսզի մուտքը չկորցնեք։"],["part","Ուղարկել միայն առաջին երեք բառը. դա պետք է բավարարի։"],["official","Փակել հաղորդագրությունը, բառերով չկիսվել և դրամապանակը բացել միայն հայտնի պաշտոնական հավելվածից կամ կայքից։"],["screen","«Աջակցությանը» էկրանի հասանելիություն տալ, որ ամեն ինչ ստուգի։"]],good:"Ճիշտ է։ Իրական աջակցությունը երբեք recovery phrase չի հարցնում։ Թարմացումներն ու օգնությունը ստուգեք միայն ինքներդ բացած պաշտոնական ալիքով։",bad:"Phrase-ի ոչ մի մասը, հեռավար հասանելիությունը կամ հաղորդագրության հղումը անվտանգ չեն։ Բառերը ստացած անձը վերահսկում է միջոցները։"},
+    order:{title:"Կազմեք անվտանգ հերթականությունը",prompt:"Ընտրեք միայն համապատասխան գործողությունները ճիշտ հերթականությամբ։ Ավելորդ գործողությունները թակարդներ են։",path:"Ձեր հերթականությունը",bank:"Հասանելի գործողություններ",choose:"Ընտրեք հաջորդ անվտանգ քայլը։",good:"Ճիշտ է։ Սա անվտանգ ուղու հաջորդ քայլն է։",bad:"Ոչ հիմա։ Այս գործողությունը վտանգավոր է կամ հերթականության այլ տեղում է։",complete:"Հերթականությունը կազմված է։",items:[["official","Բացել ստուգված պաշտոնական դրամապանակի հավելվածը կամ կայքը։"],["write","Վերականգնման բառերը գրել միայն օֆլայն։"],["verify","Պահուստային պատճենը ստուգել միայն իրական դրամապանակի ներկառուցված վերականգնման ստուգմամբ։"],["store","Պահուստային պատճենը պահել պաշտպանված ֆիզիկական վայրում՝ սարքից առանձին։"],["confirm","Ուղարկելուց առաջ ստուգել ամբողջ հասցեն, ցանցը, գումարը և վճարը, ապա հաստատել դրամապանակում։"],["cloud","Վերականգնման բառերը տեղադրել ամպային նշման մեջ։"],["support","Բառերը մուտքագրել հաղորդագրությամբ ուղարկված «աջակցության» էջում։"],["photo","Բառերի սքրինշոթ անել, եթե թուղթը կորչի։"]]},
+    result:{title:"Անվտանգ ուղին պատրաստ է",body:"Դուք անցաք ռիսկի չորս տարածված կետ. պահուստային պատճեն, հասցեի փոխարինում, ֆիշինգային հաղորդագրություն և գործողությունների հերթականություն։",items:["Վերականգնման բառերը հավասար են Bitcoin-ի վերահսկմանը. թվային պատճեններ մի՛ ստեղծեք և ոչ ոքի մի՛ ցույց տվեք։","Հաստատելուց առաջ դրամապանակում ստուգեք ամբողջ հասցեն, ցանցը, գումարը և վճարը։","Phrase-ը հայտնելու կամ մուտքագրելու ցանկացած շտապ խնդրանք ազդանշան է կանգ առնելու և պաշտոնական ալիքը ինքներդ բացելու համար։"]}
+  }
+};
+
+var LANGS=["ru","en","uk","kk","uz","es","fr","hy"];
+var CONTROL_LABELS={
+  ru:{palette:"Цвет страницы",light:"Светлая тема",dark:"Тёмная тема",violet:"Фиолетовый",cobalt:"Кобальтовый",ember:"Янтарный",forest:"Лесной",crimson:"Малиновый"},
+  en:{palette:"Page color",light:"Light theme",dark:"Dark theme",violet:"Violet",cobalt:"Cobalt",ember:"Amber",forest:"Forest",crimson:"Crimson"},
+  uk:{palette:"Колір сторінки",light:"Світла тема",dark:"Темна тема",violet:"Фіолетовий",cobalt:"Кобальтовий",ember:"Бурштиновий",forest:"Лісовий",crimson:"Малиновий"},
+  kk:{palette:"Бет түсі",light:"Ашық тақырып",dark:"Қараңғы тақырып",violet:"Күлгін",cobalt:"Кобальт",ember:"Кәріптас",forest:"Орман",crimson:"Қызыл"},
+  uz:{palette:"Sahifa rangi",light:"Yorug' mavzu",dark:"Qorong'i mavzu",violet:"Binafsha",cobalt:"Kobalt",ember:"Qahrabo",forest:"O'rmon",crimson:"Qirmizi"},
+  es:{palette:"Color de página",light:"Tema claro",dark:"Tema oscuro",violet:"Violeta",cobalt:"Cobalto",ember:"Ámbar",forest:"Bosque",crimson:"Carmesí"},
+  fr:{palette:"Couleur de page",light:"Thème clair",dark:"Thème sombre",violet:"Violet",cobalt:"Cobalt",ember:"Ambre",forest:"Forêt",crimson:"Cramoisi"},
+  hy:{palette:"Էջի գույն",light:"Բաց թեմա",dark:"Մուգ թեմա",violet:"Մանուշակագույն",cobalt:"Կոբալտ",ember:"Սաթ",forest:"Անտառ",crimson:"Կարմիր"}
+};
+var PALETTES={
+  violet:{dark:"oklch(72% .261 295)",light:"oklch(55% .319 295)"},
+  cobalt:{dark:"oklch(72% .26 250)",light:"oklch(52% .27 250)"},
+  ember:{dark:"oklch(78% .23 60)",light:"oklch(58% .23 60)"},
+  forest:{dark:"oklch(76% .23 165)",light:"oklch(48% .18 165)"},
+  crimson:{dark:"oklch(68% .27 15)",light:"oklch(48% .22 15)"}
+};
+var stage=document.querySelector("[data-stage]");
+var progress=document.querySelector("[data-progress]");
+var counter=document.querySelector("[data-counter]");
+var themeToggle=document.querySelector("[data-theme-toggle]");
+var paletteSwitch=document.querySelector("[data-palette-switch]");
+var activePalette=window.__ACCENT_FROM_URL?"":"violet";
+var current=0,protectedChoices=0,orderPicked=[],choiceOrders={},orderBankOrder=[];
+var orderExpected=["official","write","verify","store","confirm"];
+
+function dict(){return I18N[window.__LANG]||I18N.en;}
+function fill(str,vars){return String(str||"").replace(/\{(\w+)\}/g,function(_,k){return vars&&vars[k]!=null?vars[k]:"";});}
+function words(key){return dict()[key]||I18N.en[key]||"";}
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[ch];});}
+function uiLabels(){return CONTROL_LABELS[window.__LANG]||CONTROL_LABELS.en;}
+function currentTheme(){return document.documentElement.getAttribute("data-theme")==="light"?"light":"dark";}
+function renderControls(){
+  var labels=uiLabels(),theme=currentTheme();
+  paletteSwitch.setAttribute("aria-label",labels.palette);
+  paletteSwitch.querySelectorAll("[data-palette]").forEach(function(button){
+    var palette=button.getAttribute("data-palette"),label=labels[palette];
+    button.classList.toggle("active",activePalette===palette);
+    button.setAttribute("aria-label",label);
+    button.setAttribute("title",label);
+    button.setAttribute("aria-pressed",activePalette===palette?"true":"false");
+  });
+  themeToggle.textContent=theme==="dark"?"☼":"◐";
+  themeToggle.setAttribute("aria-label",theme==="dark"?labels.light:labels.dark);
+  themeToggle.setAttribute("title",theme==="dark"?labels.light:labels.dark);
+  themeToggle.setAttribute("aria-pressed",theme==="dark"?"true":"false");
+}
+function setTheme(theme){
+  if(theme!=="light"&&theme!=="dark")return;
+  document.documentElement.setAttribute("data-theme",theme);
+  if(activePalette)document.documentElement.style.setProperty("--accent",PALETTES[activePalette][theme]);
+  renderControls();
+}
+function setPalette(palette){
+  if(!PALETTES[palette])return;
+  activePalette=palette;
+  document.documentElement.style.setProperty("--accent",PALETTES[palette][currentTheme()]);
+  renderControls();
+}
+function shuffle(items){
+  var shuffled=items.slice();
+  for(var index=shuffled.length-1;index>0;index-=1){
+    var nextIndex=Math.floor(Math.random()*(index+1)),value=shuffled[index];
+    shuffled[index]=shuffled[nextIndex];shuffled[nextIndex]=value;
+  }
+  return shuffled;
+}
+function scatterOrderItems(){
+  var all=dict().order.items.map(function(item){return item[0];});
+  for(var attempt=0;attempt<32;attempt+=1){
+    var candidate=shuffle(all),safePositions=orderExpected.map(function(id){return candidate.indexOf(id);}).sort(function(a,b){return a-b;});
+    var allSafeTogether=safePositions.every(function(position,index){return index===0||position===safePositions[index-1]+1;});
+    if(!allSafeTogether)return candidate;
+  }
+  return shuffle(all);
+}
+function startRound(){
+  current=0;protectedChoices=0;orderPicked=[];
+  choiceOrders={
+    backup:shuffle(dict().backup.choices.map(function(choice){return choice[0];})),
+    address:shuffle(dict().address.choices.map(function(choice){return choice[0];})),
+    message:shuffle(dict().message.choices.map(function(choice){return choice[0];}))
+  };
+  orderBankOrder=scatterOrderItems();
+}
+function orderedChoices(key,item){
+  return (choiceOrders[key]||item.choices.map(function(choice){return choice[0];})).map(function(id){
+    return item.choices.find(function(choice){return choice[0]===id;});
+  });
+}
+function setStatic(){
+  document.querySelectorAll("[data-s]").forEach(function(el){var value=words(el.getAttribute("data-s"));if(value)el.textContent=value;});
+  document.title=words("title")+" · Luminara";
+  renderControls();
+}
+function renderProgress(){
+  var labels=[dict().backup.title,dict().address.title,dict().message.title,dict().order.title];
+  progress.innerHTML=labels.map(function(label,index){
+    var state=index<current?" done":index===current?" active":"";
+    return '<div class="progress-item'+state+'"><span class="progress-index">'+(index<current?"✓":index+1)+'</span><span>'+escapeHtml(label)+'</span></div>';
+  }).join("");
+  counter.textContent=fill(words("protected"),{n:protectedChoices});
+}
+function feedback(text,tone){
+  var el=stage.querySelector("[data-feedback]");
+  if(!el)return;
+  el.className="feedback "+(tone||"");
+  el.textContent=text;
+}
+function advance(){current+=1;protectedChoices+=1;render();}
+function renderChoiceStep(key){
+  var item=dict()[key];
+  var correct=key==="backup"?"offline":key==="address"?"full":"official";
+  var address=key==="address"?'<div class="address-compare"><div class="address-box"><span class="address-label">'+escapeHtml(item.expected)+'</span><code>bc1q8cp7 7x6nm 53p4a jg9<span class="address-diff">d</span>8 w4q</code></div><div class="address-box"><span class="address-label">'+escapeHtml(item.clipboard)+'</span><code>bc1q8cp7 7x6nm 53p4a jg9<span class="address-diff">b</span>8 w4q</code></div></div><p class="address-note">'+escapeHtml(item.note)+'</p>':"";
+  stage.innerHTML='<div class="stage-kicker">'+escapeHtml(fill(words("step"),{n:current+1}))+'</div><h2>'+escapeHtml(item.title)+'</h2><p class="prompt">'+escapeHtml(item.prompt)+'</p>'+address+'<div class="choice-list">'+orderedChoices(key,item).map(function(choice){return '<button class="choice" type="button" data-choice="'+choice[0]+'">'+escapeHtml(choice[1])+'</button>';}).join("")+'</div><div class="feedback" data-feedback>'+escapeHtml(key==="address"?item.note:"")+'</div>';
+  stage.querySelectorAll("[data-choice]").forEach(function(button){button.addEventListener("click",function(){
+    var id=button.getAttribute("data-choice");
+    if(id===correct){
+      button.dataset.state="good";
+      stage.querySelectorAll("[data-choice]").forEach(function(choice){choice.disabled=true;});
+      feedback(item.good,"good");
+      var next=document.createElement("button");next.type="button";next.className="next";next.dataset.next="";next.textContent=current===2?words("next"):words("continue");next.addEventListener("click",advance);stage.appendChild(next);
+    }else{
+      button.dataset.state="bad";
+      feedback(item.bad,"bad");
+    }
+  });});
+}
+function orderItem(id){return dict().order.items.find(function(item){return item[0]===id;});}
+function renderOrder(){
+  var item=dict().order;
+  var placed=orderPicked.map(function(id){return orderItem(id);});
+  var list=orderExpected.map(function(id,index){var picked=placed[index];return '<li class="'+(picked?"filled":"")+'"><span class="order-no">'+(index+1)+'</span><span>'+escapeHtml(picked?picked[1]:"…")+'</span></li>';}).join("");
+  stage.innerHTML='<div class="stage-kicker">'+escapeHtml(fill(words("step"),{n:4}))+'</div><h2>'+escapeHtml(item.title)+'</h2><p class="prompt">'+escapeHtml(item.prompt)+'</p><div class="order-layout"><div><div class="address-label">'+escapeHtml(item.path)+'</div><ol class="order-path" data-path>'+list+'</ol></div><div><div class="address-label">'+escapeHtml(item.bank)+'</div><div class="order-bank">'+orderBankOrder.map(function(id){var choice=orderItem(id),used=orderPicked.indexOf(choice[0])>=0;return '<button class="order-choice" type="button" data-order="'+choice[0]+'" '+(used?"disabled data-state=\"good\"":"")+'>'+escapeHtml(choice[1])+'</button>';}).join("")+'</div></div></div><div class="feedback" data-feedback>'+escapeHtml(item.choose)+'</div>';
+  stage.querySelectorAll("[data-order]").forEach(function(button){button.addEventListener("click",function(){
+    var id=button.getAttribute("data-order"),expected=orderExpected[orderPicked.length];
+    if(id===expected){
+      orderPicked.push(id);renderOrder();
+      var message=orderPicked.length===orderExpected.length?item.complete:item.good;
+      feedback(message,"good");
+      if(orderPicked.length===orderExpected.length){
+        var finish=document.createElement("button");finish.type="button";finish.className="next";finish.dataset.finish="";finish.textContent=words("continue");finish.addEventListener("click",function(){current=4;protectedChoices=4;render();});stage.appendChild(finish);
+      }
+    }else{button.dataset.state="bad";feedback(item.bad,"bad");}
+  });});
+}
+function renderResult(){
+  var item=dict().result;
+  stage.innerHTML='<div class="result"><div class="result-mark" aria-hidden="true">✓</div><h2>'+escapeHtml(item.title)+'</h2><p>'+escapeHtml(item.body)+'</p><ul class="result-list">'+item.items.map(function(text){return '<li>'+escapeHtml(text)+'</li>';}).join("")+'</ul><button type="button" class="restart" data-restart>'+escapeHtml(words("restart"))+'</button></div>';
+  stage.querySelector("[data-restart]").addEventListener("click",function(){startRound();render();});
+}
+function render(){setStatic();renderProgress();if(current===0)renderChoiceStep("backup");else if(current===1)renderChoiceStep("address");else if(current===2)renderChoiceStep("message");else if(current===3)renderOrder();else renderResult();}
+function applyLang(lang){
+  if(LANGS.indexOf(lang)<0)lang="ru";
+  window.__LANG=lang;document.documentElement.lang=lang;render();
+}
+window.addEventListener("message",function(event){
+  try{
+    if(event.source!==window.parent||event.origin!==window.location.origin)return;
+    var data=event.data;
+    if(!data||typeof data!=="object"||data.type!=="luminara:demo-style")return;
+    if(data.theme==="light"||data.theme==="dark")setTheme(data.theme);
+    if(typeof data.accent==="string"&&data.accent){activePalette="";document.documentElement.style.setProperty("--accent",data.accent);renderControls();}
+    if(typeof data.lang==="string")applyLang(data.lang);
+  }catch(e){}
+});
+themeToggle.addEventListener("click",function(){setTheme(currentTheme()==="dark"?"light":"dark");});
+paletteSwitch.querySelectorAll("[data-palette]").forEach(function(button){button.addEventListener("click",function(){setPalette(button.getAttribute("data-palette"));});});
+startRound();
+applyLang(window.__LANG||"ru");
+</script>
+</body>
+</html>

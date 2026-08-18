@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live демо · ARPANET · Luminara</title>
+<style>
+:root{
+  /* DARK (default) — mirrors app :root */
+  --bg: oklch(11% 0.026 285); --bg-surface: oklch(14.5% 0.032 285); --bg-elev: oklch(18% 0.041 285);
+  --bg-card: oklch(16% 0.036 285); --bg-tint: oklch(22% 0.051 285);
+  --line: oklch(28% 0.036 285); --line-soft: oklch(22% 0.032 285); --line-strong: oklch(40% 0.058 285);
+  --text: oklch(96% 0.007 285); --text-mid: oklch(80% 0.014 285); --text-muted: oklch(62% 0.029 285); --text-dim: oklch(46% 0.043 285);
+  --accent: oklch(72% 0.261 295); --accent-2: oklch(82% 0.174 205); --accent-3: oklch(80% 0.189 85); --accent-4: oklch(78% 0.203 155);
+  /* type/lens colors mapped to app ecosystem chroma */
+  --power: oklch(80% 0.203 10); --technology: oklch(78% 0.189 155); --media: oklch(80% 0.189 85);
+  --privacy: oklch(74% 0.232 290); --economy: oklch(76% 0.185 320);
+  --glass: oklch(11% 0.026 285 / 0.7); --scrim: oklch(0% 0 0 / 0.6);
+  --star: rgba(255,255,255,.6); --neb1: rgba(60,80,160,.16); --neb2: rgba(120,60,160,.10);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+[data-theme="light"]{
+  --bg: oklch(98% 0.006 285); --bg-surface: oklch(96% 0.009 285); --bg-elev: oklch(93.5% 0.012 285);
+  --bg-card: oklch(97% 0.007 285); --bg-tint: oklch(91% 0.014 285);
+  --line: oklch(82% 0.017 285); --line-soft: oklch(88% 0.014 285); --line-strong: oklch(70% 0.026 285);
+  --text: oklch(22% 0.043 285); --text-mid: oklch(40% 0.036 285); --text-muted: oklch(55% 0.041 285); --text-dim: oklch(68% 0.032 285);
+  --accent: oklch(55% 0.319 295); --accent-2: oklch(55% 0.232 205); --accent-3: oklch(62% 0.232 60); --accent-4: oklch(55% 0.232 155);
+  --power: oklch(58% 0.261 10); --technology: oklch(52% 0.232 155); --media: oklch(58% 0.200 90);
+  --privacy: oklch(48% 0.290 290); --economy: oklch(54% 0.220 320);
+  --glass: oklch(98% 0.006 285 / 0.85); --scrim: oklch(100% 0 0 / 0.6);
+  --star: rgba(120,110,160,.35); --neb1: rgba(150,140,220,.10); --neb2: rgba(190,160,220,.08);
+}
+[data-theme="light"] .stars,[data-theme="light"] .stars2{opacity:.25}
+[data-theme="light"] .btn.primary{color:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans,system-ui);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.demo-wrap{width:min(560px,100%)}
+@keyframes demoGlow{0%,100%{box-shadow:0 8px 26px -14px color-mix(in oklch,var(--accent) 45%,transparent),0 0 0 1px var(--line) inset}
+  50%{box-shadow:0 10px 34px -10px color-mix(in oklch,var(--accent) 70%,transparent),0 0 0 1px color-mix(in oklch,var(--accent) 30%,var(--line)) inset}}
+.arpa-wrap{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--bg-surface)}
+.arpa-wrap h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);font-weight:600}
+.arpa-svg{width:100%;height:160px;display:block;background:var(--bg-tint);border-radius:8px;border:1px solid var(--line)}
+.arpa-note{margin:9px 0 0;color:var(--text-mid);font-size:12px;min-height:1.4em;font-family:var(--serif)}
+.demo-top{flex:0 0 auto;margin:16px auto 4px;
+  width:min(560px,calc(100% - 32px));border-radius:16px;padding:14px 18px 12px;
+  background:linear-gradient(150deg,color-mix(in oklch,var(--accent) 12%,var(--bg-elev)),var(--bg-elev));
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));
+  box-shadow:0 8px 30px -14px color-mix(in oklch,var(--accent) 55%,transparent),0 0 0 1px var(--line) inset;
+  animation:demoGlow 3.6s ease-in-out infinite;position:relative}
+.demo-top-head{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+.demo-top-badge{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:color-mix(in oklch,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-radius:999px;padding:3px 9px}
+.demo-top-title{font-size:15px;font-weight:600;color:var(--text);font-family:var(--serif)}
+.demo-top .arpa-svg{height:132px;margin-top:2px}
+.demo-top .arpa-note{font-size:13.5px}
+.demo-top .panel-actions{margin-top:10px}
+.demo-top-toggle{position:absolute;top:12px;right:12px;border:none;background:transparent;
+  color:var(--text-muted);cursor:pointer;font-size:15px;line-height:1;padding:4px;border-radius:6px}
+.demo-top-toggle:hover{color:var(--text);background:var(--bg-tint)}
+.demo-top.collapsed .demo-top-body{display:none}
+.demo-top.collapsed{padding:10px 14px;animation:none}
+.demo-top{margin:12px 16px 4px;width:auto}
+.arpa-net line{stroke:var(--line-strong);stroke-width:2}
+.arpa-net .path-active{stroke:var(--technology);stroke-width:3;filter:drop-shadow(0 0 4px var(--technology))}
+.arpa-net circle.host{fill:var(--bg-elev);stroke:var(--text-mid);stroke-width:2}
+.arpa-net circle.down{fill:var(--bg-tint);stroke:var(--power);stroke-width:2}
+.arpa-net .packet{fill:var(--accent);filter:drop-shadow(0 0 5px var(--accent))}
+.arpa-net text{fill:var(--text-mid);font-size:13px;text-anchor:middle;font-family:var(--serif)}
+/* revision-3 #19 fix: this block previously contained stray JS statements left inside <style>
+   (a corrupted merge), which broke CSS parsing here and meant NO base .btn rule ever loaded —
+   the panel-actions buttons rendered with bare unstyled-browser-button defaults. The real
+   ARPANET wiring logic is intact below in <script>; this restores the same .btn/.panel-actions
+   rules the other seven demo files already use, so light/dark contrast matches the rest of the
+   family (text on --bg-surface / #fff on --accent, both ≥ 4.5:1 in both themes). */
+.panel-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{font-family:var(--sans,system-ui);font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:10px;
+  cursor:pointer;border:1px solid var(--line-strong);background:var(--bg-surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* revision-3 #19 WCAG AA fix: white text on the DARK-theme accent (L≈72%) was only ~2.75:1.
+   var(--bg) (near-black in dark theme) gives ~7.4:1. Light theme keeps its own white override
+   below, since the light accent (L≈55%) already passes at ~5.9:1. */
+.btn.primary:hover{filter:brightness(1.08)}
+.demo-top{position:relative;margin:0 auto;animation:demoGlow 3.6s ease-in-out infinite}
+.demo-top-toggle{display:none}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-top" role="region" aria-label="Интерактивное мини-демо">
+    <div class="demo-top-head">
+      <span class="demo-top-badge" id="d-badge">Живое демо</span>
+      <span class="demo-top-title" id="d-title">ARPANET</span>
+    </div>
+    <div class="demo-top-body">
+      <svg class="arpa-svg arpa-net" viewBox="0 0 460 160" role="img" aria-label="ARPANET"></svg>
+      <p class="arpa-note" id="d-hint">…</p>
+      <div class="panel-actions">
+        <button class="btn primary" type="button" data-send id="d-send">…</button>
+        <button class="btn" type="button" data-fail id="d-fail">…</button>
+        <button class="btn" type="button" data-reset id="d-reset">…</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var p=new URLSearchParams(location.search);
+    var theme=p.get("theme"),accent=p.get("accent"),rawLang=p.get("lang");
+    // Each field is parsed/applied independently (revision-3 #19 fix): a bad accent must
+    // never discard an already-valid theme or language. URLSearchParams.get() already
+    // URL-decodes its value once; re-decoding here threw on a literal "%" inside
+    // oklch(72% ...) accents and the old shared try/catch reset the language to "ru".
+    try{
+      if(theme==="light")document.documentElement.setAttribute("data-theme","light");
+      else if(theme==="dark")document.documentElement.setAttribute("data-theme","dark");
+    }catch(e){}
+    try{
+      if(accent)document.documentElement.style.setProperty("--accent",accent);
+    }catch(e){}
+    if(rawLang)__lang=rawLang;
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+const DEMO_I18N={"badge": {"ru": "Живое демо", "en": "Live demo", "uk": "Живе демо", "kk": "Тірі демо", "uz": "Jonli demo", "es": "Demo en vivo", "fr": "Démo en direct", "hy": "Կենդանի դեմո"}, "title": {"ru": "ARPANET · сеть без единой точки отказа", "en": "ARPANET · a network with no single point of failure", "uk": "ARPANET · мережа без єдиної точки відмови", "kk": "ARPANET · бір ғана істен шығу нүктесі жоқ желі", "uz": "ARPANET · yagona ishdan chiqish nuqtasisiz tarmoq", "es": "ARPANET · una red sin un único punto de fallo", "fr": "ARPANET · un réseau sans point unique de défaillance", "hy": "ARPANET · ցանց առանց խափանման մեկ կետի"}, "hint": {"ru": "Нажми «Отправить пакет». Затем «Отключить узел» — пакет найдёт другой маршрут. В этом и есть сеть без единой точки отказа.", "en": "Press “Send packet.” Then “Disable node” — the packet will find another route. That is what a network with no single point of failure means.", "uk": "Натисни «Надіслати пакет». Потім «Вимкнути вузол» — пакет знайде інший маршрут. У цьому й полягає мережа без єдиної точки відмови.", "kk": "«Пакетті жібер» батырмасын бас. Содан кейін «Түйінді өшір» — пакет басқа маршрут табады. Бір ғана істен шығу нүктесі жоқ желі деген осы.", "uz": "“Paketni yuborish”ni bos. Keyin “Tugunni oʻchirish” — paket boshqa yoʻl topadi. Yagona ishdan chiqish nuqtasisiz tarmoq shudir.", "es": "Pulsa “Enviar paquete”. Luego “Desactivar nodo”: el paquete encontrará otra ruta. Eso es una red sin un único punto de fallo.", "fr": "Appuie sur « Envoyer le paquet ». Puis sur « Désactiver le nœud » : le paquet trouvera un autre itinéraire. C’est cela, un réseau sans point unique de défaillance.", "hy": "Սեղմիր «Ուղարկել փաթեթը»։ Հետո՝ «Անջատել հանգույցը»․ փաթեթը կգտնի այլ երթուղի։ Սա է ցանցը առանց խափանման մեկ կետի։"}, "send": {"ru": "Отправить пакет", "en": "Send packet", "uk": "Надіслати пакет", "kk": "Пакетті жіберу", "uz": "Paketni yuborish", "es": "Enviar paquete", "fr": "Envoyer le paquet", "hy": "Ուղարկել փաթեթը"}, "fail": {"ru": "Отключить узел", "en": "Disable node", "uk": "Вимкнути вузол", "kk": "Түйінді өшіру", "uz": "Tugunni oʻchirish", "es": "Desactivar nodo", "fr": "Désactiver le nœud", "hy": "Անջատել հանգույցը"}, "enable": {"ru": "Включить узел", "en": "Enable node", "uk": "Увімкнути вузол", "kk": "Түйінді қосу", "uz": "Tugunni yoqish", "es": "Activar nodo", "fr": "Activer le nœud", "hy": "Միացնել հանգույցը"}, "reset": {"ru": "Сброс", "en": "Reset", "uk": "Скинути", "kk": "Қалпына келтіру", "uz": "Tiklash", "es": "Restablecer", "fr": "Réinitialiser", "hy": "Վերակայել"}, "route": {"ru": "Пакет идёт:", "en": "Packet route:", "uk": "Пакет іде:", "kk": "Пакет жүріп жатыр:", "uz": "Paket yoʻli:", "es": "Ruta del paquete:", "fr": "Trajet du paquet :", "hy": "Փաթեթի երթուղին՝"}, "delivered": {"ru": "доставлено", "en": "delivered", "uk": "доставлено", "kk": "жеткізілді", "uz": "yetkazildi", "es": "entregado", "fr": "livré", "hy": "առաքված"}, "no_route": {"ru": "Маршрут недоступен: слишком много узлов отключено.", "en": "Route unavailable: too many nodes are disabled.", "uk": "Маршрут недоступний: вимкнено забагато вузлів.", "kk": "Маршрут қолжетімсіз: тым көп түйін өшірілген.", "uz": "Yoʻl mavjud emas: juda koʻp tugun oʻchirilgan.", "es": "Ruta no disponible: hay demasiados nodos desactivados.", "fr": "Itinéraire indisponible : trop de nœuds sont désactivés.", "hy": "Երթուղին հասանելի չէ․ չափազանց շատ հանգույցներ են անջատված։"}, "restored": {"ru": "Сеть восстановлена. Отправь пакет.", "en": "The network is restored. Send the packet.", "uk": "Мережу відновлено. Надішли пакет.", "kk": "Желі қалпына келді. Пакетті жібер.", "uz": "Tarmoq tiklandi. Paketni yubor.", "es": "La red se ha restaurado. Envía el paquete.", "fr": "Le réseau est rétabli. Envoie le paquet.", "hy": "Ցանցը վերականգնված է։ Ուղարկիր փաթեթը։"}, "node_off": {"ru": "Узел B отключён. Отправь пакет — маршрут пойдёт через C.", "en": "Node B is disabled. Send the packet — the route will go through C.", "uk": "Вузол B вимкнено. Надішли пакет — маршрут піде через C.", "kk": "B түйіні өшірілген. Пакетті жібер — маршрут C арқылы өтеді.", "uz": "B tuguni oʻchirilgan. Paketni yubor — yoʻl C orqali oʻtadi.", "es": "El nodo B está desactivado. Envía el paquete: la ruta irá por C.", "fr": "Le nœud B est désactivé. Envoie le paquet : l’itinéraire passera par C.", "hy": "B հանգույցն անջատված է։ Ուղարկիր փաթեթը․ երթուղին կանցնի C-ով։"}, "node_on": {"ru": "Узел B восстановлен. Отправь пакет — маршрут снова через B.", "en": "Node B is restored. Send the packet — the route goes through B again.", "uk": "Вузол B відновлено. Надішли пакет — маршрут знову через B.", "kk": "B түйіні қалпына келді. Пакетті жібер — маршрут қайтадан B арқылы өтеді.", "uz": "B tuguni tiklandi. Paketni yubor — yoʻl yana B orqali oʻtadi.", "es": "El nodo B se ha restaurado. Envía el paquete: la ruta vuelve a pasar por B.", "fr": "Le nœud B est rétabli. Envoie le paquet : l’itinéraire repasse par B.", "hy": "B հանգույցը վերականգնված է։ Ուղարկիր փաթեթը․ երթուղին կրկին անցնում է B-ով։"}};
+const DLANGS=["ru","en","uk","kk","uz","es","fr","hy"];
+function pick(k,l){var o=DEMO_I18N[k]||{};return o[l]||o.ru||"";}
+function applyDemoLang(l){
+  if(DLANGS.indexOf(l)<0)l="ru"; window.__LANG=l; document.documentElement.lang=l;
+  document.getElementById("d-badge").textContent=pick("badge",l);
+  document.getElementById("d-title").textContent=pick("title",l);
+  document.getElementById("d-hint").textContent=pick("hint",l);
+  document.getElementById("d-send").textContent=pick("send",l);
+  document.getElementById("d-reset").textContent=pick("reset",l);
+  document.getElementById("d-fail").textContent=ARPA.down.has("B")?pick("enable",l):pick("fail",l);
+}
+window.addEventListener("message",function(ev){
+  try{
+    // Revision-3 #19 hardening: only same-origin messages from the actual embedding
+    // window, carrying our own typed shape, are honoured. Nothing in this app currently
+    // posts live style updates into this iframe (theme/accent/lang are set once via the
+    // URL when the modal opens) — this just stops an arbitrary embedder or foreign frame
+    // from pushing unvalidated messages into the page.
+    if(ev.source!==window.parent)return;
+    if(ev.origin!==window.location.origin)return;
+    var d=ev.data;
+    if(!d||typeof d!=="object"||d.type!=="luminara:demo-style")return;
+    if(d.theme==="light"||d.theme==="dark")document.documentElement.setAttribute("data-theme",d.theme);
+    if(typeof d.accent==="string"&&d.accent)document.documentElement.style.setProperty("--accent",d.accent);
+    if(typeof d.lang==="string"&&d.lang)applyDemoLang(d.lang);
+  }catch(e){}
+});
+
+const SVGNS="http://www.w3.org/2000/svg";
+const ARPA={hosts:{A:{x:40,y:80,label:"A"},B:{x:170,y:38,label:"B"},C:{x:170,y:122,label:"C"},D:{x:300,y:80,label:"D"},E:{x:420,y:80,label:"E"}},
+  links:[["A","B"],["A","C"],["B","D"],["C","D"],["D","E"]],down:new Set(),
+  route(){const P=[["A","B","D","E"],["A","C","D","E"]];for(const p of P)if(p.every(h=>!this.down.has(h)))return p;return null;}};
+function drawArpa(svg){svg.innerHTML="";const mk=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  ARPA.links.forEach(([f,t])=>{const A=ARPA.hosts[f],B=ARPA.hosts[t];svg.appendChild(mk("line",{x1:A.x,y1:A.y,x2:B.x,y2:B.y}));});
+  Object.entries(ARPA.hosts).forEach(([id,h])=>{svg.appendChild(mk("circle",{cx:h.x,cy:h.y,r:16,class:ARPA.down.has(id)?"down":"host"}));const t=mk("text",{x:h.x,y:h.y+4});t.textContent=h.label;svg.appendChild(t);});}
+function runArpanetPacketDemo(dlg){dlg=dlg||document.querySelector(".scene-dialog");const svg=dlg.querySelector(".arpa-net");if(!svg)return;drawArpa(svg);
+  const path=ARPA.route();const note=dlg.querySelector(".arpa-note");if(!path){if(note)note.textContent=pick("no_route",window.__LANG);return;}
+  for(let i=0;i<path.length-1;i++){const A=ARPA.hosts[path[i]],B=ARPA.hosts[path[i+1]];
+    [...svg.querySelectorAll("line")].forEach(ln=>{const s=(+ln.getAttribute("x1")===A.x&&+ln.getAttribute("y1")===A.y&&+ln.getAttribute("x2")===B.x&&+ln.getAttribute("y2")===B.y)||(+ln.getAttribute("x1")===B.x&&+ln.getAttribute("y1")===B.y&&+ln.getAttribute("x2")===A.x&&+ln.getAttribute("y2")===A.y);if(s)ln.classList.add("path-active");});}
+  if(note)note.textContent=pick("route",window.__LANG)+" "+path.join(" → ");
+  const pkt=document.createElementNS(SVGNS,"circle");pkt.setAttribute("r","5");pkt.setAttribute("class","packet");svg.appendChild(pkt);
+  let seg=0,t=0;function step(){if(seg>=path.length-1){pkt.remove();if(note)note.textContent+="  ✓ "+pick("delivered",window.__LANG);return;}
+    const A=ARPA.hosts[path[seg]],B=ARPA.hosts[path[seg+1]];t+=0.04;pkt.setAttribute("cx",A.x+(B.x-A.x)*t);pkt.setAttribute("cy",A.y+(B.y-A.y)*t);if(t>=1){t=0;seg++;}requestAnimationFrame(step);}
+  requestAnimationFrame(step);}
+
+(function(){
+  var svg=document.querySelector(".arpa-net"); ARPA.down=new Set(); drawArpa(svg);
+  var note=document.querySelector(".arpa-note");
+  document.querySelector("[data-send]").addEventListener("click",function(){runArpanetPacketDemo(document);});
+  document.querySelector("[data-fail]").addEventListener("click",function(ev){
+    var btn=ev.currentTarget,l=window.__LANG;
+    if(ARPA.down.has("B")){ARPA.down.delete("B");drawArpa(svg);btn.textContent=pick("fail",l);note.textContent=pick("node_on",l);}
+    else{ARPA.down.add("B");drawArpa(svg);btn.textContent=pick("enable",l);note.textContent=pick("node_off",l);}
+  });
+  document.querySelector("[data-reset]").addEventListener("click",function(){
+    ARPA.down=new Set();drawArpa(svg);document.getElementById("d-fail").textContent=pick("fail",window.__LANG);note.textContent=pick("restored",window.__LANG);
+  });
+  applyDemoLang(window.__LANG||"ru");
+})();
+</script>
+</body>
+</html>

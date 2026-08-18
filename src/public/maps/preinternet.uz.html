@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Internetdan oldin · Luminara</title><style>
+:root{
+  --paper:#f6f3ec; --paper2:#efe9dd; --ink:#1c2230; --ink2:#4a5468; --muted:#8a8172;
+  --rule:#d9cfbc; --rule2:#e7dfce; --gold:#b7791f; --center:#1c2230;
+  --power:#c0392b; --technology:#1f7a5a; --media:#b7791f; --privacy:#6b4fa0; --economy:#a04a7a;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 10px 30px rgba(60,50,30,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:radial-gradient(1100px 620px at 50% -8%, #fbf8f1 0%, var(--paper) 60%),var(--paper);
+  color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.app-shell{display:grid;grid-template-columns:288px minmax(0,1fr) 340px;gap:20px;padding:22px;min-height:100vh}
+.control-rail,.detail-panel{background:linear-gradient(180deg,#fffdf8,var(--paper2));
+  border:1px solid var(--rule);border-radius:14px;padding:20px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:16px;min-height:0}
+.detail-panel{overflow:auto}
+.eyebrow{margin:0;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+#app-title{margin:0;font-family:var(--serif);font-size:30px;line-height:1.05;letter-spacing:-.01em}
+.chapter-lede{margin:0;color:var(--ink2);font-size:14px;font-family:var(--serif);font-style:italic;line-height:1.5}
+.rail-rule{height:1px;background:linear-gradient(90deg,var(--rule),transparent);margin:2px 0}
+.section-h{margin:0;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lens-group{display:flex;flex-wrap:wrap;gap:7px}
+.lens-btn{cursor:pointer;border:1px solid var(--rule);background:#fffdf7;color:var(--ink2);
+  padding:6px 11px;border-radius:8px;font-size:12.5px;transition:.15s;display:inline-flex;gap:7px;align-items:center;font-weight:500}
+.lens-btn:hover{border-color:var(--muted);color:var(--ink)}
+.lens-btn[aria-pressed="true"]{border-color:var(--dot);color:var(--ink);background:#fff;box-shadow:0 0 0 1px var(--dot) inset}
+.lens-dot{width:9px;height:9px;border-radius:50%;background:var(--dot);display:inline-block}
+.lens-desc{margin:0;color:var(--ink2);font-size:12.5px;min-height:3.2em;line-height:1.5;font-family:var(--serif)}
+.progress-box{font-size:11.5px;color:var(--muted)}
+.progress-bar{height:5px;border-radius:5px;background:var(--rule2);overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#d6a94e);width:0;transition:width .35s}
+.node-list{display:flex;flex-direction:column;gap:2px;overflow:auto}
+.node-list button{text-align:left;cursor:pointer;border:1px solid transparent;background:transparent;color:var(--ink2);
+  padding:8px 9px;border-radius:9px;font-size:13px;display:flex;gap:10px;align-items:baseline;transition:.12s;font-family:var(--serif)}
+.node-list button:hover{background:#fffdf6;border-color:var(--rule)}
+.node-list button[aria-current="true"]{background:#fff;border-color:var(--dot);color:var(--ink)}
+.node-idx{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px;min-width:16px;font-family:var(--sans)}
+
+.map-stage{position:relative;background:radial-gradient(680px 680px at 50% 46%, #fffdf8 0%, #f4efe4 72%, #efe7d7 100%);
+  border:1px solid var(--rule);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;min-height:600px;display:flex}
+.system-map{width:100%;height:100%;display:block}
+
+.ring{fill:none;stroke:var(--rule2);stroke-width:1}
+.ring-tick{stroke:var(--rule);stroke-width:1}
+.era-label{fill:var(--muted);font-size:10.5px;font-family:var(--sans);font-weight:600;letter-spacing:.03em}
+
+.edge path{fill:none;stroke:var(--rule);stroke-width:1.4;transition:stroke .25s, opacity .25s;opacity:.5;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw .9s ease forwards}
+.edge.active path{stroke:var(--dot,#b7791f);stroke-width:2;opacity:.92;marker-end:url(#arrow-active)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.edge-label{fill:var(--muted);font-size:10px;opacity:0;transition:.2s;font-family:var(--sans)}
+.edge.active .edge-label{opacity:.9}
+
+.center-halo{fill:#fff;opacity:.6;transform-origin:center;transform-box:fill-box;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.4;r:74}50%{opacity:.75;r:86}}
+.center-ring{fill:none;stroke:var(--dot,#b7791f);stroke-width:2;opacity:.5;transition:stroke .3s}
+.center-disc{fill:var(--center);stroke:#000;stroke-opacity:.06}
+.center-t1{fill:#fff;font-family:var(--serif);font-size:15px;font-weight:600;text-anchor:middle}
+.center-t2{fill:#e9c986;font-family:var(--sans);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-anchor:middle}
+.spoke{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 4;opacity:.45}
+
+.node{cursor:pointer;opacity:0;animation:pop .5s ease forwards;animation-delay:var(--delay,0s)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.node{transform-origin:var(--ox) var(--oy);transform-box:view-box}
+.node .halo{fill:var(--dot);opacity:.10;transition:.2s}
+.node .disc{fill:#fffdf8;stroke:var(--dot);stroke-width:2;transition:.2s;filter:drop-shadow(0 3px 6px rgba(60,50,30,.12))}
+.node:hover .disc{stroke-width:2.6}
+.node .num{fill:var(--dot);font-family:var(--serif);font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+.node .cap{fill:var(--ink);font-family:var(--serif);font-size:13px;font-weight:600}
+.node .kicker{fill:var(--muted);font-family:var(--sans);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.node .era{fill:var(--dot);font-family:var(--sans);font-size:9.5px;font-weight:700}
+.node.selected .disc{stroke-width:3;fill:#fff}
+.node.selected .halo{opacity:.22}
+.node.dim{opacity:.32}
+
+.detail-empty{color:var(--ink2);font-size:13.5px;font-family:var(--serif);line-height:1.6}
+.detail-kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dot);margin:0;font-weight:600}
+.detail-title{margin:5px 0 0;font-family:var(--serif);font-size:21px;line-height:1.15}
+.detail-thesis{margin:0;color:var(--ink);font-size:14.5px;font-family:var(--serif);line-height:1.55}
+.detail-insight{margin:0;padding:11px 13px;border-left:3px solid var(--dot);background:#fffdf6;border-radius:0 8px 8px 0;font-size:13.5px;font-family:var(--serif);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;color:var(--ink2);background:#fffdf6;border:1px solid var(--rule);border-radius:999px;padding:3px 10px}
+.related h4,.sources-block h4{margin:8px 0 5px;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
+.related-list{display:flex;flex-direction:column;gap:3px}
+.related-list button{cursor:pointer;text-align:left;background:#fffdf6;border:1px solid var(--rule);color:var(--ink2);border-radius:8px;padding:7px 9px;font-size:12.5px;font-family:var(--serif)}
+.related-list button:hover{border-color:var(--dot);color:var(--ink)}
+.sources-block ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.sources-block li{font-size:11.5px;color:var(--ink2);line-height:1.4}
+.sources-block a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--rule)}
+.panel-actions{display:flex;gap:8px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
+.btn{cursor:pointer;border-radius:9px;padding:9px 13px;font-size:13px;border:1px solid var(--rule);background:#fffdf7;color:var(--ink);font-weight:500}
+.btn.primary{background:var(--center);color:#fff;border-color:var(--center)}
+.btn:hover{filter:brightness(.98)}.btn.primary:hover{filter:brightness(1.15)}
+.empty-state{margin:auto;text-align:center;padding:30px;color:var(--ink2);max-width:420px;font-family:var(--serif)}
+.empty-state a{color:var(--gold)}
+
+.scene-dialog{border:1px solid var(--rule);background:linear-gradient(180deg,#fffdf8,var(--paper2));
+  border-radius:16px;max-width:680px;width:calc(100vw - 40px);padding:0;box-shadow:0 30px 80px rgba(40,30,10,.3)}
+.scene-dialog::backdrop{background:rgba(40,32,18,.34);backdrop-filter:blur(2px)}
+.dialog-inner{padding:26px 30px}
+.dialog-inner h3{margin:2px 0 0;font-family:var(--serif);font-size:26px;line-height:1.12}
+.dialog-close{position:absolute;top:14px;right:18px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:24px;line-height:1}
+.dialog-body{margin:14px 0;color:var(--ink);font-size:15.5px;line-height:1.72;font-family:var(--serif)}
+.dialog-body h2{font-size:17px;font-family:var(--serif);margin:18px 0 6px}
+.dialog-body p{margin:0 0 12px}
+.arpa-wrap{margin-top:14px;border:1px solid var(--rule);border-radius:12px;padding:16px;background:#fffdf6}
+.arpa-wrap h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.arpa-svg{width:100%;height:160px;display:block;background:#faf6ec;border-radius:8px;border:1px solid var(--rule2)}
+.arpa-note{margin:9px 0 0;color:var(--ink2);font-size:12px;min-height:1.4em;font-family:var(--serif)}
+.arpa-net line{stroke:var(--rule);stroke-width:2}
+.arpa-net .path-active{stroke:var(--technology);stroke-width:3}
+.arpa-net circle.host{fill:#fffdf8;stroke:var(--muted);stroke-width:2}
+.arpa-net circle.down{fill:#f6e3e0;stroke:var(--power);stroke-width:2}
+.arpa-net .packet{fill:var(--gold)}
+.arpa-net text{fill:var(--ink2);font-size:11px;text-anchor:middle;font-family:var(--serif)}
+
+@media (prefers-reduced-motion: reduce){
+  .node,.edge path,.center-halo{animation:none!important;opacity:1!important;stroke-dashoffset:0!important}
+}
+@media (max-width:1060px){
+  .app-shell{grid-template-columns:1fr}
+  .map-stage{min-height:64vh;order:-1}
+  .control-rail{order:0}.detail-panel{order:2}
+}
+@media (max-width:560px){
+  .app-shell{padding:12px;gap:12px}
+  #app-title{font-size:24px}
+  .map-stage{min-height:72vh}
+}
+</style>
+<script>
+const CHAPTER_DATA = {"chapter": {"key": "preinternet", "title": "Internetdan oldin", "sourceUrl": "https://luminara.tech/#/scene?s=3&c=preinternet", "centralIdea": "Axborot hokimiyatga aylanadi", "centerX": 500, "centerY": 445, "ring": 300, "lede": "Axborot qanday hokimiyatga aylanadi — tanqislik va signallardan tarmoqli jamiyatgacha.", "lang": "uz"}, "lenses": [{"id": "chronology", "label": "Xronologiya", "accent": "#7dd3fc", "description": "Voqealar tartibi va axborot tanqisligidan maʼlumot oqimlariga oʻtish."}, {"id": "power", "label": "Hokimiyat", "accent": "#f87171", "description": "Axborotni kim nazorat qiladi: institutlar, protokollar, tarmoqlar yoki platformalar."}, {"id": "technology", "label": "Texnologiyalar", "accent": "#34d399", "description": "Ixtirolar va protokollar: signal, gipermatn, paketlar, TCP/IP, Web."}, {"id": "media", "label": "Media", "accent": "#fbbf24", "description": "Uzatish muhiti idrok, xulq-atvor va jamiyat tashkilotini qanday oʻzgartiradi."}, {"id": "privacy", "label": "Maxfiylik", "accent": "#c084fc", "description": "Kriptografiya kuzatuv va nazoratdan himoya sifatida."}], "nodes": [{"id": "scarcity", "sceneIndex": 0, "x": 500.0, "y": 145.0, "type": "power", "title": "Axborot tanqislik sifatida", "shortTitle": "Tanqislik", "insight": "Internetgacha axborot jismonan qimmat va markazlashgan edi — bu uni uskunaga ega boʻlganlarning hokimiyat vositasiga aylantirardi.", "body": "## Soʻzlar pul turgan dunyo\n\nSen buni ekranda oʻqiyapsan. Qayerdadir data-markazda server bu matnni senga millisekundlar ichida yubordi — va bu senga hech narsa turmadi. Bu elektr yoki vodoprovod kabi oʻz-oʻzidan ayon tuyuladi. Ammo doim ham bunday boʻlmagan. «Oldin» qanday boʻlganini tushunish esa tarixiy qiziqish emas, balki zamonaviy internet nega aynan shunday tuzilganini tushunish kalitidir. Va nega bu muammo ekanini ham.\n\nAtigi yetmish yil avval Kiyevdan Nyu-Yorkka xabar yuborish pul turardi, kunlar olardi va uskunaga ega boʻlganlar tomonidan nazorat qilinardi: davlatlar, telegraf kompaniyalari, gazeta tahririyatlari. Axborot tanqislik edi — xuddi neft yoki don kabi. Har qanday tanqislik kabi, u hokimiyat edi. Axborot uzatilishini nazorat qilgan kishi reallikni nazorat qilardi.\n\nXX asr oʻrtalaridagi bosmaxonani tasavvur qil. Ulkan metall mashinalar, qoʻrgʻoshin harflar, boʻyoq va moy hidi. Bitta gʻoyani million odamga yetkazish uchun gazetaning million nusxasini jismonan bosib chiqarish, ularni yuk mashinalariga ortish va butun mamlakat boʻylab kiosklar tomon tarqatish kerak edi. Har bir nusxa pul turardi. Yetkazishning har bir kilometri pul turardi. Adaddagi xato — pul havoga sovurildi, obroʻga putur yetdi. Bu ulkan, ogʻir, sekin mexanizm edi.\n\nRadio va televideniye inqilobdek tuyulardi — signal yorugʻlik tezligida tarqaladi, yuk mashinalari kerak emas. Ammo ularda prinsipial cheklov bor edi: bitta uzatkich, millionlab qabul qilgichlar. Faqat minorasi bor odamgina gapira olardi. Qolgan butun insoniyat tinglardi. Goʻshakni koʻtarib javob berib boʻlmasdi. Eʼtiroz bildirib boʻlmasdi. Oʻz soʻzingni qoʻshib boʻlmasdi.\n\nInternetgacha boʻlgan axborot dunyosi shunday koʻrinardi: markazlashgan, qimmat, bir yoʻnalishli. Bir nechta manba koʻpchilikka efir uzatardi. Axborot qatʼiy yuqoridan pastga oqardi — uskunasi borlardan uskunasi yoʻqlarga. Bu tasodif ham, yomon niyat ham emas — oʻsha davr texnologiyalarining jismoniy realligi edi.\n\n> Axborot shunchaki resurs emas edi — u hokimiyat arxitekturasi edi. Uzatish kanaliga kim egalik qilsa, reallikka ham oʻsha egalik qilardi.\n\nAynan shuning uchun bu arxitekturani oʻzgartirish mumkinligini tushungan ilk odamlar inqilobiy narsani anglashdi. Shunchaki «maʼlumotlarni tezroq uzatish mumkin» deganini emas. Balki «axborot ustidan hokimiyatning oʻzi qurilgan tuzilmani sindirish mumkin» deganini. Va ular buning ustida ishlay boshlashdi — birinchi brauzer paydo boʻlishidan ancha oldin.", "tags": ["hokimiyat", "tanqislik", "media"], "lensWeight": {"chronology": 5, "power": 5, "technology": 1, "media": 4, "privacy": 1}, "angDeg": -90.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1948 gacha"}, {"id": "shannon", "sceneIndex": 1, "x": 692.8, "y": 215.2, "type": "technology", "title": "Shannon: axborot fizikaga aylandi", "shortTitle": "Shannon", "insight": "Shannon axborotni fizik kattalik sifatida oʻlchash va uzatish mumkinligini isbotladi — bu butun raqamli dunyoning matematik poydevorini qoʻydi.", "body": "## Fikrni oʻlchagan odam\n\n1948 yilda amerikalik matematik Claude Shannon quruq texnik nomli ishini eʼlon qildi: \"A Mathematical Theory of Communication.\" Uni oʻshanda kam odam oʻqigan. Hozir ham kam odam oʻqiydi. Ammo u hamma oʻqiydigan aksariyat kitoblardan koʻra dunyoni koʻproq oʻzgartirdi.\n\nShannon imkonsizdek tuyulgan narsani isbotladi: har qanday xabarni — soʻz, tovush, tasvir, son, soʻzlar bilan tasvirlangan hidni — aniq oʻlchash, siqish va istalgan aloqa kanali orqali uzatish mumkin. U oʻlchov birligini «bit» deb atadi — binary digit, ikkilik raqam soʻzlaridan. Nol yoki bir. Signal bor yoki yoʻq. Axborotning butun olami nollar va birlar kombinatsiyasidir.\n\nShannongacha axborot mavhum va subyektiv narsa edi. Ayrim soʻzlar boshqalaridan «muhimroq». Ayrim tasvirlar «mazmunliroq». Ayrim xabarlar «boyroq». Shannondan keyin axborot massa yoki harorat kabi real va oʻlchanadigan fizik kattalikka aylandi. Dunyo faqat materiya va energiyaga boʻlinishdan toʻxtadi. Uchinchi narsa paydo boʻldi — axborot. Va bu uchinchi narsa dastlabki ikkisidan kam fundamental emasligi maʼlum boʻldi.\n\n## Okean orqali sham alangasi\n\nShannon nima qilganini tushunish uchun shunday vazifani tasavvur qil: sham alangasini Kiyevdan Tokioga uzatish. Shamning oʻzini olib borish mumkin — lekin bu sekin, qimmat, va alanga yoʻlda oʻchib qoladi. Bu materiyani uzatish, va u fizik qonunlar bilan cheklangan.\n\nAmmo alangani tasvirlash mumkin: uning rangi, balandligi, harorati, shakli, mumning kimyoviy tarkibi. Bu tasvirni sim orqali yorugʻlik tezligida yuborish mumkin. Tokiodagi boshqa odam esa xuddi shunday alangani yoqadi. Bu axborotni uzatish — va u fizik cheklovlarni bilmaydi.\n\nShannon bu ikkinchi usulni mutlaqo aniq, ishonchli va masshtablanadigan qilish mumkinligini koʻrsatdi. Har qanday signalni bitlarga kodlash, buzilishsiz uzatish va narigi tomonda qayta tiklash mumkinligini isbotladi. Butun raqamli dunyo aynan shu asosda turadi: elektron pochtadan 4K striminggacha, messenjerlardan blockchainʼgacha.\n\nHar safar Telegramʼda xabar yuborganingda — Shannon ishlaydi. Har safar blockchainʼdagi tranzaksiya tarmoq tugunlari orasida uzatilganda — Shannon ishlaydi. U butun raqamli dunyo qurilgan matematik poydevorni yaratdi.\n\n> Shannon internetni ixtiro qilmagan. U internet mumkin ekanini isbotladi — axborotni fizik kattalik kabi aniq uzatish mumkinligini ko'rsatdi.\n\nParadoks shundaki, Shannonning oʻzi Bell Laboratoriesʼda — dunyodagi eng yirik telefon monopoliyasida ishlagan. Uning kashfiyoti oxir-oqibat ish beruvchisining monopoliyasini yemirdi. Axborotni istalgan kanal orqali uzatish mumkin boʻlsa, demak, hech bir kanal abadiy monopolist boʻla olmaydi.", "tags": ["signal", "kodlash", "oʻlchov"], "lensWeight": {"chronology": 4, "power": 2, "technology": 5, "media": 2, "privacy": 2}, "angDeg": -50.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1948"}, {"id": "memex", "sceneIndex": 2, "x": 795.4, "y": 392.9, "type": "media", "title": "Bushning Memexʼi: zamonidan ilgarilagan orzu", "shortTitle": "Memex", "insight": "Vannevar Bush 1945 yilda gipermatn va bogʻlangan bilimlarni tasvirlagan — Webʼdan 46 yil oldin. Toʻgʻri gʻoyalar oʻlmaydi, ular oʻz texnologiyalarini kutadi.", "body": "## Internetdan qirq yil oldingi gipermatn\n\nHali 1945 yilda — birinchi toʻlaqonli kompyuter paydo boʻlishidan ikki yil oldin va World Wide Webʼdan qirq olti yil avval — amerikalik olim Vannevar Bush «As We May Think» nomli esse yozdi. U ilmiy jurnalda emas, keng auditoriya uchun ommaviy nashr boʻlgan The Atlanticʼda chop etildi. Bush uni faqat hamkasb olimlar emas, hamma oʻqishini xohlardi.\n\nU «memex» deb atagan qurilmani tasvirladi — memory extender, xotira kengaytirgich degani. Bu insoniyatning barcha bilimlari jamlangan shaxsiy kutubxona edi, unda har qanday hujjat boshqa istalgan hujjat bilan maʼno orqali bogʻlangan. Napoleon haqida maqola oʻqiysan — va bir harakat bilan uning yurishlari xaritasiga oʻtasan. Xaritadan — generallarining maktublariga. Maktublardan — XX asr harbiy tarixchilarining uning taktikasini tahlil qilishiga. Alfavit boʻyicha katalogdan qidirmaysan, javonlarni varaqlamaysan — fikrning oʻzi qanday ergashsa, sen ham fikr zanjiri boʻylab borasan.\n\nBu gipermatn edi. Bu soʻz rasman oʻylab topilishidan qirq yil oldin. Tim Berners-Lee bu gʻoyani World Wide Web shaklida amalga oshirishidan qirq olti yil oldin.\n\n## Nega orzu stol tortmasida yotib qoldi\n\nBush kelajakni mutlaqo aniq koʻrgan: bilimlar bogʻlangan, hammaga ochiq va barchaga tegishli boʻlishi kerak. Faqat bitta muammo bor edi — texnologiyalar hali mavjud emasdi. 1945 yilda kompyuterlar butun xonalarni egallardi, samolyotdek qimmat turardi va faqat hisoblay olardi. Displeylar ham, sichqonchalar ham, tarmoqlar ham yoʻq edi. Bush qurilmani mikrofilmlar va mexanik richaglar tili bilan tasvirladi — chunki analogiya uchun uning qoʻlida bor narsa shular edi.\n\nUning orzusi deyarli yarim asr stol tortmasida yotdi. Ammo u unutilmadi. Uni oʻqishdi, iqtibos keltirishdi, qoʻldan qoʻlga uzatishdi. Ted Nelson 1965 yilda «hypertext» soʻzini oʻylab topdi — bevosita Bushdan ilhomlanib. Douglas Engelbart kompyuter sichqonchasini va gipermatnli hujjatlar tizimini yaratdi — u ham Bush taʼsiri ostida.\n\nTim Berners-Lee 1989 yilda CERNʼda Web yaratish boʻyicha taklifini yozganida, u Bushning essesiga boshlangʻich gʻoya sifatida bevosita tayangan. Nashrdan qirq toʻrt yil oʻtgach, orzu nihoyat amalga oshirish vositalariga ega boʻldi.\n\nBu hikoya tarixiy qiziq voqea sifatida emas, muhim. U prinsipial narsani koʻrsatadi: toʻgʻri gʻoya oʻlmaydi. U oʻz vaqtini kutadi. Baʼzan — oʻnlab yillar davomida. Bugun biz shunga oʻxshash lahzani boshdan kechiryapmiz: foydalanuvchilar oʻz maʼlumotlariga egalik qiladigan markazlashmagan internet gʻoyalari blockchainʼdan ancha oldin mavjud edi. Texnologiyalar shunchaki nihoyat tasavvurga yetib oldi.\n\n> Bush World Wide Webʼni uning ixtiro qilinishidan qirq olti yil oldin tasvirlagan. Paygʻambar boʻlgani uchun emas — inson aqli bilim vositalaridan nimani xohlashini tushungani uchun.\n\nParadoks shundaki, Bush 1945 yilda gʻoyalar orasidagi bogʻlanishlar haqida oʻylagan — biz esa oxir-oqibat gʻoyalar orasidagi bogʻlanishlardan koʻra odamlar orasidagi bogʻlanishlar muhimroq boʻlib chiqqan internetga ega boʻldik. Bu muhim farq, keyingi boblarda unga qaytamiz.", "tags": ["gipermatn", "bilim", "bogʻlanishlar"], "lensWeight": {"chronology": 4, "power": 2, "technology": 4, "media": 5, "privacy": 1}, "angDeg": -10.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1945"}, {"id": "arpanet", "sceneIndex": 3, "x": 759.8, "y": 595.0, "type": "technology", "title": "ARPANET: internet qoʻrquvdan tugʻildi", "shortTitle": "ARPANET", "insight": "ARPANET yagona nosozlik nuqtasisiz harbiy aloqa tizimi sifatida yaratilgan — va aynan shu markazlashmagan arxitektura butun internetning poydevoriga aylandi.", "body": "## Dunyo arxitekturasini oʻzgartirgan sunʼiy yoʻldosh\n\nInternet tarixi Silikon vodiysida ham, universitet auditoriyalarida ham boshlanmaydi. U Pentagonda, sovuq urush avjida, keskin geosiyosiy qoʻrquv paytida boshlanadi.\n\n1957-yil 4-oktyabrda Sovet Ittifoqi Yerning birinchi sunʼiy yoʻldoshini uchirdi. Diametri 58 santimetr, ogʻirligi 83 kilogramm boʻlgan kichik metall shar Yer ustidan uchib, signal berib turdi — va uni butun dunyo eshitdi. Amerika harbiylari uchun bu raqibning shunchaki texnologik gʻalabasi emas edi. Bu xavotir signali edi: dushman orbitani nazorat qilmoqda. Agar ular sunʼiy yoʻldosh uchira olsa, yadroviy kallakli raketani ham uchirib, sayyoraning istalgan nuqtasiga yetkaza oladi.\n\nBir yil oʻtib AQSh DARPA — Ilgʻor tadqiqot loyihalari agentligini tuzdi. Uning oldida vazifa bor edi: bir zarba bilan yoʻq qilib boʻlmaydigan harbiy aloqa tizimini yaratish. Anʼanaviy telefon tarmoqlari halokatli darajada zaif edi: markaziy telefon stansiyasi bor ekan, nosozlik nuqtasi ham bor. Pentagonga bitta bomba tushsa — butun armiya bilan aloqa yoʻqoladi.\n\n## Markazsiz tarmoq — hammasini oʻzgartirgan gʻoya\n\nDARPA muhandislari tamoman boshqa yechim oʻylab topdi. Markazni umuman olib tashlasa-chi? Tarmoqdagi har bir tugunni teng huquqli qilish. Bittasi ishdan chiqsa, xabar avtomatik ravishda boshqa yoʻnalish topadi. Quvurlardagi suv kabi: bitta quvur yopilsa, suv aylanma yoʻl topadi.\n\nBu gʻoya ARPANET deb ataldi. 1969-yilda u ilk bor ishladi: toʻrtta universitet — UCLA, Stanford, UC Santa Barbara va Utah — telefon liniyasi orqali maʼlumot almashdi. Uzatishga uringan birinchi xabar \"login\" soʻzi edi. Tizim \"o\" harfidan keyin ishdan chiqdi. Proto-internet orqali uzatilgan birinchi soʻz \"lo\" boʻldi — inglizchada bu \"qarang\" degani. Tasodifiy poeziya.\n\nOʻshanda hech kim bu global fuqarolik internetining poydevoriga aylanishini oʻylamagan. Harbiylar yadroviy urush holati uchun ishonchli aloqa xohlashgan. Ular bundan kattaroq narsani yaratdi — hokimiyat tuzilmaviy jihatdan bitta nuqtada jamlana olmaydigan arxitekturani. Taqsimlangan tarmoq oʻz tabiatiga koʻra markazlashuvga chidamli.\n\nHech boʻlmaganda, reja shunday edi. Reallik esa murakkabroq boʻlib chiqdi — bu haqda keyingi boblarda gaplashamiz.\n\n> Internet yadroviy zarbaga chidamli harbiy aloqa tizimi sifatida yaratilgan. Yakunda u hokimiyatning har qanday markazlashuviga chidamli boʻlib chiqdi — va bu uning asosiy siyosiy xususiyatiga aylandi.\n\n1974-yilda Vinton Cerf va Robert Kahn keyingi muammoni hal qildi: turli kompyuterlar turli tillarda gaplashardi. Stanford tarmogʻi MIT tarmogʻini tushunmasdi. Ular TCP/IPni yaratdi — universal protokol, har qanday tarmoqlar oʻrtasida maʼlumot uzatish uchun yagona til. Maʼlumotlar kichik paketlarga boʻlinadi, har biri oʻz yoʻlini topadi, narigi uchida esa qayta yigʻiladi. Goʻyo xatni boʻlaklarga kesib, har birini alohida kuryer bilan yuborgandeksiz — ular baribir qabul qiluvchi tomonda toʻgʻri tartibda yigʻiladi. Bugun ham internet asosida aynan shu protokol yotadi — yaratilganidan ellik yil oʻtib.", "tags": ["paketlar", "DARPA", "TCP/IP", "markazsizlashuv"], "lensWeight": {"chronology": 5, "power": 5, "technology": 5, "media": 2, "privacy": 3}, "angDeg": 30.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1969"}, {"id": "open-web", "sceneIndex": 4, "x": 602.6, "y": 726.9, "type": "technology", "title": "Berners-Lee: hammasini bepul berish qarori", "shortTitle": "Ochiq Web", "insight": "Berners-Lee Webni bepul berdi — altruizm tufayli emas, balki faqat ochiq protokol global boʻla olishini tushungani uchun.", "body": "## \"Noaniq, ammo qiziq\" degan belgi qoʻyilgan taklif\n\n1989-yilda yosh britaniyalik dasturchi Tim Berners-Lee Jenevadagi CERN — Yevropa yadroviy tadqiqotlar markazida ishlardi. Bu dunyodagi eng yirik ilmiy institut: oʻnlab mamlakatlardan kelgan minglab olimlar bir xil tajribalar ustida ishlaydi, lekin doim hujjatlarni yoʻqotadi, kontekstni unutadi, oʻzlaridan oldin nima qilinganini tushunish uchun oylar sarflaydi.\n\nBerners-Lee rahbariyat uchun ichki taklif yozdi. Mazmuni: barcha hujjatlar havolalar bilan bogʻlangan va tarmoqdagi istalgan kompyuterdan ochiladigan tizim yaratish. Uning boshligʻi Mike Sendall chetiga uch soʻz yozdi: \"Noaniq, ammo qiziq\". Bu dunyoni oʻzgartiradigan ixtiro haqidagi eng kamtarona taqriz edi.\n\nUch yil ichida Berners-Lee butun zamonaviy internet tayanadigan uch narsani yaratdi: HTML — hujjatlarni belgilash tili, HTTP — ularni uzatish protokoli, va URL — manzillash tizimi. Ular birgalikda World Wide Webni hosil qildi. Hujjatlar serverlarda saqlanadi, manzillarga ega, havolalar bilan bogʻlangan va brauzer dasturi orqali ochiladi. Oddiy, nafis, universal.\n\n## Davrni belgilab bergan qaror\n\nAmmo asosiy qaror texnik emas edi. U etik qaror edi.\n\nBerners-Lee oʻz ixtirosini patentlashi mumkin edi. CERN yuristlari shuni taklif qilgan. Agar har bir sayt HTTPdan foydalangani uchun royalti toʻlaganida, Berners-Lee sayyoradagi eng boy odamga aylangan boʻlardi. Buning oʻrniga u texnologiyani insoniyatga bepul berishni talab qildi — cheklovlarsiz, litsenziyalarsiz, shartlarsiz.\n\n\"Agar Web patentlangan yoki bitta kompaniya nazorati ostida boʻlganida, u mavjud boʻlmasdi\", — deb keyinroq tushuntirdi u. Bu altruizm uchun altruizm emas edi. Bu strategiya edi: tarmoq faqat toʻsiqlarsiz global miqyosgacha oʻsa olardi. Faqat har kim ruxsatsiz sayt yarata olsa, tarmoq chinakam ochiq boʻladi.\n\n1993-yilda AQSh Milliy superkompyuter markazi talabalari Mosaic brauzerini chiqardi — matn va rasmlarni bitta ekranda birga koʻrsatgan birinchi brauzer. Bungacha internet matn dunyosi edi. Mosaic uni vizual qildi. Dasturlashni hech qachon oʻrganmagan oddiy odam uchun ham tushunarli qildi.\n\nOʻsha yili veb-saytlar soni besh yuzdan oshdi. Hozir bu kulgili eshitiladi, lekin oʻshanda bu portlash edi. Ikki yil oʻtib ular allaqachon ikki yuz mingta edi. Poyga boshlandi.\n\n> Berners-Lee Webni bepul berdi — va shu orqali uni global qildi. Agar u uni patentlaganida, biz haligacha har bir havola uchun royalti toʻlardik.\n\nBerners-Lee haqidagi bu hikoya shunchaki biografik fakt emas. Bu tarmoqlar tabiati haqidagi saboq: ochiq protokollar yopiq protokollardan tezroq oʻsadi, chunki har kim ularning ustiga qurishi mumkin. Ethereum blokcheyni aynan shuning uchun ochiq. TON aynan shuning uchun ochiq protokol. Berners-Lee 1991-yilda qaysi texnologiyalar gʻalaba qozonishini hanuz belgilab beradigan tamoyilni qoʻydi.", "tags": ["Web", "protokol", "ochiqlik"], "lensWeight": {"chronology": 5, "power": 4, "technology": 5, "media": 4, "privacy": 2}, "angDeg": 70.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1991"}, {"id": "atoms-to-bits", "sceneIndex": 5, "x": 397.4, "y": 726.9, "type": "economy", "title": "Atomlardan bitlarga: iqtisodiy mantiq almashuvi", "shortTitle": "Atomlar → bitlar", "insight": "\"Atomlardan bitlarga\" oʻtish shunchaki texnologiya emas, bu iqtisodiy mantiq almashuvi: bir xillik miqyosidan har bir oʻzaro taʼsirning noyobligiga oʻtish.", "body": "## Toffler buni 1980-yilda koʻrgan\n\n1980-yilda Alvin Toffler \"Uchinchi toʻlqin\"ni nashr qilganida, shaxsiy kompyuterlar deyarli yoʻq edi. Internet yoʻq edi. Mobil telefonlar yoʻq edi. Shunga qaramay u faqat qirq yil oʻtgach toʻliq yuzaga chiqqan iqtisodiy transformatsiyani tasvirlab berdi.\n\nToffler inson sivilizatsiyasining uch davrini tasvirladi. Birinchi toʻlqin — agrar: yer va hosil asosiy qiymat sifatida. Ikkinchi toʻlqin — sanoat: konveyer, standartlashtirish, tiraj. Zavod mingta bir xil muzlatkich ishlab chiqaradi — bu aynan ular bir xil boʻlgani uchun samarali. Mahsulot birliklari qancha koʻp boʻlsa, har birining tannarxi shuncha past boʻladi. Miqyos — industrial iqtisodiyotning gʻalabasi.\n\nUchinchi toʻlqin — axborot toʻlqini. Bu yerda mantiq ostin-ustun boʻladi. Axborot iqtisodiyotida nusxa olish bepul. Bitta dastur bir vaqtning oʻzida milliard foydalanuvchi bilan turlicha ishlashi mumkin — va bu bag emas, asosiy ustunlik. Qiymat bir xil narsani tirajlash orqali emas, har bir oʻzaro taʼsirning noyobligi orqali yaratiladi.\n\n## Nicholas Negroponte va eng sodda formula\n\n1995-yilda MIT Media Lab direktori Nicholas Negroponte buni mashhur iboraga aylangan bir jumla bilan ifodaladi: \"atomlardan bitlarga\".\n\nAtomlar — bu jismoniy dunyo. Muzlatkich ishlab chiqarish uchun metall, plastik, elektronika, ishchi qoʻllar, zavod kerak. Uni xaridorga yetkazish uchun yuk mashinasi, ombor, doʻkon kerak. Har bir nusxa pul turadi. Tiraj resurslar bilan cheklangan. Agar siz millionta muzlatkich sotmoqchi boʻlsangiz, millionta muzlatkich ishlab chiqarishingiz kerak.\n\nBitlar — bu raqamli dunyo. Dastur yaratish uchun bitta dasturchi va bitta kompyuter kerak. Uni milliard foydalanuvchiga yetkazish uchun server va internet ulanishi kerak. Nusxa olish deyarli bepul. Yetkazish bir zumda. Tiraj cheksiz. Agar siz dasturning milliard nusxasini sotmoqchi boʻlsangiz, milliardta dastur ishlab chiqarishingiz shart emas. Bitta nusxa milliard marta replikatsiya qilinadi.\n\nBu shunchaki texnologik farq emas. Bu fundamental iqtisodiy mantiqning almashuvi. XX asrning butun iqtisodiyoti atomlar mantiqiga qurilgan edi: tanqislik, miqyos, standartlashtirish. XXI asr iqtisodiyoti bitlar mantiqiga quriladi: moʻl-koʻllik, shaxsiylashtirish, tarmoq effektlari.\n\n> Industrial iqtisodiyot bir xillik miqyosidan pul topardi. Axborot iqtisodiyoti har bir oʻzaro taʼsirning noyobligidan pul topadi. Bular qarama-qarshi mantiqlar.\n\nBu farqni tushunganingizda, zamonaviy dunyodagi koʻp narsa izohlanishni boshlaydi. Nega Google bepul? Chunki qidiruv natijalarini nusxalash hech narsa turmaydi — monetizatsiya reklama orqali ketadi. Nega Spotify musiqachilarga juda oz pul toʻlaydi? Chunki bitta strimning chegaraviy qiymati nolga intiladi. Nega kriptovalyutalar umuman mumkin? Chunki raqamli aktivlarni jismoniy tashuvchisiz uzatish mumkin. Bularning barchasi Negroponte uch soʻzda ifodalagan bitta prinsipning oqibatlari.", "tags": ["iqtisodiyot", "bitlar", "miqyos"], "lensWeight": {"chronology": 4, "power": 4, "technology": 3, "media": 3, "privacy": 1}, "angDeg": 110.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1995"}, {"id": "media-effects", "sceneIndex": 6, "x": 240.2, "y": 595.0, "type": "media", "title": "Maklyuen va Rashkoff viruslari: media bizni o'zgartiradi", "shortTitle": "Media", "insight": "Maklyuen va Rashkoff tushundi: muhim narsa axborot emas, uni uzatadigan muhitdir. Media bizni kontentdan qat'i nazar - biz sezmaydigan tuzilma orqali o'zgartiradi.", "body": "## Uzatish vositasi xabardan muhimroq\n\nMarshall Maklyuen noqulay mutafakkir edi. 1964-yilda u avval bema'nilik deb, keyin metafora deb qabul qilingan, faqat keyinroq esa reallikning aniq texnik tavsifi sifatida tushunilgan iborani yozdi: \"Uzatish vositasining o'zi xabardir\".\n\nU nimani nazarda tutgan edi? 1950-yillarda ommaviy televideniye paydo bo'lganda, hamma kontent haqida bahslashardi: dasturlar yaxshimi yoki yomonmi, ta'limiy yoki ko'ngilochar, targ'ibotmi yoki san'at. Maklyuen shunday dedi: bu ikkinchi darajali savol. Televideniyening o'zi - muhit sifatida, texnologiya sifatida, idrok usuli sifatida - aynan nima ko'rsatilishidan qat'i nazar, jamiyatni allaqachon o'zgartirib bo'lgan.\n\nTelevizor tarixda birinchi marta millionlab odamlarni sinxronlashtirdi: bir xil yangiliklar, bir xil vaqtda, bir xil so'zlar bilan - mamlakatdagi barcha uylarda bir paytda. U Maklyuen \"global qishloq\" deb atagan narsani yaratdi - hamma bir vaqtning o'zida bitta hodisani boshdan kechiradigan dunyoni. Televideniyegacha turli shaharlardagi odamlar turli axborot realliklarida yashardi. Undan keyin esa - bittasida.\n\n## Rashkoffning biologik metaforasi\n\n1994-yilda amerikalik media nazariyotchisi Duglas Rashkoff Maklyuen g'oyasiga biologik metafora qo'shdi va u yanada aniqroq bo'lib chiqdi. *Media Virus!* kitobida u bugun viral kontent deb ataladigan mexanizmni tasvirlagan - YouTube'dan o'n yil, TikTok'dan yigirma yil oldin.\n\nG'oyalar viruslar kabi tarqaladi. Ular haqiqat bo'lgani uchun emas. Foydali bo'lgani uchun emas. Balki auditoriyaning psixologik zaif nuqtasiga - odamlarni ularni davom ettirib uzatishga majbur qiladigan narsaga tekkani uchun: qo'rquv, g'azablanish, zavq, tanishlik hissi, jahl, ko'ngil erishi. Emotsiya - g'oyaning replikatsiya mexanizmi.\n\nRashkoff ko'rsatdi: kuchli emotsiya uyg'otadigan kontent o'zining haqiqatligi yoki foydaliligidan qat'i nazar tarqaladi. Shov-shuvli xabar haqiqat xabardan tezroq yoyiladi. Qo'rqinchli hikoya zerikarli hikoyadan tezroq tarqaladi. Bu tasodif ham, manipulyatsiya ham emas - bu media muhitining arxitekturaviy xususiyati. Virus mezbonni \"yaxshi odammi yoki yomon odammi\" mezoni bilan tanlamaydi. U \"zaifmi yoki yo'qmi\" mezoni bilan tanlaydi.\n\nAynan shunga optimallashtirilgan TikTok algoritmlaridan ancha oldin Rashkoff ular qurilgan tamoyilni tasvirlab bergan. Algoritm virallikni yaratmadi. U faqat uni kuchaytirishni o'rgandi.\n\n> Maklyuen ogohlantirgan: muhim narsa dastur emas, televizor. Rashkoff aniqlik kiritdi: muhim narsa g'oya emas, u uyg'otadigan emotsiya. Ular birgalikda zamonaviy ijtimoiy tarmoqlar arxitekturasini ular paydo bo'lishidan o'ttiz yil oldin tasvirlab berishdi.\n\nInternet paydo bo'lganda, birinchi savol yana kontent haqida bo'ldi: odamlar u yerda nimani o'qiydi va tomosha qiladi? Maklyuen aytgan bo'lardi: noto'g'ri savol. To'g'ri savol - odam tobora ko'proq vaqt o'tkazadigan muhitning o'zi unga nima qiladi? Bu savol ijtimoiy tarmoqlar paydo bo'lganda nihoyatda muhim bo'lib qoldi. Afsuski, u juda kech berildi.", "tags": ["media", "xulq-atvor", "idrok"], "lensWeight": {"chronology": 3, "power": 3, "technology": 1, "media": 5, "privacy": 2}, "angDeg": 150.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1964–1990-yillar"}, {"id": "cypherpunks", "sceneIndex": 7, "x": 204.6, "y": 392.9, "type": "privacy", "title": "Hughes va shifropanklar: maxfiylik - bu matematika", "shortTitle": "Shifropanklar", "insight": "Hughes 1993-yilda maxfiylik inqirozini oldindan ko'rdi va matematik himoyani talab qildi - uning manifesti Bitcoin va butun Web3 uchun ideologik poydevorga aylandi.", "body": "## Oldindan ogohlantirgan ovoz\n\n1993-yilda, ko'pchilik \"internet\" so'zini ilk bor eshitayotgan paytda, matematik va kriptograf Eric Hughes uch sahifalik hujjat yozdi. U \"Shifropank manifesti\" deb atalgan va kriptografiya bilan shug'ullangan hamda ommaviy tarmoq paydo bo'lishining oqibatlari haqida o'ylagan kichik hamjamiyatning pochta ro'yxatida e'lon qilingan.\n\nO'sha vaqtda internet oddiy odamlar uchun endigina ochila boshlagan edi. Ilk brauzerlar endigina paydo bo'lgan. Tarmoqdagi maxfiylik haqida hali hech kim o'ylamasdi - odamlar shunchaki yangi imkoniyatlardan quvonardi: sayyoraning narigi chetidagi odamlar bilan yozishish mumkin! Yangiliklarni real vaqtda o'qish mumkin! Istalgan axborotni topish mumkin!\n\nHughes boshqacha o'ylardi. Uning dalili sodda va mustahkam edi: ochiq internet tarmoqdagi har bir harakating potensial ravishda hammaga - provayderlarga, davlatlarga, korporatsiyalarga ko'rinadi degani. Bu tasodifiy zaiflik emas. Bu ataylabmi yoki yo'qmi, aynan shunday yaratilgan tizimning arxitekturaviy xususiyati. Bunday sharoitda maxfiylikni himoya qilishning yagona yo'li provayderlar va davlatlardan ruxsat so'rash emas, balki matematikadan foydalanishdir. Kriptografiyadan. Hech qanday qonun buzolmaydigan matematikadan.\n\n## So'zma-so'z amalga oshgan bashorat\n\nHughes 1993-yilda shunday yozgan edi: \"Ochiq jamiyatdagi maxfiylik anonim tranzaksiyalar tizimini talab qiladi\". Bu fantastika kabi eshitilardi. O'quvchilarning ko'pchiligi yelka qisardi: \"Mening yashiradigan hech narsam yo'q\". Oddiy odamga anonim tranzaksiyalar nima uchun kerak?\n\nO'ttiz yil o'tib, biz korporatsiyalar foydalanuvchilar haqida ularning yaqinlaridan ham ko'proq biladigan dunyoda yashayapmiz. Ma'lumotlar sizishi kundalik yangilikka aylangan dunyoda. Karta orqali qilingan har bir xarid, har bir qidiruv so'rovi, telefoni yoqilgan holdagi har bir harakat yozib olinib, saqlanadigan dunyoda. Hughes paranoik emas edi. U shunchaki bir necha yurish oldinni o'ylagan.\n\nShifropanklar - 1990-yillar boshida shu g'oya atrofida to'plangan kichik hamjamiyat - oxir-oqibat Bitcoin uchun ideologik poydevor qo'ydi. Satoshi Nakamoto 2008-yilda Bitcoin tavsifini aynan shifropanklar pochta ro'yxatida e'lon qildi. Bu Hughes savoliga to'g'ridan-to'g'ri javob edi: mana sizga vositachiga ishonchga emas, matematikaga qurilgan anonim tranzaksiyalar tizimi.\n\nStewart Brand 1984-yildayoq ochiq internet manifestiga aylangan iborani aytgan edi: \"Axborot erkin bo'lishni xohlaydi\". U axborot tabiatini nazarda tutgan - u ko'chirilganda kamaymaydi, shuning uchun sun'iy to'siqlar uning tabiatiga zid. Hughes buni boshqa tomondan to'ldirdi: maxfiyliksiz axborot erkinligi erkinlik emas, kuzatayotganlar uchun shaffoflikdir.\n\n> Brand shunday dedi: axborot erkin bo'lishni xohlaydi. Hughes javob berdi: maxfiylik esa matematika bilan himoyalanishni xohlaydi. Ular birgalikda raqamli erkinlikning ikki qutbini tasvirlab berdi.\n\nBu ikki tamoyil - ochiqlik va maxfiylik - ma'lum ma'noda bir-biriga zid. Ular orasidagi taranglik internet qanday bo'lishi kerakligi haqidagi asosiy bahslarni hanuz belgilaydi. Bilimni hamma uchun ochiq qilib, shu bilan birga har bir insonning shaxsiy ma'lumotlarini qanday himoya qilish mumkin? Bu savol hali hal qilinmagan. Web3 aynan shuni hal qilishga urinmoqda.", "tags": ["kriptografiya", "maxfiylik", "kuzatuv"], "lensWeight": {"chronology": 3, "power": 4, "technology": 4, "media": 2, "privacy": 5}, "angDeg": 190.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1993"}, {"id": "castells", "sceneIndex": 8, "x": 307.2, "y": 215.2, "type": "power", "title": "Castells: hokimiyat oqimlarga o'tdi", "shortTitle": "Oqimlar", "insight": "Castells ko'rsatdi: hokimiyat joylarni nazorat qilishdan ma'lumotlar va e'tibor oqimlarini nazorat qilishga o'tdi - bu esa uni ko'rinmas va bahslashish qiyin holga keltirdi.", "body": "## E'tibordan chetda qolgan inqilob\n\n1990-yillar o'rtalariga kelib, ispan sotsiologi Manuel Castells hammaning ko'z o'ngida kechayotgan transformatsiyani kuzatdi va ko'pchilik sezmayotgan narsa haqida uch jildli asar yozdi. Axborot inqilobi allaqachon sodir bo'lgan edi. Odamlar uni shunchaki noto'g'ri joydan qidirayotgan edi.\n\nUlar uchar mashinalar va oshxonadagi robotlarni kutishardi. Ular 1960-yillardagi ilmiy-ommabop jurnallar va'da qilgan fantastik kelajakni kutishardi. Inqilob esa banklarning server xonalarida, global korporatsiyalarning logistika markazlarida, qit'alar orasidagi moliyaviy oqimlarda yuz berayotgan edi. 1990-yillarga kelib, pul jismoniy bo'lishdan to'xtagan - u serverlar orasidagi ma'lumotlar oqimiga aylangan edi. Ishlab chiqarish mahalliy bo'lishdan to'xtadi - u dizayn Kaliforniyada qilinadigan, qismlar Xitoyda ishlab chiqariladigan, Vetnamda yig'iladigan va hamma joyda sotiladigan yetkazib beruvchilarning global tarmog'iga aylandi. Hokimiyat hudud bilan o'lchanmay qo'ydi.\n\n## Joylar makoni va oqimlar makoni\n\nCastells zamonaviy dunyoni tushunishga yordam beradigan farqni kiritdi. Eski hokimiyat \"joylar makoni\"ni nazorat qilardi: zavodlar, portlar, chegaralar, hududlar. Egallash, himoya qilish, ushlab turish mumkin bo'lgan jismoniy nuqtalarni. Yangi hokimiyat \"oqimlar makoni\"ni nazorat qiladi: ma'lumotlar, kapital, e'tibor, axborotni.\n\nBular hokimiyatning tubdan boshqa-boshqa turlari. Hududiy hokimiyatni xaritada ko'rish mumkin - mana chegara, mana armiya, mana qal'a. Oqimlar ustidagi hokimiyat ko'rinmas. Google hokimiyati qayerda joylashgan? Hech qayerda va hamma joyda bir vaqtning o'zida. Facebook hokimiyati qayerda joylashgan? Milliardlab odamlar nimani ko'rishini belgilaydigan algoritmda. Bitcoin hokimiyati qayerda joylashgan? Jismoniy joylashuvi yo'q taqsimlangan tarmoqda.\n\nCastells ko'rsatdi: oqimlarni kim boshqarsa, dunyoni o'sha boshqaradi. Va bu kuzatuv qo'rqinchli darajada aniq bo'lib chiqdi. Besh-olti texnologik kompaniya sayyoradagi axborot oqimlarining katta qismini nazorat qiladi. Ular hududlarga egalik qilmaydi. Ular odamlar nimani ko'rishini, o'qishini, sotib olishini va nimaga ishonishini belgilaydigan algoritmlarga egalik qiladi.\n\nDaniel Bell 1973-yildayoq asosiy resurs axborot, asosiy institutlar esa zavodlar emas, universitetlar va tadqiqot laboratoriyalari bo'ladigan postindustrial jamiyatga o'tishni bashorat qilgan edi. Castells 1990-yillarda bu sodir bo'lganini ko'rdi - ammo axborot ustidagi hokimiyat umuman universitetlarda jamlanmagan edi.\n\n> Eski hokimiyat joylarni nazorat qilardi. Yangi hokimiyat oqimlarni nazorat qiladi. Oqimlarga qarshi chiqish esa hududga qarshi chiqishdan ancha qiyin.\n\nButun kurs bo'ylab o'tadigan fundamental savol ham shu: axborot asosiy resurs bo'lgan dunyoda hokimiyat qanday tuzilgan? Uni kim nazorat qiladi? U qanday jamlanadi? Bir nechta korporatsiya sayyoradagi axborot oqimlarining katta qismi ustidan nazoratni qo'lga olganda nima bo'ladi? Keyingi boblar - shu haqida.", "tags": ["oqimlar", "jamiyat", "hokimiyat"], "lensWeight": {"chronology": 4, "power": 5, "technology": 2, "media": 4, "privacy": 3}, "angDeg": 230.0, "sources": [{"title": "Claude Shannon — A Mathematical Theory of Communication (1948)", "url": ""}, {"title": "Vannevar Bush — As We May Think (1945)", "url": ""}, {"title": "Daniel Bell — The Coming of Post-Industrial Society (1973)", "url": ""}, {"title": "Alvin Toffler — The Third Wave (1980)", "url": ""}, {"title": "Marshall McLuhan — Understanding Media (1964)", "url": ""}, {"title": "Nicholas Negroponte — Being Digital (1995)", "url": ""}, {"title": "Douglas Rushkoff — Media Virus! (1994)", "url": ""}, {"title": "Stewart Brand — Information Wants to Be Free (1984)", "url": ""}, {"title": "Eric Hughes — A Cypherpunk's Manifesto (1993)", "url": ""}, {"title": "Manuel Castells — The Information Age (1996–1998)", "url": ""}], "era": "1996"}], "edges": [{"from": "scarcity", "to": "shannon", "label": "kamyoblikdan oʻlchashga", "lenses": ["chronology", "technology"]}, {"from": "shannon", "to": "arpanet", "label": "signal tarmoqqa aylanadi", "lenses": ["chronology", "technology"]}, {"from": "memex", "to": "open-web", "label": "gipermatn Web'ga aylanadi", "lenses": ["chronology", "media", "technology"]}, {"from": "arpanet", "to": "open-web", "label": "barqarorlik va ochiqlik", "lenses": ["chronology", "power", "technology"]}, {"from": "open-web", "to": "atoms-to-bits", "label": "ochiqlik nusxalashni tezlashtiradi", "lenses": ["power", "technology"]}, {"from": "atoms-to-bits", "to": "castells", "label": "iqtisodiyot oqimlarga aylanadi", "lenses": ["power", "media"]}, {"from": "media-effects", "to": "castells", "label": "media tarmoq jamiyatini shakllantiradi", "lenses": ["media", "power"]}, {"from": "arpanet", "to": "cypherpunks", "label": "tarmoq himoyani talab qiladi", "lenses": ["privacy", "technology", "power"]}, {"from": "cypherpunks", "to": "castells", "label": "oqimlar ichida maxfiylik", "lenses": ["privacy", "power"]}, {"from": "scarcity", "to": "castells", "label": "kirishni nazoratdan oqimlarni nazoratga", "lenses": ["power"]}], "ui": {"eyebrow": "Luminara · Asoslar", "sectionLenses": "Talqin linzalari", "sectionScenes": "Bob sahnalari", "detailLabel": "Tafsilot", "detailEmpty": "Xaritadan tugunni tanlang — bu yerda tezis, insayt, manbalar va bogʻliq gʻoyalar paydo boʻladi. Yuqoridagi linzalar nima ajratib koʻrsatilishini oʻzgartiradi va markaz rangini almashtiradi.", "related": "Bogʻliq gʻoyalar", "sources": "Manbalar", "readScene": "Sahnani oʻqish", "centerLabel": "Markaziy gʻoya", "progress": "Oʻrganildi", "progressOf": "/", "openInLuminara": "Luminara’da ochish", "close": "Yopish", "arpaTitle": "Mini-demo · paket marshrutlash", "arpaNote": "«Paketni yuborish»ni bosing. Keyin «Tugunni oʻchirish» — paket boshqa yoʻnalish topadi. Yagona ishdan chiqish nuqtasi boʻlmagan tarmoq mana shu.", "arpaSend": "Paketni yuborish", "arpaFail": "Tugunni oʻchirish", "arpaReset": "Tiklash", "arpaDemo": "ARPANET demo", "typePower": "Hokimiyat", "typeTechnology": "Texnologiyalar", "typeMedia": "Media", "typePrivacy": "Maxfiylik", "typeEconomy": "Iqtisodiyot", "chapterTitle": "Internetdan oldin", "scene": "Sahna", "arpaRouting": "Paket ketmoqda", "arpaNoRoute": "Marshrut yoʻq: juda koʻp tugun oʻchirilgan.", "arpaDelivered": "yetkazildi", "arpaAria": "ARPANET paketini qayta yoʻnaltirish", "initError": "Ishga tushirishda xatolik"}};
+function renderEmptyState(reason){const empty=document.querySelector(".empty-state"),svg=document.querySelector(".system-map");if(!empty||!svg)return;empty.hidden=false;svg.setAttribute("hidden","");empty.innerHTML=`<p>${reason}</p><a href="${CHAPTER_DATA.chapter.sourceUrl}" target="_blank" rel="noreferrer">Luminara</a>`;}
+</script></head>
+<body>
+<main class="app-shell">
+  <section class="control-rail">
+    <div><p class="eyebrow">Luminara · Asoslar</p><h1 id="app-title">Internetdan oldin</h1></div>
+    <p class="chapter-lede">Axborot qanday hokimiyatga aylanadi — tanqislik va signallardan tarmoqli jamiyatgacha.</p>
+    <div class="rail-rule"></div>
+    <div><p class="section-h">Talqin linzalari</p><div class="lens-group" style="margin-top:9px"></div><p class="lens-desc" style="margin-top:9px"></p></div>
+    <div class="rail-rule"></div>
+    <div class="progress-box"></div>
+    <div><p class="section-h">Bob sahnalari</p><nav class="node-list" style="margin-top:6px"></nav></div>
+  </section>
+  <section class="map-stage">
+    <svg class="system-map" viewBox="0 0 1000 890" role="img" preserveAspectRatio="xMidYMid meet"><title id="map-title">Internetdan oldin</title><desc id="map-desc">Axborot hokimiyatga aylanadi</desc></svg>
+    <div class="empty-state" hidden></div>
+  </section>
+  <aside class="detail-panel"></aside>
+</main>
+<dialog class="scene-dialog"></dialog>
+<script>
+const state={lens:"chronology",selected:null,visited:new Set(),entered:false};
+const byId=id=>CHAPTER_DATA.nodes.find(n=>n.id===id);
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in(a||{}))e.setAttribute(k,a[k]);return e;};
+function typeColor(t){return{power:"#c0392b",technology:"#1f7a5a",media:"#b7791f",privacy:"#6b4fa0",economy:"#a04a7a"}[t]||"#b7791f";}
+function typeLabel(t){const u=CHAPTER_DATA.ui;return{power:u.typePower,technology:u.typeTechnology,media:u.typeMedia,privacy:u.typePrivacy,economy:u.typeEconomy}[t]||"";}
+function lensById(id){return CHAPTER_DATA.lenses.find(l=>l.id===id);}
+function edgeActive(e){return e.lenses.includes(state.lens);}
+function nodeWeight(n){return(n.lensWeight&&n.lensWeight[state.lens])||0;}
+const CX=CHAPTER_DATA.chapter.centerX||500, CY=CHAPTER_DATA.chapter.centerY||445, RING=CHAPTER_DATA.chapter.ring||300;
+
+function buildLenses(){
+  const w=document.querySelector(".lens-group");w.innerHTML="";
+  CHAPTER_DATA.lenses.forEach(l=>{const b=document.createElement("button");b.className="lens-btn";b.type="button";
+    b.setAttribute("aria-pressed",String(l.id===state.lens));b.style.setProperty("--dot",l.accent);
+    b.innerHTML=`<span class="lens-dot"></span>${l.label}`;b.addEventListener("click",()=>setLens(l.id));w.appendChild(b);});
+}
+function setLens(id){state.lens=id;const l=lensById(id);
+  const d=document.querySelector(".lens-desc");if(d)d.textContent=l?l.description:"";
+  document.querySelectorAll(".lens-btn").forEach((b,i)=>b.setAttribute("aria-pressed",String(CHAPTER_DATA.lenses[i].id===id)));
+  renderAll();}
+
+function curve(a,b){const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;const dx=mx-CX,dy=my-CY,len=Math.hypot(dx,dy)||1;const bow=26;
+  return `M ${a.x} ${a.y} Q ${mx+(dx/len)*bow} ${my+(dy/len)*bow} ${b.x} ${b.y}`;}
+
+function defs(){
+  const d=el("defs");
+  const mk=(id,color)=>{const m=el("marker",{id,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"});
+    const p=el("path",{d:"M0 0 L10 5 L0 10 z",fill:color});m.appendChild(p);return m;};
+  d.appendChild(mk("arrow-active", lensById(state.lens)?lensById(state.lens).accent:"#b7791f"));
+  return d;
+}
+
+function renderMap(){
+  const svg=document.querySelector(".system-map");if(!svg)return;
+  [...svg.querySelectorAll("defs,g,.ring,.ring-tick,.era-label,.spoke")].forEach(n=>n.remove());
+  svg.appendChild(defs());
+  // rings
+  const gDeco=el("g",{});
+  [RING*0.55,RING].forEach(r=>gDeco.appendChild(el("circle",{class:"ring",cx:CX,cy:CY,r})));
+  svg.appendChild(gDeco);
+  // spokes + chronology era labels around outer ring
+  const gSpoke=el("g",{});
+  CHAPTER_DATA.nodes.forEach(n=>{
+    gSpoke.appendChild(el("line",{class:"spoke",x1:CX,y1:CY,x2:n.x,y2:n.y}));
+  });
+  svg.appendChild(gSpoke);
+
+  // edges (with directional arrows on active)
+  const gE=el("g",{});
+  CHAPTER_DATA.edges.forEach(e=>{const a=byId(e.from),b=byId(e.to);if(!a||!b)return;
+    const active=edgeActive(e);const g=el("g",{class:"edge"+(active?" active":"")});
+    if(active)g.style.setProperty("--dot",lensById(state.lens).accent);
+    const d=curve(a,b);const p=el("path",{d});
+    // approximate length for draw animation
+    const len=Math.round(Math.hypot(b.x-a.x,b.y-a.y)*1.15);
+    p.style.setProperty("--len",len);
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+    const lb=el("text",{class:"edge-label",x:mx,y:my-5,"text-anchor":"middle"});lb.textContent=e.label;
+    g.appendChild(p);g.appendChild(lb);gE.appendChild(g);});
+  svg.appendChild(gE);
+
+  // center (breathing, lens-tinted ring)
+  const gC=el("g",{});
+  gC.style.setProperty("--dot", lensById(state.lens)?lensById(state.lens).accent:"#b7791f");
+  gC.appendChild(el("circle",{class:"center-halo",cx:CX,cy:CY,r:78}));
+  gC.appendChild(el("circle",{class:"center-ring",cx:CX,cy:CY,r:72}));
+  gC.appendChild(el("circle",{class:"center-disc",cx:CX,cy:CY,r:66}));
+  const t2=el("text",{class:"center-t2",x:CX,y:CY-20});t2.textContent=CHAPTER_DATA.ui.centerLabel;gC.appendChild(t2);
+  wrapText(gC,CHAPTER_DATA.chapter.centralIdea,CX,CY+2,120,"center-t1",17);
+  svg.appendChild(gC);
+
+  // nodes with smart outward labels + era
+  const gN=el("g",{});
+  CHAPTER_DATA.nodes.forEach((n,i)=>{
+    const g=el("g",{class:"node"+(state.selected===n.id?" selected":""),tabindex:"0",role:"button","aria-label":`${n.sceneIndex+1}. ${n.title} (${n.era||""})`});
+    g.style.setProperty("--dot",typeColor(n.type));
+    g.style.setProperty("--ox",n.x+"px");g.style.setProperty("--oy",n.y+"px");
+    if(!state.entered) g.style.setProperty("--delay",(0.15+i*0.06)+"s"); else g.style.animation="none",g.style.opacity="1";
+    if(state.selected){const linked=CHAPTER_DATA.edges.some(e=>(e.from===state.selected&&e.to===n.id)||(e.to===state.selected&&e.from===n.id));
+      if(n.id!==state.selected&&!linked)g.classList.add("dim");}
+    else if(nodeWeight(n)<=1){g.classList.add("dim");}
+    g.appendChild(el("circle",{class:"halo",cx:n.x,cy:n.y,r:34}));
+    g.appendChild(el("circle",{class:"disc",cx:n.x,cy:n.y,r:26}));
+    const num=el("text",{class:"num",x:n.x,y:n.y});num.textContent=String(n.sceneIndex+1);g.appendChild(num);
+
+    // smart label placement: outward along the radius from center
+    const dx=n.x-CX,dy=n.y-CY,len=Math.hypot(dx,dy)||1;
+    const ux=dx/len,uy=dy/len;
+    const lx=n.x+ux*40, ly=n.y+uy*40;
+    // anchor by horizontal side
+    const anchor = ux>0.25?"start":(ux<-0.25?"end":"middle");
+    const era=el("text",{class:"era",x:lx,y:ly-13,"text-anchor":anchor});era.textContent=n.era||"";g.appendChild(era);
+    const kick=el("text",{class:"kicker",x:lx,y:ly-1,"text-anchor":anchor});kick.textContent=typeLabel(n.type);g.appendChild(kick);
+    wrapTextAnchored(g,n.shortTitle,lx,ly+13,150,"cap",13,anchor);
+
+    g.addEventListener("click",()=>selectNode(n.id));
+    g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectNode(n.id);}});
+    gN.appendChild(g);
+  });
+  svg.appendChild(gN);
+  state.entered=true;
+}
+function wrapText(parent,text,x,y,maxw,cls,fs){wrapTextAnchored(parent,text,x,y,maxw,cls,fs,"middle");}
+function wrapTextAnchored(parent,text,x,y,maxw,cls,fs,anchor){
+  const words=String(text).split(/\s+/);const lines=[];let line="";
+  const approx=s=>s.length*(fs*0.56);
+  words.forEach(w=>{const t=line?line+" "+w:w;if(approx(t)>maxw&&line){lines.push(line);line=w;}else line=t;});
+  if(line)lines.push(line);const total=(lines.length-1)*(fs+2);
+  lines.forEach((ln,i)=>{const t=el("text",{class:cls,x,y:y-total/2+i*(fs+2),"text-anchor":anchor});t.textContent=ln;parent.appendChild(t);});
+}
+
+function renderNodeList(){const nav=document.querySelector(".node-list");if(!nav)return;nav.innerHTML="";
+  CHAPTER_DATA.nodes.slice().sort((a,b)=>a.sceneIndex-b.sceneIndex).forEach(n=>{
+    const b=document.createElement("button");b.type="button";b.setAttribute("aria-current",String(state.selected===n.id));b.style.setProperty("--dot",typeColor(n.type));
+    b.innerHTML=`<span class="node-idx">${String(n.sceneIndex+1).padStart(2,"0")}</span><span>${n.shortTitle}</span>`;
+    b.addEventListener("click",()=>selectNode(n.id));nav.appendChild(b);});}
+function renderProgress(){const box=document.querySelector(".progress-box");if(!box)return;
+  const total=CHAPTER_DATA.nodes.length,seen=state.visited.size;
+  box.innerHTML=`${CHAPTER_DATA.ui.progress} ${seen} ${CHAPTER_DATA.ui.progressOf} ${total}<div class="progress-bar"><div class="progress-fill" style="width:${Math.round(seen/total*100)}%"></div></div>`;}
+function firstSentence(txt){return String(txt).replace(/^##[^\n]*\n+/,"").split(/(?<=[.!?])\s/)[0]||"";}
+function renderDetail(){const p=document.querySelector(".detail-panel");if(!p)return;
+  if(!state.selected){p.innerHTML=`<p class="eyebrow">${CHAPTER_DATA.ui.detailLabel}</p><p class="detail-empty">${CHAPTER_DATA.ui.detailEmpty}</p>`;return;}
+  const n=byId(state.selected);const c=typeColor(n.type);
+  const related=CHAPTER_DATA.edges.filter(e=>e.from===n.id||e.to===n.id).map(e=>({node:byId(e.from===n.id?e.to:e.from),label:e.label})).filter(x=>x.node);
+  const srcs=(n.sources||[]).slice(0,10);
+  p.innerHTML=`<p class="detail-kicker" style="--dot:${c}">${CHAPTER_DATA.ui.scene} ${n.sceneIndex+1} · ${typeLabel(n.type)}${n.era?" · "+n.era:""}</p>
+    <h3 class="detail-title">${n.title}</h3>
+    <p class="detail-thesis">${firstSentence(n.body)}</p>
+    <p class="detail-insight" style="--dot:${c}">${n.insight}</p>
+    <div class="chips">${(n.tags||[]).map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+    <div class="related"><h4>${CHAPTER_DATA.ui.related}</h4><div class="related-list">
+      ${related.map(r=>`<button type="button" data-go="${r.node.id}">${r.node.shortTitle} · <span style="color:var(--muted)">${r.label}</span></button>`).join("")}</div></div>
+    ${srcs.length?`<div class="sources-block"><h4>${CHAPTER_DATA.ui.sources} (${srcs.length})</h4><ol>${srcs.map(s=>`<li>${s.url?`<a href="${s.url}" target="_blank" rel="noreferrer">${s.title}</a>`:s.title}</li>`).join("")}</ol></div>`:""}
+    <div class="panel-actions"><button class="btn primary" type="button" data-full="${n.id}">${CHAPTER_DATA.ui.readScene}</button>
+      ${n.id==="arpanet"?'<button class="btn" type="button" data-arpa="1">${CHAPTER_DATA.ui.arpaDemo}</button>':""}</div>`;
+  p.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>selectNode(b.getAttribute("data-go"))));
+  p.querySelector("[data-full]").addEventListener("click",()=>renderFullScene(n.id));
+  const ad=p.querySelector("[data-arpa]");if(ad)ad.addEventListener("click",()=>renderFullScene("arpanet",true));}
+function selectNode(id){state.selected=id;state.visited.add(id);renderAll();}
+
+function mdToHtml(md){return String(md).split(/\n{2,}/).map(b=>{b=b.trim();if(!b)return"";
+  if(b.startsWith("## "))return`<h2>${b.slice(3)}</h2>`;return`<p>${b.replace(/\*([^*]+)\*/g,"<em>$1</em>")}</p>`;}).join("");}
+function renderFullScene(id,openArpa){const n=byId(id);if(!n)return;const dlg=document.querySelector(".scene-dialog");const isArpa=n.id==="arpanet";const c=typeColor(n.type);const srcs=(n.sources||[]);
+  dlg.innerHTML=`<div class="dialog-inner"><button class="dialog-close" aria-label="${CHAPTER_DATA.ui.close}" type="button">×</button>
+    <p class="detail-kicker" style="--dot:${c}">${CHAPTER_DATA.ui.scene} ${n.sceneIndex+1} · ${typeLabel(n.type)}${n.era?" · "+n.era:""}</p>
+    <h3>${n.title}</h3><div class="dialog-body">${mdToHtml(n.body)}</div>
+    <p class="detail-insight" style="--dot:${c}">${n.insight}</p>${isArpa?arpaMarkup():""}
+    ${srcs.length?`<div class="sources-block"><h4>${CHAPTER_DATA.ui.sources}</h4><ol>${srcs.map(s=>`<li>${s.url?`<a href="${s.url}" target="_blank" rel="noreferrer">${s.title}</a>`:s.title}</li>`).join("")}</ol></div>`:""}
+    <div class="panel-actions"><a class="btn" href="${CHAPTER_DATA.chapter.sourceUrl}" target="_blank" rel="noreferrer">${CHAPTER_DATA.ui.openInLuminara}</a>
+      <button class="btn primary" type="button" data-close>${CHAPTER_DATA.ui.close}</button></div></div>`;
+  const close=()=>dlg.close();dlg.querySelector(".dialog-close").addEventListener("click",close);dlg.querySelector("[data-close]").addEventListener("click",close);
+  if(typeof dlg.showModal==="function")dlg.showModal();else dlg.setAttribute("open","");
+  if(isArpa){wireArpanet(dlg);if(openArpa)setTimeout(()=>runArpanetPacketDemo(dlg),300);}}
+function arpaMarkup(){return `<div class="arpa-wrap"><h4>${CHAPTER_DATA.ui.arpaTitle}</h4>
+  <svg class="arpa-svg arpa-net" viewBox="0 0 460 160" role="img" aria-label="${CHAPTER_DATA.ui.arpaAria}"></svg>
+  <p class="arpa-note">${CHAPTER_DATA.ui.arpaNote}</p>
+  <div class="panel-actions"><button class="btn primary" type="button" data-send>${CHAPTER_DATA.ui.arpaSend}</button>
+    <button class="btn" type="button" data-fail>${CHAPTER_DATA.ui.arpaFail}</button><button class="btn" type="button" data-reset>${CHAPTER_DATA.ui.arpaReset}</button></div></div>`;}
+const ARPA={hosts:{A:{x:40,y:80,label:"A"},B:{x:170,y:38,label:"B"},C:{x:170,y:122,label:"C"},D:{x:300,y:80,label:"D"},E:{x:420,y:80,label:"E"}},
+  links:[["A","B"],["A","C"],["B","D"],["C","D"],["D","E"]],down:new Set(),
+  route(){const P=[["A","B","D","E"],["A","C","D","E"]];for(const p of P)if(p.every(h=>!this.down.has(h)))return p;return null;}};
+function drawArpa(svg){svg.innerHTML="";const mk=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  ARPA.links.forEach(([f,t])=>{const A=ARPA.hosts[f],B=ARPA.hosts[t];svg.appendChild(mk("line",{x1:A.x,y1:A.y,x2:B.x,y2:B.y}));});
+  Object.entries(ARPA.hosts).forEach(([id,h])=>{svg.appendChild(mk("circle",{cx:h.x,cy:h.y,r:16,class:ARPA.down.has(id)?"down":"host"}));const t=mk("text",{x:h.x,y:h.y+4});t.textContent=h.label;svg.appendChild(t);});}
+function wireArpanet(dlg){const svg=dlg.querySelector(".arpa-net");ARPA.down=new Set();drawArpa(svg);
+  dlg.querySelector("[data-send]").addEventListener("click",()=>runArpanetPacketDemo(dlg));
+  dlg.querySelector("[data-fail]").addEventListener("click",()=>{ARPA.down.add("B");drawArpa(svg);dlg.querySelector(".arpa-note").textContent=(CHAPTER_DATA.ui.arpaFailNote||"Node B down; routes via C.");});
+  dlg.querySelector("[data-reset]").addEventListener("click",()=>{ARPA.down=new Set();drawArpa(svg);dlg.querySelector(".arpa-note").textContent=(CHAPTER_DATA.ui.arpaResetNote||"Network restored.");});}
+function runArpanetPacketDemo(dlg){dlg=dlg||document.querySelector(".scene-dialog");const svg=dlg.querySelector(".arpa-net");if(!svg)return;drawArpa(svg);
+  const path=ARPA.route();const note=dlg.querySelector(".arpa-note");if(!path){if(note)note.textContent=CHAPTER_DATA.ui.arpaNoRoute;return;}
+  for(let i=0;i<path.length-1;i++){const A=ARPA.hosts[path[i]],B=ARPA.hosts[path[i+1]];
+    [...svg.querySelectorAll("line")].forEach(ln=>{const s=(+ln.getAttribute("x1")===A.x&&+ln.getAttribute("y1")===A.y&&+ln.getAttribute("x2")===B.x&&+ln.getAttribute("y2")===B.y)||(+ln.getAttribute("x1")===B.x&&+ln.getAttribute("y1")===B.y&&+ln.getAttribute("x2")===A.x&&+ln.getAttribute("y2")===A.y);if(s)ln.classList.add("path-active");});}
+  if(note)note.textContent=CHAPTER_DATA.ui.arpaRouting+": "+path.join(" → ");
+  const pkt=document.createElementNS(SVGNS,"circle");pkt.setAttribute("r","5");pkt.setAttribute("class","packet");svg.appendChild(pkt);
+  let seg=0,t=0;function step(){if(seg>=path.length-1){pkt.remove();if(note)note.textContent+="  ✓ "+CHAPTER_DATA.ui.arpaDelivered;return;}
+    const A=ARPA.hosts[path[seg]],B=ARPA.hosts[path[seg+1]];t+=0.04;pkt.setAttribute("cx",A.x+(B.x-A.x)*t);pkt.setAttribute("cy",A.y+(B.y-A.y)*t);if(t>=1){t=0;seg++;}requestAnimationFrame(step);}
+  requestAnimationFrame(step);}
+function renderAll(){renderMap();renderNodeList();renderDetail();renderProgress();}
+async function boot(){buildLenses();setLens(state.lens);}
+document.addEventListener("DOMContentLoaded",()=>{try{boot();}catch(e){renderEmptyState(CHAPTER_DATA.ui.initError+": "+e.message);}});
+</script>
+</body></html>

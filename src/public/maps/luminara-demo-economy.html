@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live демо · 1000 истинных фанатов · Luminara</title>
+<style>
+:root{
+  /* DARK (default) — mirrors app :root */
+  --bg: oklch(11% 0.026 285); --bg-surface: oklch(14.5% 0.032 285); --bg-elev: oklch(18% 0.041 285);
+  --bg-card: oklch(16% 0.036 285); --bg-tint: oklch(22% 0.051 285);
+  --line: oklch(28% 0.036 285); --line-soft: oklch(22% 0.032 285); --line-strong: oklch(40% 0.058 285);
+  --text: oklch(96% 0.007 285); --text-mid: oklch(80% 0.014 285); --text-muted: oklch(62% 0.029 285); --text-dim: oklch(46% 0.043 285);
+  --accent: oklch(72% 0.261 295); --accent-2: oklch(82% 0.174 205); --accent-3: oklch(80% 0.189 85); --accent-4: oklch(78% 0.203 155);
+  /* type/lens colors mapped to app ecosystem chroma */
+  --power: oklch(80% 0.203 10); --technology: oklch(78% 0.189 155); --media: oklch(80% 0.189 85);
+  --privacy: oklch(74% 0.232 290); --economy: oklch(76% 0.185 320);
+  --glass: oklch(11% 0.026 285 / 0.7); --scrim: oklch(0% 0 0 / 0.6);
+  --star: rgba(255,255,255,.6); --neb1: rgba(60,80,160,.16); --neb2: rgba(120,60,160,.10);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+[data-theme="light"]{
+  --bg: oklch(98% 0.006 285); --bg-surface: oklch(96% 0.009 285); --bg-elev: oklch(93.5% 0.012 285);
+  --bg-card: oklch(97% 0.007 285); --bg-tint: oklch(91% 0.014 285);
+  --line: oklch(82% 0.017 285); --line-soft: oklch(88% 0.014 285); --line-strong: oklch(70% 0.026 285);
+  --text: oklch(22% 0.043 285); --text-mid: oklch(40% 0.036 285); --text-muted: oklch(55% 0.041 285); --text-dim: oklch(68% 0.032 285);
+  --accent: oklch(55% 0.319 295); --accent-2: oklch(55% 0.232 205); --accent-3: oklch(62% 0.232 60); --accent-4: oklch(55% 0.232 155);
+  --power: oklch(58% 0.261 10); --technology: oklch(52% 0.232 155); --media: oklch(58% 0.200 90);
+  --privacy: oklch(48% 0.290 290); --economy: oklch(54% 0.220 320);
+  --glass: oklch(98% 0.006 285 / 0.85); --scrim: oklch(100% 0 0 / 0.6);
+  --star: rgba(120,110,160,.35); --neb1: rgba(150,140,220,.10); --neb2: rgba(190,160,220,.08);
+}
+[data-theme="light"] .stars,[data-theme="light"] .stars2{opacity:.25}
+[data-theme="light"] .btn.primary{color:#fff}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans,system-ui);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.demo-wrap{width:min(620px,100%)}
+.demo-card{position:relative;border-radius:18px;padding:22px 24px 20px;
+  background:linear-gradient(150deg,color-mix(in oklch,var(--accent) 12%,var(--bg-elev)),var(--bg-elev));
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));
+  box-shadow:0 10px 40px -16px color-mix(in oklch,var(--accent) 55%,transparent),0 0 0 1px var(--line) inset;
+  animation:demoGlow 3.8s ease-in-out infinite}
+@keyframes demoGlow{0%,100%{box-shadow:0 8px 30px -16px color-mix(in oklch,var(--accent) 45%,transparent),0 0 0 1px var(--line) inset}
+  50%{box-shadow:0 12px 44px -12px color-mix(in oklch,var(--accent) 70%,transparent),0 0 0 1px color-mix(in oklch,var(--accent) 30%,var(--line)) inset}}
+.demo-head{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.demo-badge{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:color-mix(in oklch,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-radius:999px;padding:4px 10px;white-space:nowrap}
+.demo-title{font-size:17px;font-weight:600;color:var(--text);font-family:var(--serif,Georgia,serif);line-height:1.3}
+.demo-note{margin:14px 0 0;color:var(--text-mid);font-size:14px;line-height:1.55;min-height:1.5em;font-family:var(--serif,Georgia,serif)}
+.demo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{font-family:var(--sans,system-ui);font-size:13.5px;font-weight:600;padding:9px 15px;border-radius:10px;
+  cursor:pointer;border:1px solid var(--line-strong);background:var(--bg-surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* revision-3 #19 WCAG AA fix: white text on the DARK-theme accent (L≈72%) was only ~2.75:1.
+   var(--bg) (near-black in dark theme) gives ~7.4:1. Light theme keeps its own white override
+   below, since the light accent (L≈55%) already passes at ~5.9:1. */
+.btn.primary:hover{filter:brightness(1.08)}
+.demo-stage{margin-top:6px}
+.demo-stat{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.demo-stat .s{font-size:12px;color:var(--text-muted)}
+.demo-stat .s b{display:block;font-size:22px;color:var(--text);font-family:var(--serif,Georgia,serif);font-weight:600;margin-top:2px}
+.demo-slider{margin-top:12px}
+.demo-slider label{font-size:12px;color:var(--text-muted);display:block;margin-bottom:5px}
+.demo-slider input[type=range]{width:100%;accent-color:var(--accent)}
+svg text{font-family:var(--sans,system-ui)}
+
+.bars{display:flex;gap:16px;margin:10px 0}.bar-col{flex:1;text-align:center}.bar-wrap{height:120px;display:flex;align-items:flex-end;border-radius:10px;background:var(--bg-surface);overflow:hidden}.bar-fill{width:100%;transition:.3s;border-radius:10px 10px 0 0}.bar-lbl{font-size:11px;color:var(--text-muted);margin-top:6px}.bar-val{font-size:18px;font-family:var(--serif,Georgia,serif);color:var(--text);margin-top:2px}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-card" role="region" aria-label="Интерактивное живое демо">
+    <div class="demo-head">
+      <span class="demo-badge" data-s="badge">Живое демо</span>
+      <span class="demo-title" data-s="title">1000 истинных фанатов</span>
+    </div>
+    <div class="demo-stage">
+<div class="demo-slider"><label><span data-s="fans_label">Фанатов</span><span data-fansv> 500</span></label><input type="range" min="0" max="1000" value="500" step="50" data-fans></div>
+<div class="demo-slider"><label><span data-s="price_label">$ с фаната</span><span data-pricev> 50</span></label><input type="range" min="10" max="200" value="50" step="10" data-price></div>
+<div class="bars"><div class="bar-col"><div class="bar-wrap"><div class="bar-fill" data-bar-p style="background:var(--line-strong)"></div></div><div class="bar-lbl" data-s="via_platform">Через платформу</div><div class="bar-val" data-val-p>$0</div></div><div class="bar-col"><div class="bar-wrap"><div class="bar-fill" data-bar-d style="background:var(--accent)"></div></div><div class="bar-lbl" data-s="via_direct">Напрямую</div><div class="bar-val" data-val-d>$0</div></div></div>
+    </div>
+    <p class="demo-note" data-s="hint">…</p>
+  </div>
+</div>
+<script>
+(function(){
+  var __lang="ru";
+  try{
+    var p=new URLSearchParams(location.search);
+    var theme=p.get("theme"),accent=p.get("accent"),rawLang=p.get("lang");
+    // Each field is parsed/applied independently (revision-3 #19 fix): a bad accent must
+    // never discard an already-valid theme or language. URLSearchParams.get() already
+    // URL-decodes its value once; re-decoding here threw on a literal "%" inside
+    // oklch(72% ...) accents and the old shared try/catch reset the language to "ru".
+    try{
+      if(theme==="light")document.documentElement.setAttribute("data-theme","light");
+      else if(theme==="dark")document.documentElement.setAttribute("data-theme","dark");
+    }catch(e){}
+    try{
+      if(accent)document.documentElement.style.setProperty("--accent",accent);
+    }catch(e){}
+    if(rawLang)__lang=rawLang;
+  }catch(e){}
+  window.__LANG=__lang;
+})();
+const S={"title": {"ru": "1000 истинных фанатов", "en": "1000 true fans", "uk": "1000 справжніх фанатів", "kk": "1000 шынайы фанат", "uz": "1000 haqiqiy fanat", "es": "1000 fans verdaderos", "fr": "1000 vrais fans", "hy": "1000 իրական երկրպագու"}, "badge": {"ru": "Живое демо", "en": "Live demo", "uk": "Живе демо", "kk": "Тірі демо", "uz": "Jonli demo", "es": "Demo en vivo", "fr": "Démo en direct", "hy": "Կենդանի դեմո"}, "hint": {"ru": "Двигай ползунки. Смотри, сколько доходит до создателя через платформу и напрямую.", "en": "Move the sliders. See how much reaches the creator through a platform and directly.", "uk": "Рухай повзунки. Дивися, скільки доходить до творця через платформу й напряму.", "kk": "Жүгірткілерді жылжыт. Платформа арқылы және тікелей жасаушыға қанша жететінін көр.", "uz": "Slayderlarni sur. Platforma orqali va bevosita ijodkorga qancha yetib borishini ko‘r.", "es": "Mueve los controles. Mira cuánto llega al creador por la plataforma y directamente.", "fr": "Déplace les curseurs. Regarde combien arrive au créateur via la plateforme et directement.", "hy": "Տեղաշարժիր սահիչները։ Տես, թե որքան է հասնում ստեղծողին պլատֆորմի միջոցով և ուղիղ։"}, "fans_label": {"ru": "Фанатов", "en": "Fans", "uk": "Фанатів", "kk": "Фанат", "uz": "Fanatlar", "es": "Fans", "fr": "Fans", "hy": "Երկրպագուներ"}, "price_label": {"ru": "$ с фаната в год", "en": "$ per fan per year", "uk": "$ з фаната на рік", "kk": "$ бір фанаттан жылына", "uz": "$ har bir fanatdan yiliga", "es": "$ por fan al año", "fr": "$ par fan et par an", "hy": "$ մեկ երկրպագուից տարեկան"}, "via_platform": {"ru": "Через платформу", "en": "Through platform", "uk": "Через платформу", "kk": "Платформа арқылы", "uz": "Platforma orqali", "es": "Por la plataforma", "fr": "Via la plateforme", "hy": "Պլատֆորմի միջոցով"}, "via_direct": {"ru": "Напрямую (Web3)", "en": "Directly (Web3)", "uk": "Напряму (Web3)", "kk": "Тікелей (Web3)", "uz": "Bevosita (Web3)", "es": "Directamente (Web3)", "fr": "Directement (Web3)", "hy": "Ուղիղ (Web3)"}, "res": {"ru": "Прямые каналы меняют выживаемость создателя. (Келли, 2008 → токены и NFT дали инструменты)", "en": "Direct channels change a creator’s survival odds. (Kelly, 2008 → tokens and NFT gave the tools)", "uk": "Прямі канали змінюють виживаність творця. (Келлі, 2008 → токени й NFT дали інструменти)", "kk": "Тікелей арналар жасаушының өміршеңдігін өзгертеді. (Келли, 2008 → токендер мен NFT құрал берді)", "uz": "Bevosita kanallar ijodkorning yashab qolish imkonini o‘zgartiradi. (Kelly, 2008 → tokenlar va NFT vositalarni berdi)", "es": "Los canales directos cambian la supervivencia del creador. (Kelly, 2008 → los tokens y NFT dieron las herramientas)", "fr": "Les canaux directs changent la capacité de survie du créateur. (Kelly, 2008 → les tokens et NFT ont fourni les outils)", "hy": "Ուղիղ ալիքները փոխում են ստեղծողի գոյատևման հնարավորությունը։ (Քելլի, 2008 → թոքեններն ու NFT-ն գործիքներ տվեցին)"}};
+const DLANGS=["ru", "en", "uk", "kk", "uz", "es", "fr", "hy"];
+function t(k,l){l=l||window.__LANG;var o=S[k]||{};return o[l]||o.ru||"";}
+function applyLang(l){
+  if(DLANGS.indexOf(l)<0)l="ru"; window.__LANG=l; document.documentElement.lang=l;
+  document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");var v=t(k,l);if(v)el.textContent=v;});
+  if(typeof onLang==="function")try{onLang(l);}catch(e){}
+}
+window.addEventListener("message",function(ev){
+  try{
+    // Revision-3 #19 hardening: only same-origin messages from the actual embedding
+    // window, carrying our own typed shape, are honoured. Nothing in this app currently
+    // posts live style updates into this iframe (theme/accent/lang are set once via the
+    // URL when the modal opens) — this just stops an arbitrary embedder or foreign frame
+    // from pushing unvalidated messages into the page.
+    if(ev.source!==window.parent)return;
+    if(ev.origin!==window.location.origin)return;
+    var d=ev.data;
+    if(!d||typeof d!=="object"||d.type!=="luminara:demo-style")return;
+    if(d.theme==="light"||d.theme==="dark")document.documentElement.setAttribute("data-theme",d.theme);
+    if(typeof d.accent==="string"&&d.accent)document.documentElement.style.setProperty("--accent",d.accent);
+    if(typeof d.lang==="string"&&d.lang)applyLang(d.lang);
+  }catch(e){}
+});
+var fans=500,price=50;var PLAT=0.35;
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
+function render(){var gross=fans*price;var plat=gross*PLAT;var direct=gross*0.98;var maxv=fans*200*0.98||1;document.querySelector('[data-bar-p]').style.height=Math.round(plat/maxv*100)+'%';document.querySelector('[data-bar-d]').style.height=Math.round(direct/maxv*100)+'%';document.querySelector('[data-val-p]').textContent=fmt(plat);document.querySelector('[data-val-d]').textContent=fmt(direct);document.querySelector('[data-fansv]').textContent=' '+fans;document.querySelector('[data-pricev]').textContent=' '+price;}
+function onLang(l){}
+document.querySelector('[data-fans]').addEventListener('input',function(e){fans=+e.target.value;render();});
+document.querySelector('[data-price]').addEventListener('input',function(e){price=+e.target.value;render();if(fans>=800&&price>=100)document.querySelector('.demo-note').textContent=t('res');});
+render();
+applyLang(window.__LANG||"ru");
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Sign in — Luminara BTC</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="/runtime-config.js"></script>
+  <script src="/v62/auth-return.js"></script>
+  <script src="/v62/api.js"></script>
+  <style>
+    :root { color-scheme: light; font-family: Manrope, Inter, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px;
+      color: #17142f; background: radial-gradient(circle at top, #f0e8ff 0, #fafaff 48%, #fff 100%); }
+    main { width: min(100%, 440px); padding: 32px; border: 1px solid #ddd9ea; border-radius: 28px;
+      background: rgba(255,255,255,.94); box-shadow: 0 24px 70px rgba(55,35,100,.13); }
+    .brand { display: flex; align-items: center; gap: 12px; font-family: Georgia, serif; font-size: 30px; }
+    .mark { width: 34px; height: 34px; border-radius: 50%; background: #7b2cff;
+      box-shadow: inset 0 0 0 9px #eee8ff, 0 0 24px #9d66ff; }
+    h1 { margin: 30px 0 10px; font-size: clamp(30px, 8vw, 44px); letter-spacing: -.04em; }
+    p { color: #656078; line-height: 1.55; }
+    .widget { min-height: 54px; display: grid; place-items: center; margin: 28px 0 18px; }
+    .status { min-height: 24px; color: #6d28d9; font-size: 14px; text-align: center; }
+    .error { color: #b42318; }
+    .privacy { margin-top: 24px; padding-top: 20px; border-top: 1px solid #ece9f2; font-size: 13px; }
+    select { border: 1px solid #d8d3e5; border-radius: 999px; padding: 8px 12px; background: #fff; }
+    header { display: flex; justify-content: space-between; align-items: center; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="brand"><span class="mark"></span><span>Luminara BTC</span></div>
+      <select id="language" aria-label="Language">
+        <option value="en">EN</option><option value="ru">RU</option><option value="uk">UK</option>
+        <option value="kk">KK</option><option value="uz">UZ</option><option value="es">ES</option>
+        <option value="fr">FR</option><option value="hy">HY</option>
+      </select>
+    </header>
+    <h1 id="title">Continue your learning</h1>
+    <p id="lede">Sign in with Telegram. We use it only to create your learning account and keep your progress.</p>
+    <div class="widget" id="telegram-widget"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <p class="privacy" id="privacy">No wallet is required. We do not ask for a seed phrase, payment or subscription.</p>
+  </main>
+  <script>
+    (function () {
+      var copy = {
+        en: ["Continue your learning", "Sign in with Telegram. We use it only to create your learning account and keep your progress.", "No wallet is required. We do not ask for a seed phrase, payment or subscription."],
+        ru: ["Продолжить обучение", "Войдите через Telegram. Он используется только для создания учебного аккаунта и сохранения прогресса.", "Кошелёк не требуется. Мы не запрашиваем seed-фразу, оплату или подписку."],
+        uk: ["Продовжити навчання", "Увійдіть через Telegram, щоб створити навчальний акаунт і зберігати прогрес.", "Гаманець не потрібен. Ми не просимо seed-фразу, оплату чи підписку."],
+        es: ["Continúa aprendiendo", "Inicia sesión con Telegram para crear tu cuenta educativa y guardar el progreso.", "No necesitas una billetera. No pedimos frase semilla, pagos ni suscripción."],
+        fr: ["Continue ton apprentissage", "Connecte-toi avec Telegram pour créer ton compte pédagogique et conserver ta progression.", "Aucun portefeuille n’est requis. Nous ne demandons ni phrase secrète, ni paiement, ni abonnement."]
+      };
+      var lang = "en";
+      try {
+        var saved = localStorage.getItem("lum-lang");
+        if (saved && document.querySelector('#language option[value="' + saved + '"]')) lang = saved;
+      } catch (_e) {}
+      var selector = document.getElementById("language");
+      selector.value = lang;
+      function render() {
+        var text = copy[selector.value] || copy.en;
+        document.documentElement.lang = selector.value;
+        document.getElementById("title").textContent = text[0];
+        document.getElementById("lede").textContent = text[1];
+        document.getElementById("privacy").textContent = text[2];
+        try { localStorage.setItem("lum-lang", selector.value); } catch (_e) {}
+      }
+      selector.addEventListener("change", render);
+      render();
+
+      var api = window.createLuminaraApi();
+      var target = window.LUMINARA_AUTH_RETURN
+        ? window.LUMINARA_AUTH_RETURN.targetFromAuthLocation(window.location)
+        : "/atlas";
+      function status(message, error) {
+        var node = document.getElementById("status");
+        node.textContent = message || "";
+        node.className = "status" + (error ? " error" : "");
+      }
+      async function finish(action) {
+        status("Signing in…");
+        try {
+          await action();
+          window.location.replace(target);
+        } catch (_error) {
+          status("Sign-in failed. Please try again.", true);
+        }
+      }
+      window.onTelegramAuth = function (user) {
+        finish(function () { return api.auth.telegramWidget(user); });
+      };
+
+      var telegram = window.Telegram && window.Telegram.WebApp;
+      if (telegram && telegram.initData) {
+        telegram.ready();
+        finish(function () { return api.auth.telegram(telegram.initData); });
+        return;
+      }
+      var username = window.LUMINARA_PUBLIC_CONFIG && window.LUMINARA_PUBLIC_CONFIG.telegramBotUsername;
+      if (!username) {
+        status("Telegram login is temporarily unavailable.", true);
+        return;
+      }
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = "https://telegram.org/js/telegram-widget.js?22";
+      script.setAttribute("data-telegram-login", username);
+      script.setAttribute("data-size", "large");
+      script.setAttribute("data-radius", "14");
+      script.setAttribute("data-userpic", "false");
+      script.setAttribute("data-request-access", "write");
+      script.setAttribute("data-onauth", "onTelegramAuth(user)");
+      document.getElementById("telegram-widget").appendChild(script);
+    })();
+  </script>
+</body>
+</html>

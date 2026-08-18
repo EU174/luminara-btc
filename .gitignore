@@ -1,10 +1,14 @@
+# Local dependencies and generated artifacts
 node_modules/
 output/
-coverage/
-*.log
-*.dump
-*.sql.gz
+
+# macOS Finder metadata
 .DS_Store
-.env
-.env.*
-!.env.example
+
+# Local-only archives of temporary handoffs
+.local-archive/
+
+# Delivery packages are exchanged outside the application runtime. Keeping them
+# out of the repository/deploy context prevents local archives from blocking a
+# Railway code snapshot.
+deliverables/
