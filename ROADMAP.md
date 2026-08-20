@@ -9,7 +9,7 @@ This roadmap records intended work, not claims of completed functionality.
 - Complete code, dependency, content-rights, and secret-history inventories.
 - Decide separate licenses for source code and educational content.
 
-## Phase 2 — sanitized public baseline
+## Phase 2 — public technical baseline
 
 - Import only approved Bitcoin-project source and tests.
 - Provide reproducible setup from a clean clone using synthetic data.
@@ -18,7 +18,7 @@ This roadmap records intended work, not claims of completed functionality.
 
 ## Phase 3 — learning and identity
 
-- Publish the Foundations, Bitcoin ecosystem, AI, and trading learning surfaces.
+- Publish the Foundations, Bitcoin ecosystem, and AI learning surfaces.
 - Keep Telegram login independent from TON.
 - Evaluate Bitcoin wallet ownership proofs with server-generated, single-use challenges.
 - Build an isolated personal learning cabinet without commercial surfaces.

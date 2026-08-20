@@ -8,9 +8,8 @@ teams.
 
 **Pre-alpha · public audit candidate · 17 August 2026**
 
-This repository was opened early so that the project can develop transparently. The first
-sanitized source snapshot is prepared for publication only after security-boundary, content-rights,
-secret-history and reproducibility reviews are complete.
+This repository was opened early so that the project can develop transparently. Publication
+continues alongside security-boundary, content-rights, secret-history and reproducibility reviews.
 
 The initial repository contains no production configuration, user data, wallet identifiers,
 credentials, database exports, or source history from the main Luminara product.
@@ -22,7 +21,6 @@ The planned learning surface includes:
 - Foundations;
 - the Bitcoin ecosystem and future Bitcoin-focused courses;
 - artificial intelligence;
-- trading literacy;
 - privacy-preserving learning progress and exercises;
 - lightweight materials for slow or unreliable internet connections.
 
@@ -42,8 +40,7 @@ BTC project has no subscriptions, payments, advertising, or paywall.
 ## Public development
 
 The roadmap, reviewed changes, test evidence, and releases will be published here as the project
-passes its safety and licensing gates. We will not manufacture retrospective commits or import the
-private history of another product.
+passes its safety and licensing gates.
 
 See [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.md), and
 [CONTRIBUTING.md](CONTRIBUTING.md).
