@@ -1,0 +1,53 @@
+Luminara BTC — Educational Content License
+Copyright (c) 2026 Luminara
+
+This license applies to the educational content of this repository:
+lesson text, exercises, scenarios, illustrations, translations, and
+related instructional materials.
+
+It does NOT apply to the software in this repository, which is licensed
+separately under the GNU Affero General Public License v3.0. See LICENSE.
+
+GRANT OF USE
+
+You may read, study, and complete the educational materials free of
+charge, for personal or organizational learning, including in nonprofit,
+newsroom, and human rights contexts. No registration or payment is
+required.
+
+You may quote short excerpts for review, commentary, teaching, or
+scholarship, with attribution to Luminara.
+
+RESTRICTIONS
+
+Except as stated above, you may not reproduce, republish, redistribute,
+translate, adapt, or create derivative works from the educational
+content without prior written permission from Luminara.
+
+This restriction exists for safety reasons. Security and regional
+guidance is published only after expert review. An outdated or altered
+copy of this material can give a reader advice that is no longer safe,
+and the reader has no way to tell. Keeping a single reviewed source of
+truth is a safety property of this project, not a commercial one.
+
+GRANT-FUNDED MATERIALS
+
+Educational materials produced with external grant funding are released
+under Creative Commons Attribution-ShareAlike 4.0 International
+(CC BY-SA 4.0) and are exempt from the restrictions above. Such
+materials are marked in their source files with the header:
+
+    license: CC-BY-SA-4.0
+    funded-by: <funder name>
+
+REQUESTS
+
+For permission to translate, adapt, or republish this content, or to
+deploy it as part of a training program, contact the project maintainers
+through the repository.
+
+NO WARRANTY
+
+The educational content is provided "as is", without warranty of any
+kind. It is educational material, not financial, legal, or security
+advice for any specific person or situation.
