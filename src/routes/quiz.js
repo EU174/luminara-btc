@@ -3,7 +3,7 @@ import { requireFreshAuth, freshAuth } from '../lib/middleware.js';
 import { query } from '../lib/db.js';
 import { assembleQuizCatalog } from '../lib/quiz-catalog.js';
 import {
-  allowsCourse, assertContentPolicy, dedupeById, isPublishedRow, manifestSectionFor,
+  allowsCourse, allowsScene, visibleQuizQuestion, assertContentPolicy, dedupeById, isPublishedRow, manifestSectionFor,
 } from '../lib/content-policy.js';
 
 const COLLECTION = 'lum_quiz_questions';
@@ -89,7 +89,7 @@ async function byTopic(policy, topic) {
   if (hit) return hit;
   const rows = await fetchAll(`/items/${COLLECTION}`, QUESTION_FIELDS);
   const retained = dedupeById(
-    rows.filter((row) => row?.topic_key === topic
+    rows.map(row => visibleQuizQuestion(policy, row)).filter((row) => row?.topic_key === topic
       && allowsCourse(policy, row.topic_key)
       && isPublishedRow(policy, row)),
     (row) => String(row.id),
@@ -104,20 +104,20 @@ async function byId(policy, id) {
   const rows = await fetchAll(`/items/${COLLECTION}`, `${QUESTION_FIELDS},why`);
   const exact = rows.filter((row) => String(row?.id) === String(id)
     && isPublishedRow(policy, row));
-  return store(policy, `id:${id}`, exact.length === 1 ? exact[0] : null);
+  return store(policy, `id:${id}`, exact.length === 1 ? visibleQuizQuestion(policy, exact[0]) : null);
 }
 
 async function catalog(policy) {
   const hit = cached(policy, 'catalog');
   if (hit) return hit;
   const [questions, topics, scenes] = await Promise.all([
-    fetchAll(`/items/${COLLECTION}`, 'id,topic_key,node_id,status'),
+    fetchAll(`/items/${COLLECTION}`, 'id,topic_key,scene_ck,node_id,status'),
     fetchAll('/items/lum_topics', 'key,status,title,ecosystem'),
     fetchAll('/items/lum_scenes', 'topic_key,access,status,ck'),
   ]);
   const retained = assembleQuizCatalog({
     questions: dedupeById(
-      questions.filter((row) => row && allowsCourse(policy, row.topic_key)
+      questions.map(row => visibleQuizQuestion(policy, row)).filter((row) => row && allowsCourse(policy, row.topic_key)
         && isPublishedRow(policy, row)),
       (row) => String(row.id),
     ),
@@ -127,7 +127,7 @@ async function catalog(policy) {
       (row) => row.key,
     ),
     scenes: dedupeById(
-      scenes.filter((row) => row && allowsCourse(policy, row.topic_key)
+      scenes.filter((row) => row && allowsScene(policy, row)
         && isPublishedRow(policy, row)),
       (row) => row.ck,
     ),

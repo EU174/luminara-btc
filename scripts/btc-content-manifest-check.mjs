@@ -23,7 +23,7 @@ const read = (file) => readFileSync(join(ROOT, file), 'utf8');
 
 // ── 1. exact identity, version and access policy ─────────────────────────────
 assert.equal(MANIFEST.manifestId, 'luminara_btc_v1', 'stable manifest identity');
-assert.equal(MANIFEST.version, 1, 'explicit reviewable version');
+assert.equal(MANIFEST.version, 5, 'explicit reviewable version');
 assert.equal(MANIFEST.siteProfile, 'luminara_btc', 'site profile');
 assert.equal(MANIFEST.siteId, 'luminara-btc', 'site id');
 assert.equal(MANIFEST.accessPolicy, 'free', 'approved content is free/noncommercial');
@@ -40,13 +40,13 @@ assert.equal(MANIFEST.localeCoverage.perCourseEvidence, null, 'no per-course tra
 // ── 2. exact section order ───────────────────────────────────────────────────
 assert.deepEqual(
   MANIFEST.sections.map((section) => section.id),
-  ['foundations', 'bitcoin', 'ai', 'trading'],
-  'the four product sections keep their exact order',
+  ['foundations', 'bitcoin', 'ai'],
+  'the three product sections keep their exact order',
 );
-assert.deepEqual(APPROVED_SECTION_IDS, ['foundations', 'bitcoin', 'ai', 'trading']);
+assert.deepEqual(APPROVED_SECTION_IDS, ['foundations', 'bitcoin', 'ai']);
 assert.deepEqual(
   MANIFEST.sections.map((section) => section.label),
-  ['Основания', 'Экосистема Bitcoin', 'Искусственный интеллект', 'Трейдинг'],
+  ['Основания', 'Экосистема Bitcoin', 'Искусственный интеллект'],
   'display labels are exact',
 );
 
@@ -54,12 +54,10 @@ assert.deepEqual(
 const coursesOf = (sectionId) => MANIFEST.sections
   .find((section) => section.id === sectionId).courses.map((course) => course.id);
 assert.deepEqual(coursesOf('foundations'), [
-  'preinternet', 'web1', 'web2', 'social', 'web30', 'web3',
-  'economy', 'netocracy', 'kripto-yasli', 'kripto-azbuka', 'netocracy-book',
+  'preinternet', 'web1', 'web2', 'social', 'web30', 'economy', 'kripto-yasli',
 ], 'foundations catalogue order');
 assert.deepEqual(coursesOf('bitcoin'), ['bitcoin-atlas'], 'bitcoin ecosystem catalogue');
-assert.deepEqual(coursesOf('ai'), ['ai'], 'ai industry');
-assert.deepEqual(coursesOf('trading'), ['trading'], 'trading industry');
+assert.deepEqual(coursesOf('ai'), ['ai', 'ai-open-stack', 'ai-production'], 'ai industry');
 // The Bitcoin section is a catalogue, not a single hardcoded field.
 const bitcoinSection = MANIFEST.sections.find((section) => section.id === 'bitcoin');
 assert.ok(Array.isArray(bitcoinSection.courses), 'the bitcoin section is a course array');
@@ -69,8 +67,8 @@ assert.equal(/bitcoinCourse/.test(read('src/lib/btc-content-manifest.js')), fals
 
 // ── 4. every approved id is allowed ──────────────────────────────────────────
 const APPROVED = [
-  'preinternet', 'web1', 'web2', 'social', 'web30', 'web3', 'economy', 'netocracy',
-  'kripto-yasli', 'kripto-azbuka', 'netocracy-book', 'bitcoin-atlas', 'ai', 'trading',
+  'preinternet', 'web1', 'web2', 'social', 'web30', 'economy',
+  'kripto-yasli', 'bitcoin-atlas', 'ai', 'ai-open-stack', 'ai-production',
 ];
 assert.deepEqual(APPROVED_COURSE_IDS, APPROVED, 'the ordered approved set is exact');
 for (const id of APPROVED) {
@@ -82,7 +80,8 @@ assert.equal(sectionForCourseId('bitcoin-atlas'), 'bitcoin', 'bitcoin-atlas belo
 
 // ── 5. excluded, hostile and unknown ids are denied ──────────────────────────
 const DENIED = [
-  // explicitly excluded ecosystems
+  // explicitly excluded former courses and ecosystems
+  'web3', 'netocracy', 'netocracy-book', 'kripto-azbuka', 'trading',
   'ton', 'telegram', 'ecosystems-overview',
   'ethereum', 'eth-atlas', 'ethereum-whitepaper',
   'base', 'base-ch01',
@@ -122,7 +121,9 @@ const mutations = {
   'duplicate course id': ["      { id: 'web1' },", "      { id: 'web1' },\n      { id: 'web1' },"],
   'course in two sections': ["      { id: 'bitcoin-atlas' },", "      { id: 'bitcoin-atlas' },\n      { id: 'web1' },"],
   'missing course id': ["      { id: 'preinternet' },", '      { },'],
-  'duplicate section id': ["    id: 'trading',", "    id: 'ai',"],
+  'duplicate section id': ["    id: 'bitcoin',", "    id: 'ai',"],
+  'duplicate scene exclusion': ["  'blockchain:4',", "  'blockchain:4',\n  'blockchain:4',"],
+  'wildcard scene exclusion': ["  'blockchain:4',", "  'blockchain:*',"],
 };
 for (const [label, [from, to]] of Object.entries(mutations)) {
   assert.ok(source.includes(from), `mutation fixture "${label}" still matches the module`);

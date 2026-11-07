@@ -23,7 +23,7 @@ function deepFreeze(value) {
 
 /** Stable identity. `version` is bumped by a reviewed change, never at runtime. */
 const MANIFEST_ID = 'luminara_btc_v1';
-const VERSION = 1;
+const VERSION = 5;
 const SITE_PROFILE = 'luminara_btc';
 const SITE_ID = 'luminara-btc';
 // Approved BTC educational content is noncommercial and free. This is a CONTENT
@@ -35,7 +35,7 @@ const ACCESS_POLICY = 'free';
 // that any course is fully translated: per-course availability evidence is 95D.
 const INTERFACE_LOCALES = ['ru', 'en', 'uk', 'kk', 'uz', 'es', 'fr', 'hy'];
 
-// The four ordered product sections. Order is part of the contract.
+// The three ordered product sections. Order is part of the contract.
 const SECTIONS = [
   {
     id: 'foundations',
@@ -47,12 +47,8 @@ const SECTIONS = [
       { id: 'web2' },
       { id: 'social' },
       { id: 'web30' },
-      { id: 'web3' },
       { id: 'economy' },
-      { id: 'netocracy' },
       { id: 'kripto-yasli' },
-      { id: 'kripto-azbuka' },
-      { id: 'netocracy-book' },
     ],
   },
   {
@@ -69,16 +65,36 @@ const SECTIONS = [
     label: 'Искусственный интеллект',
     courses: [
       { id: 'ai' },
-    ],
-  },
-  {
-    id: 'trading',
-    label: 'Трейдинг',
-    courses: [
-      { id: 'trading' },
+      { id: 'ai-open-stack' },
+      { id: 'ai-production' },
     ],
   },
 ];
+
+// Explicit lesson ownership, separate from course membership. Never infer it from
+// a prefix, a CMS label or the request. trading is ambiguous; erc20_practice and
+// defi_ton belong to ecosystems excluded from BTC and remain outside this map.
+export const BTC_TOPIC_OWNERS = deepFreeze(Object.fromEntries([
+  'history_of_money', 'blockchain', 'mining', 'consensus', 'security', 'scams',
+].map(topic => [topic, 'kripto-yasli'])));
+
+// OS-0: exact canonical scene keys excluded inside otherwise approved courses.
+// Never infer a range from sort order or a prefix; new exceptions require review
+// and a manifest version bump. Shared Directus content remains untouched.
+export const BTC_EXCLUDED_SCENE_KEYS = deepFreeze([
+  'blockchain:4',
+  'consensus:2',
+  'consensus:3',
+  'consensus:4',
+  'mining:3',
+  'mining:4',
+  'scams:1',
+  'scams:3',
+  'economy:3',
+  'economy:5',
+  'economy:6',
+  'bitcoin-atlas:12-bitcoin-atlas-ch12',
+]);
 
 // ── construction-time assertions ─────────────────────────────────────────────
 // A malformed manifest must fail at import, not at the first request.
@@ -112,6 +128,37 @@ for (const section of SECTIONS) {
 }
 if (new Set(INTERFACE_LOCALES).size !== INTERFACE_LOCALES.length) fail('duplicate interface locale');
 
+for (const [topic, owner] of Object.entries(BTC_TOPIC_OWNERS)) {
+  if (!/^[a-z0-9]+(?:[-_][a-z0-9]+)*$/.test(topic) || courseOwner.has(topic)
+      || !courseOwner.has(owner)) fail(`invalid lesson ownership: ${topic}`);
+}
+
+const EXCLUDED_SCENES = new Set(BTC_EXCLUDED_SCENE_KEYS);
+if (EXCLUDED_SCENES.size !== BTC_EXCLUDED_SCENE_KEYS.length) fail('duplicate excluded scene key');
+for (const ck of BTC_EXCLUDED_SCENE_KEYS) {
+  if (!/^[a-z0-9]+(?:[-_][a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/.test(ck)) {
+    fail(`invalid excluded scene key: ${ck}`);
+  }
+}
+
+/** Resolve a topic to its approved parent without changing its canonical key. */
+export function courseIdForTopic(topic) {
+  if (typeof topic !== 'string') return null;
+  return courseOwner.has(topic) ? topic
+    : (Object.prototype.hasOwnProperty.call(BTC_TOPIC_OWNERS, topic) ? BTC_TOPIC_OWNERS[topic] : null);
+}
+
+/** Exact exception lookup; a scene key never determines course ownership. */
+export function isExcludedSceneKey(ck) {
+  return typeof ck === 'string' && EXCLUDED_SCENES.has(ck);
+}
+
+/** Approved authoritative owner AND an exact, non-excluded canonical scene key. */
+export function isApprovedScene(ck, topic) {
+  return typeof ck === 'string' && !!ck && courseIdForTopic(topic) !== null
+    && !isExcludedSceneKey(ck);
+}
+
 /** The immutable manifest. Deep-frozen: sections, courses and locales all resist mutation. */
 export const BTC_CONTENT_MANIFEST = deepFreeze({
   manifestId: MANIFEST_ID,
@@ -119,6 +166,8 @@ export const BTC_CONTENT_MANIFEST = deepFreeze({
   siteProfile: SITE_PROFILE,
   siteId: SITE_ID,
   accessPolicy: ACCESS_POLICY,
+  topicOwners: BTC_TOPIC_OWNERS,
+  excludedSceneKeys: BTC_EXCLUDED_SCENE_KEYS,
   interfaceLocales: INTERFACE_LOCALES.slice(),
   // The requested/interface vocabulary is separate from per-course availability.
   // Coverage, licensing and attribution evidence are explicitly still pending.

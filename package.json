@@ -14,6 +14,7 @@
     "test": "node scripts/check.mjs",
     "test:public-export": "node scripts/public-export-check.mjs",
     "test:btc-content-manifest": "node scripts/btc-content-manifest-check.mjs",
+    "test:btc:os0": "node scripts/btc-os0-check.mjs",
     "test:btc-content-evidence": "node scripts/btc-content-evidence-check.mjs",
     "test:btc-content-boundary": "node scripts/btc-content-boundary-check.mjs",
     "test:btc-frontend-boundary": "node scripts/btc-frontend-boundary-check.mjs",

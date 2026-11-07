@@ -1,24 +1,24 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import vm from 'node:vm';
-
-const HERE = dirname(fileURLToPath(import.meta.url));
-const GRAPH_PATH = join(HERE, '..', 'public', 'v62', 'content-graph.js');
+import { BTC_CONTENT_MANIFEST } from './btc-content-manifest.js';
 const ACTIVATION_TOPIC = 'ecosystems-overview';
 
 let staticMetadata;
 
-// The browser content graph remains the canonical source for static Foundations
-// titles. Execute it in a data-only sandbox instead of maintaining a second locale
-// dictionary on the server (issue #79).
+// The public export excludes the shared graph. CMS titles take precedence over
+// this small, explicit Foundations catalogue; no excluded file is read at runtime.
 export function getStaticQuizMetadata() {
   if (staticMetadata) return staticMetadata;
-  const window = { LUMINARA_EXTERNAL_THEMES: [] };
-  vm.runInNewContext(readFileSync(GRAPH_PATH, 'utf8'), { window, console: { warn() {} } }, { filename: GRAPH_PATH });
-  const data = window.LUMINARA_DATA || {};
-  const foundations = new Map((data.CHAPTERS || []).map((chapter) => [chapter.key, chapter.title || {}]));
-  const nodes = new Map((data.NODES || []).map((node) => [node.id, { title: node.title || {}, group: node.group || '' }]));
+  const titles = {
+    preinternet: { en: 'Before the Internet', ru: 'До интернета' },
+    web1: { en: 'Web 1.0', ru: 'Web 1.0' },
+    web2: { en: 'Web 2.0', ru: 'Web 2.0' },
+    social: { en: 'Social networks', ru: 'Социальные сети' },
+    web30: { en: 'Web 3.0', ru: 'Web 3.0' },
+    economy: { en: 'Information economy', ru: 'Информационная экономика' },
+    'kripto-yasli': { en: 'Crypto Nursery', ru: 'Крипто-Ясли' },
+  };
+  const foundations = new Map(BTC_CONTENT_MANIFEST.sections.find(section => section.id === 'foundations')
+    .courses.map(course => [course.id, titles[course.id] || {}]));
+  const nodes = new Map();
   staticMetadata = { foundations, nodes };
   return staticMetadata;
 }

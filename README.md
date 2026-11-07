@@ -6,7 +6,10 @@ teams.
 
 ## Status
 
-**Pre-alpha · public audit candidate · 17 August 2026**
+**Pre-alpha · public audit snapshot · content manifest v5**
+
+The repository was first opened on 17 August 2026. The current content boundary
+is reviewed independently from deployment and publication readiness.
 
 This repository was opened early so that the project can develop transparently. Publication
 continues alongside security-boundary, content-rights, secret-history and reproducibility reviews.
@@ -23,6 +26,33 @@ The planned learning surface includes:
 - artificial intelligence;
 - privacy-preserving learning progress and exercises;
 - lightweight materials for slow or unreliable internet connections.
+
+## Shared origins and the Bitcoin-only boundary
+
+Luminara BTC grew out of the broader Luminara educational platform. Some shared
+source files and historical audit records therefore still contain identifiers for
+material outside the BTC product. Their presence is provenance, not an available
+course or an endorsement.
+
+The active catalogue is defined by the versioned, server-owned
+[`luminara_btc_v1` manifest, version 5](src/lib/btc-content-manifest.js):
+**Foundations, the Bitcoin ecosystem, and AI**. Exact course membership, explicit
+lesson ownership, and exact scene-key exclusions are applied before content is
+returned by the server. Excluded material remains in the shared CMS; it is not
+published through the BTC learning API. AI courses are retained unchanged by this
+content-selection change. Lesson copy is not rewritten by this filter.
+
+Exclusions are intentionally public so reviewers can inspect the product boundary.
+The identifier-only test fixture records 252 scene identities from the previous
+catalogue: version 5 retains 127 and excludes 125. It contains no lesson bodies,
+account data, credentials, or operational database dump. Historical content-review
+evidence is retained separately from the evidence for the active catalogue;
+catalogue membership does not certify translation quality, rights, or launch readiness.
+
+This repository is a curated, single-product public audit snapshot. Its lightweight
+client is separate from the hosted application's full interface. Updating this
+snapshot does not deploy the hosted service or establish which artifact is running
+there. See [the content boundary](docs/ai/CONTENT-BOUNDARY.md) for local checks.
 
 Public educational reading is intended to remain available without mandatory registration. The
 BTC project has no subscriptions, payments, advertising, or paywall.
@@ -75,4 +105,4 @@ the difference.
 is released under CC BY-SA 4.0 and marked as such in its source files.
 
 Production configuration, user data, wallet identifiers, credentials,
-and database exports are never committed to this repository.
+and operational database dumps are never committed to this repository.

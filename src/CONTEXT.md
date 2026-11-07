@@ -17,4 +17,4 @@ For the least-privilege BTC Directus token, treat the policy-filtered collection
 view as the remote boundary and apply stable-id filtering and ordering in the
 backend. Do not add client-supplied Directus `filter` or `sort` modifiers without
 the live capability check described in the
-[restricted Directus query lesson](../docs/ai/lessons/DIRECTUS-RESTRICTED-POLICY-QUERY-MODIFIERS.md).
+[content boundary](../docs/ai/CONTENT-BOUNDARY.md).

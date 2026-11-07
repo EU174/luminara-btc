@@ -17,6 +17,14 @@ import fastifyStatic from '@fastify/static';
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 export default async function luminaraStatic(app, opts = {}) {
+  const hiddenMaps = new Set(['/maps/web3.ru.html', '/maps/luminara-demo-web3.html',
+    '/maps/netocracy.ru.html', '/maps/luminara-demo-netocracy.html', '/maps/economy.ru.html']);
+  app.addHook('onRequest', async (req, reply) => {
+    let pathname;
+    try { pathname = path.posix.normalize(decodeURIComponent(String(req.raw.url || '').split('?')[0])); }
+    catch { return reply.code(404).send({ error: 'not_found' }); }
+    if (hiddenMaps.has(pathname.toLowerCase())) return reply.code(404).send({ error: 'not_found' });
+  });
   await app.register(fastifyStatic, {
     root: opts.root || path.join(here, 'public'),
     // The root `/` serves the v62 app. v62.html uses relative asset paths

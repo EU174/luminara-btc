@@ -77,6 +77,15 @@ for (const group of EVIDENCE.sourceGroups) {
   // The owner explicitly chose an internal-origin attestation instead of formal
   // legal clearance. Preserve that decision without inventing a registered
   // Luminara entity or a third-party/open-content licence.
+  if (group.id === 'ai-additional-courses-unverified') {
+    assert.equal(group.rights.status, 'unverified');
+    assert.equal(group.rights.rightsBasis, 'unverified');
+    assert.equal(group.rights.licenseId, null);
+    assert.deepEqual(group.courseIds, ['ai-open-stack', 'ai-production']);
+    assert.ok(Object.values(group.localeCoverage).every(row => row.availability === 'unverified' && row.contentQa === 'not_run'));
+    assert.equal(group.review.status, 'unverified');
+    continue;
+  }
   assert.equal(group.rights.status, 'owner_attested_internal_origin');
   assert.equal(group.rights.rightsBasis, 'created_by_luminara_team_with_ai_assistance');
   assert.equal(group.rights.licenseId, null, `${group.id}: no public reuse licence is asserted`);
@@ -93,7 +102,10 @@ for (const group of EVIDENCE.sourceGroups) {
   assert.equal(group.review.owner, null);
 }
 
-const groupById = Object.fromEntries(EVIDENCE.sourceGroups.map((group) => [group.id, group]));
+assert.equal(EVIDENCE.manifestVersion, 5);
+const historicalCourses = EVIDENCE.historicalSourceGroups.flatMap(group => group.courseIds);
+assert.deepEqual(historicalCourses.sort(), ['kripto-azbuka','netocracy','netocracy-book','trading','web3'].sort());
+const groupById = Object.fromEntries([...EVIDENCE.sourceGroups, ...EVIDENCE.historicalSourceGroups].map((group) => [group.id, group]));
 const netocracy = groupById['netocracy-book-v108-9'];
 for (const locale of EXPECTED_LOCALES) {
   assert.equal(netocracy.localeCoverage[locale].unitsPresent, 25);
@@ -144,6 +156,6 @@ console.log(`BTC content evidence (${EVIDENCE.evidenceId}): OK`);
 console.log(`  courses=${assignedCourses.length}; source-groups=${EVIDENCE.sourceGroups.length}; locale-records=${localeRows}`);
 console.log(`  Content QA blocked=${failedQa.join(', ') || 'none'}`);
 console.log(`  unavailable=${unavailable.join(', ') || 'none'}`);
-console.log('  rights=owner-attested internal origin; formal clearance deferred');
+console.log('  historical rights attestation retained; additional AI courses explicitly unverified');
 console.log('  first-launch locale=en; fallback=en with visible notice and no mixed-language body');
 console.log('OWNER_DECISION_REQUIRED: 95D');

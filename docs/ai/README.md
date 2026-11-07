@@ -15,6 +15,7 @@ document below. Do not put secrets, personal data, database URLs or operational 
 | Scope | Read |
 |---|---|
 | Runtime and API | `ARCHITECTURE.md`, `SECURITY.md`, `TESTING.md` |
+| Content membership, ownership and exclusions | [Content boundary](CONTENT-BOUNDARY.md) |
 | Browser learning UI | `ARCHITECTURE.md`, `TESTING.md`, `src/public/v62/CONTEXT.md` |
 | Database | `SECURITY.md`, `DEPLOYMENT.md`, `migrations/CONTEXT.md` |
 | Release | `DEPLOYMENT.md`, `TESTING.md` |

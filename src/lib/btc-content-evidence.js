@@ -1,3 +1,5 @@
+import { isApprovedCourseId, BTC_CONTENT_MANIFEST } from './btc-content-manifest.js';
+
 // Issue #95 / chunk 95D — reviewable localization and rights evidence for BTC.
 //
 // This is an inventory, not a grant of permission and not a launch decision.
@@ -13,7 +15,7 @@ function deepFreeze(value) {
 }
 
 export const BTC_CONTENT_EVIDENCE_ID = 'luminara_btc_content_evidence_v1';
-export const BTC_CONTENT_EVIDENCE_VERSION = 1;
+export const BTC_CONTENT_EVIDENCE_VERSION = 2;
 export const BTC_CONTENT_LOCALES = deepFreeze(['ru', 'en', 'uk', 'kk', 'uz', 'es', 'fr', 'hy']);
 
 const FOUNDATION_COURSES = [
@@ -182,11 +184,34 @@ const SOURCE_GROUPS = [
   },
 ];
 
+// Preserve the historical audit unchanged. Removed courses cannot confer active
+// catalogue evidence, and newly admitted courses do not inherit an old attestation.
+const ACTIVE_SOURCE_GROUPS = SOURCE_GROUPS.map(group => ({
+  ...group, courseIds: group.courseIds.filter(isApprovedCourseId),
+})).filter(group => group.courseIds.length);
+const HISTORICAL_SOURCE_GROUPS = SOURCE_GROUPS.map(group => ({
+  ...group, courseIds: group.courseIds.filter(id => !isApprovedCourseId(id)),
+})).filter(group => group.courseIds.length);
+ACTIVE_SOURCE_GROUPS.push({
+  id: 'ai-additional-courses-unverified',
+  courseIds: ['ai-open-stack', 'ai-production'],
+  provenance: 'manifest-v5-course-membership',
+  packageAudit: { status: 'unverified', evidenceRef: 'course-review-required',
+    note: 'Manifest membership establishes scope only; no package, translation or rights review is asserted.' },
+  localeCoverage: unverifiedRuntimeCoverage,
+  rights: { status: 'unverified', rightsBasis: 'unverified', licenseId: null,
+    evidenceRefs: ['course-review-required:ai-open-stack', 'course-review-required:ai-production'] },
+  review: reviewUnverified(),
+});
+
 export const BTC_CONTENT_EVIDENCE = deepFreeze({
   evidenceId: BTC_CONTENT_EVIDENCE_ID,
   version: BTC_CONTENT_EVIDENCE_VERSION,
   siteProfile: 'luminara_btc',
   auditedAt: '2026-08-16',
+  scopeUpdatedAt: '2026-11-07',
+  manifestVersion: BTC_CONTENT_MANIFEST.version,
+  scopeNote: 'The v5 scope update does not re-audit historical package unit counts, translations or rights evidence.',
   requestedLocales: [...BTC_CONTENT_LOCALES],
   localePolicy: {
     primaryLocale: 'en',
@@ -209,10 +234,11 @@ export const BTC_CONTENT_EVIDENCE = deepFreeze({
       'attribution_displayed',
     ],
   },
-  sourceGroups: SOURCE_GROUPS,
+  sourceGroups: ACTIVE_SOURCE_GROUPS,
+  historicalSourceGroups: HISTORICAL_SOURCE_GROUPS,
 });
 
 /** Ordered course-to-group map for parity checks and operator tooling. */
 export const BTC_CONTENT_COURSE_EVIDENCE = deepFreeze(Object.fromEntries(
-  SOURCE_GROUPS.flatMap((group) => group.courseIds.map((courseId) => [courseId, group.id])),
+  ACTIVE_SOURCE_GROUPS.flatMap((group) => group.courseIds.map((courseId) => [courseId, group.id])),
 ));

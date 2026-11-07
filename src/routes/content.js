@@ -1,7 +1,7 @@
 import { canonicalCourseTitle } from '../lib/course-catalog.js';
 import { mergeCatalogTitle } from '../lib/locale-resolve.js';
 import {
-  allowsCourse, assertContentPolicy, dedupeById, isPublishedRow, manifestOrder,
+  allowsCourse, allowsTopic, allowsScene, allowsSceneKey, assertContentPolicy, dedupeById, isPublishedRow, manifestOrder,
   manifestSectionFor, mediaOwnerCourse, selectUnique,
 } from '../lib/content-policy.js';
 
@@ -61,6 +61,7 @@ function store(policy, name, data) {
 }
 
 async function sceneByKey(policy, ck) {
+  if (!allowsSceneKey(policy, ck)) return null;
   const hit = cached(policy, `scene:${ck}`);
   if (hit !== null) return hit;
   const rows = await directusList(`/items/lum_scenes?fields=${SCENE_FIELDS}`);
@@ -68,7 +69,7 @@ async function sceneByKey(policy, ck) {
     rows.filter((row) => row?.ck === ck && isPublishedRow(policy, row)),
     (row) => row.ck,
   );
-  return store(policy, `scene:${ck}`, scene);
+  return store(policy, `scene:${ck}`, scene && allowsScene(policy, scene) ? scene : null);
 }
 
 async function scenesByTopic(policy, topic) {
@@ -77,7 +78,7 @@ async function scenesByTopic(policy, topic) {
   const rows = await directusList(`/items/lum_scenes?fields=${SCENE_FIELDS}`);
   const scenes = dedupeById(
     rows.filter((row) => row?.topic_key === topic
-      && allowsCourse(policy, row.topic_key)
+      && allowsScene(policy, row)
       && isPublishedRow(policy, row)),
     (row) => row.ck,
   ).sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0)
@@ -162,7 +163,7 @@ async function bootstrap(policy) {
     access: 'free',
   }));
   const retainedScenes = dedupeById(
-    scenes.filter((row) => row && allowsCourse(policy, row.topic_key) && isPublishedRow(policy, row)),
+    scenes.filter((row) => row && allowsScene(policy, row) && isPublishedRow(policy, row)),
     (row) => row.ck,
   ).sort((a, b) => String(a.topic_key).localeCompare(String(b.topic_key))
     || Number(a.sort || 0) - Number(b.sort || 0)
@@ -222,7 +223,7 @@ export default async function contentRoutes(app, opts = {}) {
       return reply.code(error.code === 503 ? 503 : 502)
         .send({ error: error.message || 'content_unavailable' });
     }
-    if (!scene || !allowsCourse(policy, scene.topic_key)) {
+    if (!scene || !allowsScene(policy, scene)) {
       return reply.code(404).send({ error: 'scene_not_found' });
     }
     const body = isLeveledBody(scene.body) ? scene.body[level] : null;
@@ -239,7 +240,7 @@ export default async function contentRoutes(app, opts = {}) {
       return reply.code(error.code === 503 ? 503 : 502)
         .send({ error: error.message || 'content_unavailable' });
     }
-    if (!scene || !allowsCourse(policy, scene.topic_key)) {
+    if (!scene || !allowsScene(policy, scene)) {
       return reply.code(404).send({ error: 'scene_not_found' });
     }
     publicCache(reply);
@@ -252,7 +253,7 @@ export default async function contentRoutes(app, opts = {}) {
     if (rejectBulk(req, reply)) return;
     const topic = String(req.params?.key || '').slice(0, 60);
     if (!topic) return reply.code(400).send({ error: 'topic_required' });
-    if (!allowsCourse(policy, topic)) return reply.code(404).send({ error: 'topic_not_found' });
+    if (!allowsTopic(policy, topic)) return reply.code(404).send({ error: 'topic_not_found' });
     let scenes;
     try { scenes = await scenesByTopic(policy, topic); } catch (error) {
       return reply.code(error.code === 503 ? 503 : 502)
