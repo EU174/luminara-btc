@@ -211,7 +211,7 @@ export const BTC_CONTENT_EVIDENCE = deepFreeze({
   auditedAt: '2026-08-16',
   scopeUpdatedAt: '2026-11-07',
   manifestVersion: BTC_CONTENT_MANIFEST.version,
-  scopeNote: 'The v5 scope update does not re-audit historical package unit counts, translations or rights evidence.',
+  scopeNote: 'Manifest membership and override declarations do not re-audit historical package unit counts, translations or rights evidence.',
   requestedLocales: [...BTC_CONTENT_LOCALES],
   localePolicy: {
     primaryLocale: 'en',

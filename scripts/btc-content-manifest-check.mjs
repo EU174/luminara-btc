@@ -12,6 +12,7 @@ import {
   APPROVED_COURSE_IDS,
   APPROVED_SECTION_IDS,
   BTC_CONTENT_MANIFEST as MANIFEST,
+  BTC_SCENE_OVERRIDE_PAIRS, BTC_MAP_OVERRIDES, sceneOverrideForCk,
   isApprovedCourseId,
   isApprovedSectionId,
   publicManifestView,
@@ -23,7 +24,7 @@ const read = (file) => readFileSync(join(ROOT, file), 'utf8');
 
 // ── 1. exact identity, version and access policy ─────────────────────────────
 assert.equal(MANIFEST.manifestId, 'luminara_btc_v1', 'stable manifest identity');
-assert.equal(MANIFEST.version, 5, 'explicit reviewable version');
+assert.equal(MANIFEST.version, 6, 'explicit reviewable version');
 assert.equal(MANIFEST.siteProfile, 'luminara_btc', 'site profile');
 assert.equal(MANIFEST.siteId, 'luminara-btc', 'site id');
 assert.equal(MANIFEST.accessPolicy, 'free', 'approved content is free/noncommercial');
@@ -133,6 +134,44 @@ for (const [label, [from, to]] of Object.entries(mutations)) {
   assert.ok(threw, `a manifest with a ${label} must fail at construction`);
 }
 
+// OS-0b v6: the approved package is an independent, metadata-only review fixture.
+const overrides = JSON.parse(read('scripts/fixtures/btc-scene-overrides-v6.json'));
+assert.equal(overrides.manifest, MANIFEST.manifestId);
+assert.equal(overrides.target_version, MANIFEST.version);
+assert.deepEqual(BTC_SCENE_OVERRIDE_PAIRS, overrides.pairs, 'all 30 accepted ck/id/hash/chunk pairs');
+assert.equal(BTC_SCENE_OVERRIDE_PAIRS.length, 30);
+assert.equal(new Set(BTC_SCENE_OVERRIDE_PAIRS.map(p => p.ck)).size, 30);
+const identities = new Map(JSON.parse(read('scripts/fixtures/btc-os0-scenes.json')).scenes.map(([id,ck]) => [ck,id]));
+for (const pair of BTC_SCENE_OVERRIDE_PAIRS) {
+  assert.equal(identities.get(pair.ck), pair.source_id, pair.ck + ': source identity unchanged');
+  assert.equal(sceneOverrideForCk(pair.ck), pair);
+  assert.ok(Object.isFrozen(pair));
+  assert.match(pair.source_hash, /^[a-f0-9]{64}$/);
+  assert.ok(!pair.ck.startsWith('ai') && !pair.ck.includes('ch12'));
+}
+assert.equal(BTC_SCENE_OVERRIDE_PAIRS.filter(p => p.ck.startsWith('bitcoin-atlas:')).length, 11);
+for (const key of ['unknown:0', 'constructor', '__proto__', null, {ck: overrides.pairs[0].ck}]) {
+  assert.equal(sceneOverrideForCk(key), null, 'only exact string keys select overrides');
+}
+const mapPairs = Object.fromEntries(['ru','en','uk','kk','uz','es','fr','hy']
+  .map(locale => [`/maps/preinternet.${locale}.html`, `/maps/preinternet.${locale}.btc.html`]));
+assert.deepEqual(BTC_MAP_OVERRIDES, mapPairs, 'eight exact hosted map substitutions');
+assert.equal(Object.hasOwn(BTC_MAP_OVERRIDES, '/maps/economy.ru.html'), false);
+assert.deepEqual(MANIFEST.sceneOverrides, overrides.pairs);
+assert.deepEqual(MANIFEST.mapOverrides, mapPairs);
+assert.ok(Object.isFrozen(BTC_SCENE_OVERRIDE_PAIRS));
+assert.ok(Object.isFrozen(BTC_MAP_OVERRIDES));
+assert.throws(() => { BTC_SCENE_OVERRIDE_PAIRS[0].source_hash = '0'.repeat(64); }, TypeError);
+assert.throws(() => { BTC_MAP_OVERRIDES['/maps/economy.ru.html'] = '/maps/economy.btc.html'; }, TypeError);
+for (const [label, from, to] of [
+  ['duplicate replacement', '"ck": "' + overrides.pairs[1].ck + '"', '"ck": "' + overrides.pairs[0].ck + '"'],
+  ['invalid source hash', overrides.pairs[0].source_hash, 'z'.repeat(64)],
+]) {
+  assert.ok(source.includes(from));
+  const broken = `data:text/javascript;base64,${Buffer.from(source.replace(from, to)).toString('base64')}`;
+  await assert.rejects(import(broken), /btc-content-manifest/, label + ' fails at construction');
+}
+
 // ── 7. nested mutation attempts change nothing ───────────────────────────────
 assert.ok(Object.isFrozen(MANIFEST), 'the manifest is frozen');
 assert.ok(Object.isFrozen(MANIFEST.sections), 'the section array is frozen');
@@ -229,5 +268,6 @@ assert.equal(/^import\s/m.test(code), false, 'the manifest module imports nothin
 console.log(
   `BTC content manifest (#95 / 95A): OK — ${MANIFEST.manifestId} v${MANIFEST.version}, `
   + `${APPROVED_SECTION_IDS.length} sections, ${APPROVED_COURSE_IDS.length} approved courses, `
-  + `${DENIED.length} denied ids, ${Object.keys(mutations).length} construction failures`,
+  + `${BTC_SCENE_OVERRIDE_PAIRS.length} scene replacements, ${Object.keys(BTC_MAP_OVERRIDES).length} map rewrites, `
+  + `${DENIED.length} denied ids, ${Object.keys(mutations).length + 2} construction failures`,
 );

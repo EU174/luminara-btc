@@ -23,7 +23,7 @@ function deepFreeze(value) {
 
 /** Stable identity. `version` is bumped by a reviewed change, never at runtime. */
 const MANIFEST_ID = 'luminara_btc_v1';
-const VERSION = 5;
+const VERSION = 6;
 const SITE_PROFILE = 'luminara_btc';
 const SITE_ID = 'luminara-btc';
 // Approved BTC educational content is noncommercial and free. This is a CONTENT
@@ -96,6 +96,207 @@ export const BTC_EXCLUDED_SCENE_KEYS = deepFreeze([
   'bitcoin-atlas:12-bitcoin-atlas-ch12',
 ]);
 
+// OS-0b: exact approved source/version pairs. The CMS cannot expand this table.
+export const BTC_SCENE_OVERRIDE_PAIRS = deepFreeze([
+  {
+    "ck": "bitcoin-atlas:01-bitcoin-atlas-ch01",
+    "source_id": 429,
+    "source_hash": "34f2bc0dbaa544efaa8af9bc204a273260969bceec1062828f7bd6be690cd4a6",
+    "chunk": "C2a"
+  },
+  {
+    "ck": "bitcoin-atlas:02-bitcoin-atlas-ch02",
+    "source_id": 430,
+    "source_hash": "16150b9dfe41b1276229bbf76d4a51fcfeff9c942ad4ca4209f1c76051cc87a7",
+    "chunk": "C2a"
+  },
+  {
+    "ck": "bitcoin-atlas:03-bitcoin-atlas-ch03",
+    "source_id": 431,
+    "source_hash": "c442f17de61a7a7ca550edd57e0285b6e7aac7009d230de0b5ef57090933372d",
+    "chunk": "C2a"
+  },
+  {
+    "ck": "bitcoin-atlas:04-bitcoin-atlas-ch04",
+    "source_id": 432,
+    "source_hash": "00d3cccbd5f4c2c9c4211c3c7ad35822f75b7bde8f2551da68199ca170297455",
+    "chunk": "C2b"
+  },
+  {
+    "ck": "bitcoin-atlas:05-bitcoin-atlas-ch05",
+    "source_id": 433,
+    "source_hash": "066d90f7177015c3b2279eb1cc6bccf5412898ead3f3545a0d0c6077cf407d77",
+    "chunk": "C2b"
+  },
+  {
+    "ck": "bitcoin-atlas:06-bitcoin-atlas-ch06",
+    "source_id": 434,
+    "source_hash": "362a0014222000645f2b76c281c144ddcca6c8923ea02800f002f817176f7833",
+    "chunk": "C2b"
+  },
+  {
+    "ck": "bitcoin-atlas:07-bitcoin-atlas-ch07",
+    "source_id": 435,
+    "source_hash": "e196db0c85d6bf4dfc30774a0aa65eeb3fedb2f73f6009acc194370cab683c0a",
+    "chunk": "C2c"
+  },
+  {
+    "ck": "bitcoin-atlas:08-bitcoin-atlas-ch08",
+    "source_id": 436,
+    "source_hash": "a1c6c779c2224cd671c46933a9072645994df7c5abdd24fd86393b9c651dfb35",
+    "chunk": "C2c"
+  },
+  {
+    "ck": "bitcoin-atlas:09-bitcoin-atlas-ch09",
+    "source_id": 437,
+    "source_hash": "2778faf7bff59cd9836a04d83b82ce64d4fecf934bef8dbd5e9c72afc3a5fbd4",
+    "chunk": "C2c"
+  },
+  {
+    "ck": "bitcoin-atlas:10-bitcoin-atlas-ch10",
+    "source_id": 438,
+    "source_hash": "8c213907cb4a952e1429ef3b94aeb19c136b466702aac0d39f75590ade447920",
+    "chunk": "C3a-2"
+  },
+  {
+    "ck": "bitcoin-atlas:11-bitcoin-atlas-ch11",
+    "source_id": 439,
+    "source_hash": "73fb950f38ad16cfe67aad1624b02c155a51ffd8f1d64bf3513e38309994c100",
+    "chunk": "C3b-2"
+  },
+  {
+    "ck": "security:0",
+    "source_id": 193,
+    "source_hash": "269533cc6fa434a87ea3ab4dc035c6fda937927a51e232324a793b1668595f28",
+    "chunk": "C4a"
+  },
+  {
+    "ck": "security:1",
+    "source_id": 194,
+    "source_hash": "fe0ea8e8d8d37bb8da255131b9b9f2677b7ffd123c14680a90a908daa08234ba",
+    "chunk": "C4a"
+  },
+  {
+    "ck": "security:2",
+    "source_id": 195,
+    "source_hash": "fb86ffd248f802bd7b1db527b8a2a6ba31f627b57950454dc469911067235281",
+    "chunk": "C4a"
+  },
+  {
+    "ck": "security:3",
+    "source_id": 196,
+    "source_hash": "c481c692fb1b838a85c552c9ceaf0420ca8954af390f036db0e5bbea1f4a8716",
+    "chunk": "C4a"
+  },
+  {
+    "ck": "security:4",
+    "source_id": 197,
+    "source_hash": "8e7111a1af04ca358432dbef93800ddc3750387693baf965d967e21b1371c70e",
+    "chunk": "C4a"
+  },
+  {
+    "ck": "scams:0",
+    "source_id": 221,
+    "source_hash": "09984a8cf4250ac902ba0ef0b06d43499c150a62079770322bf6921a3a261cae",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "scams:2",
+    "source_id": 223,
+    "source_hash": "7c888eebf7ba23942c3e9c9c20cbfffdf4e4331eb22fc8a7fa2789c1690041ef",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "scams:4",
+    "source_id": 225,
+    "source_hash": "6f4b7ea6c02a4f11b82cbf5878f00bb2890e370364d81e470d1f02c1c71db686",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "blockchain:1",
+    "source_id": 149,
+    "source_hash": "92c31459b6006417e3488f0b698bb0631526f16b3d3599a5baf6a0ae6198319f",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "blockchain:2",
+    "source_id": 150,
+    "source_hash": "98c318d765b302ea24726cb685080458e104c9c0de1b8802aadb287afb595071",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "blockchain:3",
+    "source_id": 151,
+    "source_hash": "b6a5d6c02506b07764b17db91f70c7dd1ef85753996717a1c035a527aa2316d1",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "consensus:0",
+    "source_id": 158,
+    "source_hash": "63da6b3d5db8713fc0dbbbd01b935302abe1bd86e2b60a646d99ac91144d9808",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "consensus:1",
+    "source_id": 159,
+    "source_hash": "fa006a5d5626388fbb38bf2f4eb3a292c0df4a13aa071a9f87460ca82899e3bd",
+    "chunk": "C4b"
+  },
+  {
+    "ck": "economy:0",
+    "source_id": 127,
+    "source_hash": "fcd397d36e1930f7718a8f79ad0bc7a0e34992475f7ae193f49615daecfc99cf",
+    "chunk": "C5"
+  },
+  {
+    "ck": "economy:1",
+    "source_id": 128,
+    "source_hash": "5f12c8cc4e52931850db1a7362d9228b70cb35e738ea19a83ea88563a64c5e6e",
+    "chunk": "C5"
+  },
+  {
+    "ck": "economy:4",
+    "source_id": 131,
+    "source_hash": "53ef4c7da2d8e3cebbf47e92e06b3bc3fa015b8159850e676bca99b85eff085b",
+    "chunk": "C5"
+  },
+  {
+    "ck": "economy:2",
+    "source_id": 129,
+    "source_hash": "98c6308e6fb5d0fb30e306316a192133106978525c62f2f38242d0006205ad89",
+    "chunk": "C5"
+  },
+  {
+    "ck": "preinternet:4",
+    "source_id": 88,
+    "source_hash": "aa567931de12927bcb963dba023be2c31a2ece7fe7b9a42ecdda2eef6b22a06d",
+    "chunk": "C5"
+  },
+  {
+    "ck": "web2:2",
+    "source_id": 101,
+    "source_hash": "1397f43439590861269af09abaf0f45135bf6f1130bfdd93e8d158d946d971e4",
+    "chunk": "C5"
+  }
+]);
+const OVERRIDE_BY_CK = new Map(BTC_SCENE_OVERRIDE_PAIRS.map(pair => [pair.ck, pair]));
+
+export function sceneOverrideForCk(ck) {
+  return typeof ck === 'string' ? OVERRIDE_BY_CK.get(ck) || null : null;
+}
+
+// Exact internal substitutions: preserve bookmarks without serving shared text.
+export const BTC_MAP_OVERRIDES = deepFreeze({
+  '/maps/preinternet.ru.html': '/maps/preinternet.ru.btc.html',
+  '/maps/preinternet.en.html': '/maps/preinternet.en.btc.html',
+  '/maps/preinternet.uk.html': '/maps/preinternet.uk.btc.html',
+  '/maps/preinternet.kk.html': '/maps/preinternet.kk.btc.html',
+  '/maps/preinternet.uz.html': '/maps/preinternet.uz.btc.html',
+  '/maps/preinternet.es.html': '/maps/preinternet.es.btc.html',
+  '/maps/preinternet.fr.html': '/maps/preinternet.fr.btc.html',
+  '/maps/preinternet.hy.html': '/maps/preinternet.hy.btc.html',
+});
+
 // ── construction-time assertions ─────────────────────────────────────────────
 // A malformed manifest must fail at import, not at the first request.
 const fail = (message) => { throw new Error(`btc-content-manifest: ${message}`); };
@@ -141,6 +342,13 @@ for (const ck of BTC_EXCLUDED_SCENE_KEYS) {
   }
 }
 
+if (OVERRIDE_BY_CK.size !== BTC_SCENE_OVERRIDE_PAIRS.length) fail('duplicate scene override');
+for (const pair of BTC_SCENE_OVERRIDE_PAIRS) {
+  const topic = pair.ck.split(':')[0];
+  if (!isApprovedScene(pair.ck, topic) || !Number.isSafeInteger(pair.source_id) || pair.source_id <= 0
+      || !/^[a-f0-9]{64}$/.test(pair.source_hash) || !pair.chunk) fail(`invalid scene override: ${pair.ck}`);
+}
+
 /** Resolve a topic to its approved parent without changing its canonical key. */
 export function courseIdForTopic(topic) {
   if (typeof topic !== 'string') return null;
@@ -168,6 +376,8 @@ export const BTC_CONTENT_MANIFEST = deepFreeze({
   accessPolicy: ACCESS_POLICY,
   topicOwners: BTC_TOPIC_OWNERS,
   excludedSceneKeys: BTC_EXCLUDED_SCENE_KEYS,
+  sceneOverrides: BTC_SCENE_OVERRIDE_PAIRS,
+  mapOverrides: BTC_MAP_OVERRIDES,
   interfaceLocales: INTERFACE_LOCALES.slice(),
   // The requested/interface vocabulary is separate from per-course availability.
   // Coverage, licensing and attribution evidence are explicitly still pending.

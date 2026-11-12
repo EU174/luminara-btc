@@ -6,7 +6,7 @@ teams.
 
 ## Status
 
-**Pre-alpha · public audit snapshot · content manifest v5**
+**Pre-alpha · public audit snapshot · content manifest v6**
 
 The repository was first opened on 17 August 2026. The current content boundary
 is reviewed independently from deployment and publication readiness.
@@ -35,19 +35,46 @@ material outside the BTC product. Their presence is provenance, not an available
 course or an endorsement.
 
 The active catalogue is defined by the versioned, server-owned
-[`luminara_btc_v1` manifest, version 5](src/lib/btc-content-manifest.js):
+[`luminara_btc_v1` manifest, version 6](src/lib/btc-content-manifest.js):
 **Foundations, the Bitcoin ecosystem, and AI**. Exact course membership, explicit
 lesson ownership, and exact scene-key exclusions are applied before content is
 returned by the server. Excluded material remains in the shared CMS; it is not
 published through the BTC learning API. AI courses are retained unchanged by this
-content-selection change. Lesson copy is not rewritten by this filter.
+content-selection change. Catalogue filtering preserves the shared originals;
+BTC-specific editorial versions are described below.
 
 Exclusions are intentionally public so reviewers can inspect the product boundary.
 The identifier-only test fixture records 252 scene identities from the previous
-catalogue: version 5 retains 127 and excludes 125. It contains no lesson bodies,
+catalogue: version 6 retains 127 and excludes 125. It contains no lesson bodies,
 account data, credentials, or operational database dump. Historical content-review
 evidence is retained separately from the evidence for the active catalogue;
 catalogue membership does not certify translation quality, rights, or launch readiness.
+
+### BTC scene editions (OS-0b)
+
+Manifest v6 declares **30 exact scene replacements**: the original `ck`, source
+row ID, SHA-256 `source_hash`, and editorial chunk for each reviewed BTC version.
+The metadata-only [review fixture](scripts/fixtures/btc-scene-overrides-v6.json)
+contains the same accepted pairs. These replacements preserve the 127-scene
+catalogue; they do not add or delete lessons.
+
+On the hosted BTC site, the separate `lum_scenes_btc` collection holds one BTC
+version per `ck`; shared originals remain in `lum_scenes`. The server selects the
+whole BTC version under the original lesson key and URL, retaining slug and
+progress identities. A declared version that is missing, invalid, or unpublished
+fails closed without falling back to the original. AI material is unchanged,
+and Bitcoin chapter 12 remains outside the replacement table and excluded.
+
+The same manifest records eight internal map substitutions:
+`preinternet.{ru,en,uk,kk,uz,es,fr,hy}.html` → the corresponding `*.btc.html`.
+The original map URLs are preserved; `economy.ru.html` remains 404.
+
+This public snapshot publishes the v6 declarations for audit. Its lightweight
+content handlers read `lum_scenes`; the hosted override resolver, separate CMS
+collection, and replacement map payloads belong to the hosted runtime. A
+deployment from this snapshot needs that integration to serve the declared BTC
+editions. This metadata sync does not import lesson text or certify its rights
+or translation coverage.
 
 This repository is a curated, single-product public audit snapshot. Its lightweight
 client is separate from the hosted application's full interface. Updating this
