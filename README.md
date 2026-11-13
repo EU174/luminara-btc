@@ -6,7 +6,12 @@ teams.
 
 ## Status
 
-**Pre-alpha · public audit snapshot · content manifest v6**
+**Pre-alpha · public audit snapshot for hosted BTC v2.15 · content manifest v9**
+
+The hosted BTC release is **v2.15**, verified on 13 November 2026 at
+[luminarabtc.academy](https://luminarabtc.academy/atlas). This public source snapshot
+is prepared separately; it does not contain the full hosted runtime. Current
+snapshot metadata is recorded in [PUBLIC-SNAPSHOT.json](PUBLIC-SNAPSHOT.json).
 
 The repository was first opened on 17 August 2026. The current content boundary
 is reviewed independently from deployment and publication readiness.
@@ -35,7 +40,7 @@ material outside the BTC product. Their presence is provenance, not an available
 course or an endorsement.
 
 The active catalogue is defined by the versioned, server-owned
-[`luminara_btc_v1` manifest, version 6](src/lib/btc-content-manifest.js):
+[`luminara_btc_v1` manifest, version 9](src/lib/btc-content-manifest.js):
 **Foundations, the Bitcoin ecosystem, and AI**. Exact course membership, explicit
 lesson ownership, and exact scene-key exclusions are applied before content is
 returned by the server. Excluded material remains in the shared CMS; it is not
@@ -45,16 +50,16 @@ BTC-specific editorial versions are described below.
 
 Exclusions are intentionally public so reviewers can inspect the product boundary.
 The identifier-only test fixture records 252 scene identities from the previous
-catalogue: version 6 retains 127 and excludes 125. It contains no lesson bodies,
+catalogue: version 9 retains 127 and excludes 125. It contains no lesson bodies,
 account data, credentials, or operational database dump. Historical content-review
 evidence is retained separately from the evidence for the active catalogue;
 catalogue membership does not certify translation quality, rights, or launch readiness.
 
 ### BTC scene editions (OS-0b)
 
-Manifest v6 declares **30 exact scene replacements**: the original `ck`, source
+Manifest v9 declares **40 exact scene replacements**: the original `ck`, source
 row ID, SHA-256 `source_hash`, and editorial chunk for each reviewed BTC version.
-The metadata-only [review fixture](scripts/fixtures/btc-scene-overrides-v6.json)
+The metadata-only [review fixture](scripts/fixtures/btc-scene-overrides-v9.json)
 contains the same accepted pairs. These replacements preserve the 127-scene
 catalogue; they do not add or delete lessons.
 
@@ -69,20 +74,38 @@ The same manifest records eight internal map substitutions:
 `preinternet.{ru,en,uk,kk,uz,es,fr,hy}.html` → the corresponding `*.btc.html`.
 The original map URLs are preserved; `economy.ru.html` remains 404.
 
-This public snapshot publishes the v6 declarations for audit. Its lightweight
+This public snapshot publishes the v9 declarations for audit. Its lightweight
 content handlers read `lum_scenes`; the hosted override resolver, separate CMS
 collection, and replacement map payloads belong to the hosted runtime. A
 deployment from this snapshot needs that integration to serve the declared BTC
-editions. This metadata sync does not import lesson text or certify its rights
-or translation coverage.
+editions. The local content export in `content/scenes/` contains 74 current grant-scope
+scene snapshots, including available reading levels; it contains no account data
+or CMS credentials. See `content/index.json`. It does not claim completion of
+all per-course translation/third-party-rights reviews or wire this lightweight
+client to the hosted resolver.
 
 This repository is a curated, single-product public audit snapshot. Its lightweight
 client is separate from the hosted application's full interface. Updating this
 snapshot does not deploy the hosted service or establish which artifact is running
 there. See [the content boundary](docs/ai/CONTENT-BOUNDARY.md) for local checks.
 
-Public educational reading is intended to remain available without mandatory registration. The
-BTC project has no subscriptions, payments, advertising, or paywall.
+The hosted BTC service has a 71-scene anonymous preview. A learner session or a
+personal reviewer link opens the 127-scene catalogue; these access modes are not
+payment requirements. All available BTC reading levels, including Deep and
+Academic, are free. The BTC profile has no subscription or payment routes.
+
+## OpenSats application scope
+
+The proposed grant covers Bitcoin and related digital-security education:
+63 Foundations scenes and 11 Bitcoin Atlas chapters. The 53 AI scenes remain
+accessible on the platform but are explicitly outside this application and its
+budget. This is an application-scope statement, not a claim of awarded funding.
+
+The current public tree excludes the five maps that the hosted BTC profile
+already denies: web3.ru.html, netocracy.ru.html, economy.ru.html,
+luminara-demo-web3.html and luminara-demo-netocracy.html. The hosted originals
+for the main Luminara product are preserved. Git history is not rewritten by
+this local change.
 
 ## Safety principles
 
@@ -104,32 +127,53 @@ See [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.m
 
 ## Licensing
 
-This repository uses two licenses: one for software, one for educational
-content.
+Software keeps **AGPL-3.0**, see [LICENSE](LICENSE). Original educational
+contributions owned by Luminara BTC use **CC BY-SA 4.0 now**, without a funding
+condition: see [CONTENT-LICENSE](CONTENT-LICENSE) and
+[content/LICENSE](content/LICENSE).
 
-| Path | License |
-|---|---|
-| `src/` except `src/content/`, `scripts/`, `migrations/`, `.github/` | AGPL-3.0 — see [LICENSE](LICENSE) |
-| `src/content/` | Luminara Educational Content License — see [CONTENT-LICENSE](CONTENT-LICENSE) |
+This covers Luminara-owned prose, exercises, scenarios and translations, not
+the software or third-party quotations, images, videos, trademarks and linked
+publications. Their own rights remain; citations and existing notices must be
+preserved. See [third-party notice](content/THIRD-PARTY-NOTICE.txt). Being listed
+in the catalogue does not certify ownership of every embedded work or completion
+of per-course translation/rights review.
 
-**Software.** The platform, course engine, and interactive modules are
-free and open source under the GNU Affero General Public License v3.0.
-Any organization may deploy Luminara BTC on its own infrastructure and
-fill it with its own content. If you run a modified version as a network
-service, AGPL requires you to publish your changes.
-
-**Educational content.** Lesson text, exercises, and scenarios remain the
-property of Luminara. They are free to read and free to complete — there
-is no registration, subscription, paywall, or advertising — but they may
-not be republished or adapted without permission.
-
-This is a safety boundary rather than a commercial one. Regional and
-security guidance is published only after expert review; an outdated
-copy can carry advice that is no longer safe, and a reader cannot tell
-the difference.
-
-**Grant-funded materials.** Content produced with external grant funding
-is released under CC BY-SA 4.0 and marked as such in its source files.
+You may share and adapt covered original contributions, including commercially,
+with attribution, a licence link and an indication of changes; adaptations keep
+the same or a compatible licence. Full terms:
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/legalcode.en).
 
 Production configuration, user data, wallet identifiers, credentials,
 and operational database dumps are never committed to this repository.
+
+## Hosted release v2.15 and this public snapshot
+
+The hosted BTC release v2.15 preserves manifest v9 and its 40 exact scene
+variants, including web2:6.
+Four Web30 interactive editions have complete Russian and English payloads;
+the display title of web30:0 is localized in eight languages after raw version
+validation. The original CMS identity and source records are preserved.
+This audit snapshot declares that boundary; its lightweight handlers are not
+a full reproduction of the hosted resolver or protected media runtime.
+
+The v2.15 hosted release also publishes the approved
+[RU privacy notice](https://luminarabtc.academy/btc-info.html?page=privacy&lang=ru) /
+[EN privacy notice](https://luminarabtc.academy/btc-info.html?page=privacy&lang=en),
+the [content licence](https://luminarabtc.academy/btc-info.html?page=license&lang=en),
+and [grant scope](https://luminarabtc.academy/btc-info.html?page=grant&lang=en). It
+removes BTC subscription badges, improves source and administration presentation,
+and exposes repeat copy for eligible reviewer links. Those full hosted UI and
+reviewer implementations are not supplied by this lightweight audit snapshot.
+
+The educational export in `content/scenes/` reflects the accepted v9 CMS snapshot
+of 13 November 2026, used unchanged by v2.15. It contains 63 Foundations scenes and
+11 Bitcoin Atlas chapters. No missing translation or reading level is invented,
+and inclusion does not certify third-party rights or completion of native-language review.
+The [initial export record](EXPORT-PROVENANCE.json) remains historical evidence
+from August; it is not the status of this November snapshot.
+
+Privacy targets are approved, but automatic retention cleanup is not enabled.
+The notice distinguishes current behaviour from target periods, including the
+existing manual backups without expiry. See [PRIVACY.md](PRIVACY.md); publishing
+this source snapshot does not change data retention or backup configuration.

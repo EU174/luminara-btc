@@ -1,0 +1,48 @@
+{
+  "schema": "luminara_btc_public_snapshot_v1",
+  "preparedOn": "2026-11-13",
+  "repository": "EU174/luminara-btc",
+  "preparedFromPublicMain": "a071e069895b40e28b1b947400fe32b190f720fa",
+  "publicationIsSeparate": true,
+  "hostedReference": {
+    "url": "https://luminarabtc.academy/atlas",
+    "release": "v2.15",
+    "verifiedOn": "2026-11-13",
+    "manifestVersion": 9,
+    "exactSceneOverrides": 40,
+    "mapOverrides": 8,
+    "visibleScenes": 127,
+    "anonymousPreviewScenes": 71,
+    "hiddenScenes": 125
+  },
+  "educationalExport": {
+    "index": "content/index.json",
+    "sceneCount": 74,
+    "foundationsScenes": 63,
+    "bitcoinAtlasChapters": 11,
+    "aiScenesOutsideGrant": 53,
+    "basis": "Accepted v9 CMS snapshot of 13 November 2026, unchanged by hosted v2.15",
+    "inventedLocalesOrLevels": false
+  },
+  "licensing": {
+    "software": "AGPL-3.0 (existing LICENSE preserved)",
+    "ownEducationalContributions": "CC-BY-SA-4.0",
+    "fundingCondition": false,
+    "thirdPartyNotice": "content/THIRD-PARTY-NOTICE.txt"
+  },
+  "excludedFromCurrentTree": [
+    "src/public/maps/web3.ru.html",
+    "src/public/maps/netocracy.ru.html",
+    "src/public/maps/economy.ru.html",
+    "src/public/maps/luminara-demo-web3.html",
+    "src/public/maps/luminara-demo-netocracy.html"
+  ],
+  "historyRewrite": false,
+  "notIncluded": [
+    "Full hosted resolver and protected-media integration",
+    "Full hosted interface and reviewer administration",
+    "Production configuration and credentials",
+    "User data and operational database exports"
+  ],
+  "historicalInitialExport": "EXPORT-PROVENANCE.json"
+}

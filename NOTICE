@@ -4,8 +4,10 @@ Copyright © 2026 Luminara.
 Licensing is intentionally split by material type:
 
 - Software code is licensed under AGPL-3.0. See LICENSE.
-- Original educational materials in src/content/ are licensed under the
-  Luminara Educational Content License. See CONTENT-LICENSE.
+- Original educational prose, exercises, scenarios and translations authored
+  and owned by Luminara BTC, including covered contributions in src/content/
+  and content/scenes/, use CC BY-SA 4.0 without a funding condition.
+  See CONTENT-LICENSE and content/THIRD-PARTY-NOTICE.txt.
 
 Third-party material remains subject to its own notices and licenses. This notice does not grant
 rights to use the Luminara name, marks, or logos.

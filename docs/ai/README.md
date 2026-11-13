@@ -22,8 +22,8 @@ document below. Do not put secrets, personal data, database URLs or operational 
 
 This engineering map follows the repository's licensing and does not impose
 additional reuse restrictions. Software is licensed under AGPL-3.0 (see
-[LICENSE](../../LICENSE)). Educational content in `src/content/` is covered
-by the Luminara Educational Content License (see
+[LICENSE](../../LICENSE)). Educational content in `src/content/` and `content/scenes/` is covered
+by CC BY-SA 4.0 for Luminara-owned contributions (see
 [CONTENT-LICENSE](../../CONTENT-LICENSE)). Materials explicitly marked
 `license: CC-BY-SA-4.0` in their source files follow that license. See the
 [Licensing section of the main README](../../README.md#licensing).

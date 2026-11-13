@@ -24,7 +24,7 @@ const read = (file) => readFileSync(join(ROOT, file), 'utf8');
 
 // ── 1. exact identity, version and access policy ─────────────────────────────
 assert.equal(MANIFEST.manifestId, 'luminara_btc_v1', 'stable manifest identity');
-assert.equal(MANIFEST.version, 6, 'explicit reviewable version');
+assert.equal(MANIFEST.version, 9, 'explicit reviewable version');
 assert.equal(MANIFEST.siteProfile, 'luminara_btc', 'site profile');
 assert.equal(MANIFEST.siteId, 'luminara-btc', 'site id');
 assert.equal(MANIFEST.accessPolicy, 'free', 'approved content is free/noncommercial');
@@ -134,13 +134,13 @@ for (const [label, [from, to]] of Object.entries(mutations)) {
   assert.ok(threw, `a manifest with a ${label} must fail at construction`);
 }
 
-// OS-0b v6: the approved package is an independent, metadata-only review fixture.
-const overrides = JSON.parse(read('scripts/fixtures/btc-scene-overrides-v6.json'));
+// OS-0b v9: the approved package is an independent, metadata-only review fixture.
+const overrides = JSON.parse(read('scripts/fixtures/btc-scene-overrides-v9.json'));
 assert.equal(overrides.manifest, MANIFEST.manifestId);
 assert.equal(overrides.target_version, MANIFEST.version);
-assert.deepEqual(BTC_SCENE_OVERRIDE_PAIRS, overrides.pairs, 'all 30 accepted ck/id/hash/chunk pairs');
-assert.equal(BTC_SCENE_OVERRIDE_PAIRS.length, 30);
-assert.equal(new Set(BTC_SCENE_OVERRIDE_PAIRS.map(p => p.ck)).size, 30);
+assert.deepEqual(BTC_SCENE_OVERRIDE_PAIRS, overrides.pairs, 'all 40 accepted ck/id/hash/chunk pairs');
+assert.equal(BTC_SCENE_OVERRIDE_PAIRS.length, 40);
+assert.equal(new Set(BTC_SCENE_OVERRIDE_PAIRS.map(p => p.ck)).size, 40);
 const identities = new Map(JSON.parse(read('scripts/fixtures/btc-os0-scenes.json')).scenes.map(([id,ck]) => [ck,id]));
 for (const pair of BTC_SCENE_OVERRIDE_PAIRS) {
   assert.equal(identities.get(pair.ck), pair.source_id, pair.ck + ': source identity unchanged');

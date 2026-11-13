@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 
 const checks = [
   'public-export-check.mjs',
+  'btc-grant-package-check.mjs',
   'btc-content-manifest-check.mjs',
   'btc-os0-check.mjs',
   'btc-content-evidence-check.mjs',

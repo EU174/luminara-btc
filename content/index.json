@@ -1,0 +1,380 @@
+{
+  "status": "EDUCATIONAL_CONTENT_SNAPSHOT",
+  "basis": "Accepted manifest v9 CMS snapshot of 13 November 2026, reused unchanged by hosted v2.15: 40 exact BTC versions and display projection; no CMS identifiers, credentials or account data.",
+  "license": "CC-BY-SA-4.0",
+  "licenseScope": "Luminara-owned contributions;third-party exceptions retained",
+  "grantScenes": 74,
+  "aiScenesOutsideGrant": 53,
+  "scenes": [
+    {
+      "ck": "bitcoin-atlas:01-bitcoin-atlas-ch01",
+      "file": "scenes/bitcoin-atlas--01-bitcoin-atlas-ch01.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=0"
+    },
+    {
+      "ck": "bitcoin-atlas:02-bitcoin-atlas-ch02",
+      "file": "scenes/bitcoin-atlas--02-bitcoin-atlas-ch02.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=1"
+    },
+    {
+      "ck": "bitcoin-atlas:03-bitcoin-atlas-ch03",
+      "file": "scenes/bitcoin-atlas--03-bitcoin-atlas-ch03.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=2"
+    },
+    {
+      "ck": "bitcoin-atlas:04-bitcoin-atlas-ch04",
+      "file": "scenes/bitcoin-atlas--04-bitcoin-atlas-ch04.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=3"
+    },
+    {
+      "ck": "bitcoin-atlas:05-bitcoin-atlas-ch05",
+      "file": "scenes/bitcoin-atlas--05-bitcoin-atlas-ch05.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=4"
+    },
+    {
+      "ck": "bitcoin-atlas:06-bitcoin-atlas-ch06",
+      "file": "scenes/bitcoin-atlas--06-bitcoin-atlas-ch06.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=5"
+    },
+    {
+      "ck": "bitcoin-atlas:07-bitcoin-atlas-ch07",
+      "file": "scenes/bitcoin-atlas--07-bitcoin-atlas-ch07.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=6"
+    },
+    {
+      "ck": "bitcoin-atlas:08-bitcoin-atlas-ch08",
+      "file": "scenes/bitcoin-atlas--08-bitcoin-atlas-ch08.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=7"
+    },
+    {
+      "ck": "bitcoin-atlas:09-bitcoin-atlas-ch09",
+      "file": "scenes/bitcoin-atlas--09-bitcoin-atlas-ch09.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=8"
+    },
+    {
+      "ck": "bitcoin-atlas:10-bitcoin-atlas-ch10",
+      "file": "scenes/bitcoin-atlas--10-bitcoin-atlas-ch10.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=9"
+    },
+    {
+      "ck": "bitcoin-atlas:11-bitcoin-atlas-ch11",
+      "file": "scenes/bitcoin-atlas--11-bitcoin-atlas-ch11.json",
+      "url": "https://luminarabtc.academy/atlas#/research?t=bitcoin-atlas&g=ecosystems&s=10"
+    },
+    {
+      "ck": "blockchain:0",
+      "file": "scenes/blockchain--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=blockchain&g=foundations&s=0"
+    },
+    {
+      "ck": "blockchain:1",
+      "file": "scenes/blockchain--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=blockchain&g=foundations&s=1"
+    },
+    {
+      "ck": "blockchain:2",
+      "file": "scenes/blockchain--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=blockchain&g=foundations&s=2"
+    },
+    {
+      "ck": "blockchain:3",
+      "file": "scenes/blockchain--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=blockchain&g=foundations&s=3"
+    },
+    {
+      "ck": "consensus:0",
+      "file": "scenes/consensus--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=consensus&g=foundations&s=0"
+    },
+    {
+      "ck": "consensus:1",
+      "file": "scenes/consensus--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=consensus&g=foundations&s=1"
+    },
+    {
+      "ck": "economy:0",
+      "file": "scenes/economy--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=economy&g=foundations&s=0"
+    },
+    {
+      "ck": "economy:1",
+      "file": "scenes/economy--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=economy&g=foundations&s=1"
+    },
+    {
+      "ck": "economy:2",
+      "file": "scenes/economy--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=economy&g=foundations&s=2"
+    },
+    {
+      "ck": "economy:4",
+      "file": "scenes/economy--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=economy&g=foundations&s=4"
+    },
+    {
+      "ck": "history_of_money:0",
+      "file": "scenes/history_of_money--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=0"
+    },
+    {
+      "ck": "history_of_money:1",
+      "file": "scenes/history_of_money--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=1"
+    },
+    {
+      "ck": "history_of_money:2",
+      "file": "scenes/history_of_money--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=2"
+    },
+    {
+      "ck": "history_of_money:3",
+      "file": "scenes/history_of_money--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=3"
+    },
+    {
+      "ck": "history_of_money:4",
+      "file": "scenes/history_of_money--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=4"
+    },
+    {
+      "ck": "history_of_money:5",
+      "file": "scenes/history_of_money--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=5"
+    },
+    {
+      "ck": "history_of_money:6",
+      "file": "scenes/history_of_money--6.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=history_of_money&g=foundations&s=6"
+    },
+    {
+      "ck": "mining:0",
+      "file": "scenes/mining--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=mining&g=foundations&s=0"
+    },
+    {
+      "ck": "mining:1",
+      "file": "scenes/mining--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=mining&g=foundations&s=1"
+    },
+    {
+      "ck": "mining:2",
+      "file": "scenes/mining--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=mining&g=foundations&s=2"
+    },
+    {
+      "ck": "preinternet:0",
+      "file": "scenes/preinternet--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=0"
+    },
+    {
+      "ck": "preinternet:1",
+      "file": "scenes/preinternet--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=1"
+    },
+    {
+      "ck": "preinternet:2",
+      "file": "scenes/preinternet--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=2"
+    },
+    {
+      "ck": "preinternet:3",
+      "file": "scenes/preinternet--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=3"
+    },
+    {
+      "ck": "preinternet:4",
+      "file": "scenes/preinternet--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=4"
+    },
+    {
+      "ck": "preinternet:5",
+      "file": "scenes/preinternet--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=5"
+    },
+    {
+      "ck": "preinternet:6",
+      "file": "scenes/preinternet--6.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=6"
+    },
+    {
+      "ck": "preinternet:7",
+      "file": "scenes/preinternet--7.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=7"
+    },
+    {
+      "ck": "preinternet:8",
+      "file": "scenes/preinternet--8.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=preinternet&g=foundations&s=8"
+    },
+    {
+      "ck": "scams:0",
+      "file": "scenes/scams--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=scams&g=foundations&s=0"
+    },
+    {
+      "ck": "scams:2",
+      "file": "scenes/scams--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=scams&g=foundations&s=2"
+    },
+    {
+      "ck": "scams:4",
+      "file": "scenes/scams--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=scams&g=foundations&s=4"
+    },
+    {
+      "ck": "security:0",
+      "file": "scenes/security--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=security&g=foundations&s=0"
+    },
+    {
+      "ck": "security:1",
+      "file": "scenes/security--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=security&g=foundations&s=1"
+    },
+    {
+      "ck": "security:2",
+      "file": "scenes/security--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=security&g=foundations&s=2"
+    },
+    {
+      "ck": "security:3",
+      "file": "scenes/security--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=security&g=foundations&s=3"
+    },
+    {
+      "ck": "security:4",
+      "file": "scenes/security--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=security&g=foundations&s=4"
+    },
+    {
+      "ck": "social:0",
+      "file": "scenes/social--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=0"
+    },
+    {
+      "ck": "social:1",
+      "file": "scenes/social--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=1"
+    },
+    {
+      "ck": "social:2",
+      "file": "scenes/social--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=2"
+    },
+    {
+      "ck": "social:3",
+      "file": "scenes/social--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=3"
+    },
+    {
+      "ck": "social:4",
+      "file": "scenes/social--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=4"
+    },
+    {
+      "ck": "social:5",
+      "file": "scenes/social--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=5"
+    },
+    {
+      "ck": "social:6",
+      "file": "scenes/social--6.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=social&g=foundations&s=6"
+    },
+    {
+      "ck": "web1:0",
+      "file": "scenes/web1--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=0"
+    },
+    {
+      "ck": "web1:1",
+      "file": "scenes/web1--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=1"
+    },
+    {
+      "ck": "web1:2",
+      "file": "scenes/web1--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=2"
+    },
+    {
+      "ck": "web1:3",
+      "file": "scenes/web1--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=3"
+    },
+    {
+      "ck": "web1:4",
+      "file": "scenes/web1--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=4"
+    },
+    {
+      "ck": "web1:5",
+      "file": "scenes/web1--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web1&g=foundations&s=5"
+    },
+    {
+      "ck": "web2:0",
+      "file": "scenes/web2--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=0"
+    },
+    {
+      "ck": "web2:1",
+      "file": "scenes/web2--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=1"
+    },
+    {
+      "ck": "web2:2",
+      "file": "scenes/web2--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=2"
+    },
+    {
+      "ck": "web2:3",
+      "file": "scenes/web2--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=3"
+    },
+    {
+      "ck": "web2:4",
+      "file": "scenes/web2--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=4"
+    },
+    {
+      "ck": "web2:5",
+      "file": "scenes/web2--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=5"
+    },
+    {
+      "ck": "web2:6",
+      "file": "scenes/web2--6.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web2&g=foundations&s=6"
+    },
+    {
+      "ck": "web30:0",
+      "file": "scenes/web30--0.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=0"
+    },
+    {
+      "ck": "web30:1",
+      "file": "scenes/web30--1.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=1"
+    },
+    {
+      "ck": "web30:2",
+      "file": "scenes/web30--2.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=2"
+    },
+    {
+      "ck": "web30:3",
+      "file": "scenes/web30--3.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=3"
+    },
+    {
+      "ck": "web30:4",
+      "file": "scenes/web30--4.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=4"
+    },
+    {
+      "ck": "web30:5",
+      "file": "scenes/web30--5.json",
+      "url": "https://luminarabtc.academy/atlas#/scene?c=web30&g=foundations&s=5"
+    }
+  ]
+}

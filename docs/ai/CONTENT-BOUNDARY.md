@@ -2,18 +2,18 @@
 scope: btc-content-boundary
 status: canonical
 owner: engineering
-last_verified: 2026-11-12
+last_verified: 2026-11-13
 ---
 
 # Versioned BTC catalogue boundary
 
 `src/lib/btc-content-manifest.js` is the authoritative, immutable membership
-contract. Version 6 contains three sections and eleven courses. Child lesson IDs
+contract. Version 9 contains three sections and eleven courses. Child lesson IDs
 resolve only through `topicOwners`; individual exclusions use exact canonical
 scene keys. Course membership never overrides a scene exclusion. Wildcards,
 prefix-based ownership, CMS group names and request flags cannot grant membership.
 
-Version 6 also publishes thirty exact `sceneOverrides` pairs and eight
+Version 9 also publishes forty exact `sceneOverrides` pairs and eight
 `mapOverrides` entries. Source IDs and hashes are review commitments, not CMS
 credentials. The hosted runtime selects whole versions from `lum_scenes_btc`
 under original lesson keys and URLs, with no fallback for an invalid declared

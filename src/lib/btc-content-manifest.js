@@ -23,7 +23,7 @@ function deepFreeze(value) {
 
 /** Stable identity. `version` is bumped by a reviewed change, never at runtime. */
 const MANIFEST_ID = 'luminara_btc_v1';
-const VERSION = 6;
+const VERSION = 9;
 const SITE_PROFILE = 'luminara_btc';
 const SITE_ID = 'luminara-btc';
 // Approved BTC educational content is noncommercial and free. This is a CONTENT
@@ -277,6 +277,66 @@ export const BTC_SCENE_OVERRIDE_PAIRS = deepFreeze([
     "source_id": 101,
     "source_hash": "1397f43439590861269af09abaf0f45135bf6f1130bfdd93e8d158d946d971e4",
     "chunk": "C5"
+  },
+  {
+    "ck": "preinternet:7",
+    "source_id": 91,
+    "source_hash": "90fad93e3e3522f5db8dd19a6ff3a9b765f16f64659825518e90418c68eec7db",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "social:4",
+    "source_id": 110,
+    "source_hash": "59735d17c7551329f78b79eaf0835e40cbc18acd24c63d4f3533dfc69646ec7f",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "social:6",
+    "source_id": 112,
+    "source_hash": "1242ec1681f4b80808eeb4d35742b7c6bc61586b3bda51a5cc2799bd80659e2f",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "web1:3",
+    "source_id": 96,
+    "source_hash": "c39aa48a7c87caabb60d9a1c5f75c459462276a0352f02df8458b9bc8f886247",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "web2:4",
+    "source_id": 103,
+    "source_hash": "a6901d8e1b70e3c5c49781f9964766e481e889fd5c99b272d26d69624f5c2c61",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "web30:0",
+    "source_id": 113,
+    "source_hash": "5d64fb2a8fcdde3f552e48d0a5abfbf3afb6b2be7a2171c688301cadb2c7fe27",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "web30:3",
+    "source_id": 116,
+    "source_hash": "d35812b5e2bd3e6200f67439cb42853098db9dc7e3ab4d34e813dc2e29a73c95",
+    "chunk": "WEB3-12-20261112"
+  },
+  {
+    "ck": "preinternet:1",
+    "source_id": 85,
+    "source_hash": "bd6f0e2c3367c0fe15176b7147e91f5a8f6dfdf3bccff234f4727ced344f75f9",
+    "chunk": "EDITORIAL-HY-20261112"
+  },
+  {
+    "ck": "social:3",
+    "source_id": 109,
+    "source_hash": "a6798558af66d0bb0980fed93fadfa50dc6db08925b17eb17904dbd6491cf2d6",
+    "chunk": "EDITORIAL-HY-20261112"
+  },
+  {
+    "ck": "web2:6",
+    "source_id": 105,
+    "source_hash": "0d8a5627ec3478a9c3e695a0b2ecacaed56c653d67ce15ffd67b8f08c606eca3",
+    "chunk": "BTC-EDITORIAL-SIX-20261113"
   }
 ]);
 const OVERRIDE_BY_CK = new Map(BTC_SCENE_OVERRIDE_PAIRS.map(pair => [pair.ck, pair]));
@@ -284,6 +344,35 @@ const OVERRIDE_BY_CK = new Map(BTC_SCENE_OVERRIDE_PAIRS.map(pair => [pair.ck, pa
 export function sceneOverrideForCk(ck) {
   return typeof ck === 'string' ? OVERRIDE_BY_CK.get(ck) || null : null;
 }
+
+// Presentation follows successful whole-scene selection; raw CMS titles stay
+// immutable and continue to be checked by the resolver before this projection.
+export const BTC_SCENE_PRESENTATION_OVERRIDES = deepFreeze({
+  "web30:0": {
+    "topic_key": "web30",
+    "sort": 0,
+    "title": {
+      "ru": "Семантическая паутина: данные, связи и смысл",
+      "en": "The Semantic Web: data, relationships and meaning",
+      "uk": "Семантична павутина: дані, зв’язки та значення",
+      "kk": "Семантикалық веб: деректер, байланыстар және мағына",
+      "uz": "Semantik veb: ma’lumotlar, aloqalar va ma’no",
+      "es": "La web semántica: datos, relaciones y significado",
+      "fr": "Le Web sémantique : données, relations et sens",
+      "hy": "Իմաստային վեբը․ տվյալներ, կապեր և իմաստ"
+    }
+  }
+});
+
+// BTC-only catalogue wording. This does not authorize content or alter CMS rows.
+export const BTC_TOPIC_PRESENTATION_OVERRIDES = deepFreeze({
+  "bitcoin-atlas": {
+    "blurb": {
+      "ru": "История, технология и культура Bitcoin в 11 главах.",
+      "en": "Bitcoin history, technology and culture in 11 chapters."
+    }
+  }
+});
 
 // Exact internal substitutions: preserve bookmarks without serving shared text.
 export const BTC_MAP_OVERRIDES = deepFreeze({
@@ -347,6 +436,14 @@ for (const pair of BTC_SCENE_OVERRIDE_PAIRS) {
   const topic = pair.ck.split(':')[0];
   if (!isApprovedScene(pair.ck, topic) || !Number.isSafeInteger(pair.source_id) || pair.source_id <= 0
       || !/^[a-f0-9]{64}$/.test(pair.source_hash) || !pair.chunk) fail(`invalid scene override: ${pair.ck}`);
+}
+
+for (const [ck, presentation] of Object.entries(BTC_SCENE_PRESENTATION_OVERRIDES)) {
+  if (!OVERRIDE_BY_CK.has(ck) || presentation.topic_key !== ck.split(':')[0]
+      || !Number.isInteger(presentation.sort) || presentation.sort < 0
+      || !presentation.title || Object.keys(presentation.title).length !== INTERFACE_LOCALES.length
+      || INTERFACE_LOCALES.some(locale => typeof presentation.title[locale] !== 'string'
+        || !presentation.title[locale].trim())) fail(`invalid scene presentation: ${ck}`);
 }
 
 /** Resolve a topic to its approved parent without changing its canonical key. */

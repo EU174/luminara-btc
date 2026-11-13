@@ -24,5 +24,6 @@
     "qualityGate": "npm test passes five BTC-only checks",
     "frontend": "rewrite pending; candidate is not publishable"
   },
-  "state": "99B in progress; local-only and not authorized for public push"
+  "state": "99B in progress; local-only and not authorized for public push",
+  "recordScope": "Historical initial export record of 17 August 2026; the original checkpoint and state are preserved. See PUBLIC-SNAPSHOT.json for the current prepared snapshot."
 }

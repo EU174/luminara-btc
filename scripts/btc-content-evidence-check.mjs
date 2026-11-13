@@ -102,7 +102,7 @@ for (const group of EVIDENCE.sourceGroups) {
   assert.equal(group.review.owner, null);
 }
 
-assert.equal(EVIDENCE.manifestVersion, 6);
+assert.equal(EVIDENCE.manifestVersion, 9);
 const historicalCourses = EVIDENCE.historicalSourceGroups.flatMap(group => group.courseIds);
 assert.deepEqual(historicalCourses.sort(), ['kripto-azbuka','netocracy','netocracy-book','trading','web3'].sort());
 const groupById = Object.fromEntries([...EVIDENCE.sourceGroups, ...EVIDENCE.historicalSourceGroups].map((group) => [group.id, group]));
